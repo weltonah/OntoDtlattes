@@ -41,7 +41,7 @@ public class Main {
 		System.out.println(listaPessoa.size());
 		tratamentoDeDados.JuncaoMembros(listaPessoa);
 
-		listaPessoa.forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() + "  " + u.getCont()));
+		listaPessoa.forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() + " " + u.getCont()));
 		System.out.println(listaPessoa.size());
 		// tratamentoDeDados.TratarNomes(listaPessoa);
 		// ontoDao.preencherOnto(listaPessoa);

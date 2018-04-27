@@ -265,7 +265,7 @@ public class TratamentoDeDados {
 					j = i + 1;
 					if (idlattes.contentEquals(listaPessoa.get(j).getIdLattes())) {
 						listaPessoa.get(i).Copiar(listaPessoa.get(j));
-						listaPessoa.get(i).cont();
+						// listaPessoa.get(i).cont();
 						listaPessoa.remove(j);
 					} else {
 						break;
@@ -283,6 +283,37 @@ public class TratamentoDeDados {
 					listaPessoa.get(i).Copiar(listaPessoa.get(j));
 					// listaPessoa.get(i).cont();
 					listaPessoa.remove(j);
+				} else {
+					break;
+				}
+			}
+		}
+		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			String nome = listaPessoa.get(i).getNomeCompleto();
+			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
+			for ( j = 0; j < listaPessoa.size(); j++) {
+				if (!(i == j)) {
+					if (listcitacaoPivo.contains(listaPessoa.get(j).getNomeCompleto())) {
+						listaPessoa.get(i).Copiar(listaPessoa.get(j));
+						// listaPessoa.get(i).cont();
+						listaPessoa.remove(j);
+						continue;
+					}
+				}
+			}
+		}
+		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		j = 0;
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			String nome = listaPessoa.get(i).getNomeCompleto();
+			while (i + 1 < listaPessoa.size()) {
+				j = i + 1;
+				if (listaPessoa.get(j).getNomeCompleto().contains(nome)) {
+					listaPessoa.get(j).Copiar(listaPessoa.get(i));
+					listaPessoa.get(j).cont();
+					nome = listaPessoa.get(j).getNomeCompleto();
+					listaPessoa.remove(i);
 				} else {
 					break;
 				}

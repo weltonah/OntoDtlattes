@@ -39,12 +39,18 @@ public class teste {
 				}
 			}
 		}
-		System.out.println(listaPessoa.get(0).getNomeCompleto());
-		System.out.println(listaPessoa.size());
-		listaPessoa.get(0).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
-		listaPessoa.get(0).getListOntoOrientacao().forEach(u -> System.out.println(u.getTitulo()));
-		System.out.println(listaPessoa.get(1).getNomeCompleto());
-		listaPessoa.get(1).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
+//		System.out.println(listaPessoa.get(0).getNomeCompleto());
+//		System.out.println(listaPessoa.size());
+//		listaPessoa.get(0).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
+//		listaPessoa.get(0).getListOntoOrientacao().forEach(u -> System.out.println(u.getTitulo()));
+//		System.out.println(listaPessoa.get(1).getNomeCompleto());
+//		listaPessoa.get(1).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
+		
+		
+		String aux = "ola";
+		String aux2 = "aola mundo";
+		if (aux2.contains(aux))
+			System.out.println(aux2);
 	}
 
 }
