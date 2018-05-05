@@ -10,15 +10,18 @@ import br.com.modelo.OntoClass;
 import br.com.modelo.OntoParceiro;
 import br.com.modelo.OntoPessoa;
 import br.com.modelo.TriplaOwl;
+import info.debatty.java.stringsimilarity.NGram;
 
 public class TratamentoDeDados {
 
 	public String corrigirString(String text) {
-		String result = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
-		result = result.replaceAll(">", "").replaceAll("<", "").replaceAll("#", "").replaceAll("\t", "")
-				.replaceAll("-", "").replaceAll("&", "").replaceAll(":", "").replaceAll("\n", " ").replaceAll(" ", "_")
-				.replaceAll("'", "").toLowerCase();
-		return result;
+		// Retira acentuacao
+		text = Normalizer.normalize(text, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");
+		text = text.replaceAll("-", " ");
+		text = text.replaceAll("\\s+", "_");
+		text = text.replaceAll("[^\\w^\\;]", "");
+		text = text.toLowerCase();
+		return text;
 	}
 
 	public void ExpansaoMembros(ArrayList<OntoPessoa> listapessoa) {
@@ -56,156 +59,6 @@ public class TratamentoDeDados {
 		listapessoa.addAll(listaAux);
 	}
 
-	public void TratarNomes(ArrayList<OntoPessoa> listapessoa) {
-		for (OntoPessoa ontoPessoa : listapessoa) {
-			String nome = ontoPessoa.getNomeCompleto();
-			ArrayList<String> listcitacao = ontoPessoa.getCitacaoList();
-			String idLattes = ontoPessoa.getIdLattes();
-
-			listapessoa.stream().filter(u -> !u.equals(ontoPessoa)).forEach(pe -> {
-				// System.out.println("nome analisado " + nome);
-				// System.out.println("lista autor analisado " + pe.getNomeCompleto());
-				for (OntoClass ontoClass : pe.getListOntoBanca()) {
-					for (OntoParceiro ontoParceiro : ontoClass.getListAutores()) {
-						if (nome.contentEquals(ontoParceiro.getNome())) {
-							System.out.println("------------BANCA----------------");
-							System.out.println("id analisado " + idLattes);
-							System.out.println("nome analisado " + nome);
-							System.out.println("lista autor analisado " + pe.getNomeCompleto());
-							System.out.println("nome citacao " + ontoParceiro.getNome());
-							System.out.println("id citacao " + ontoParceiro.getId());
-							System.out.println("abre citacao " + ontoParceiro.getCitacao());
-
-							System.out.println("#");
-							ontoParceiro.setNome(nome);
-							ontoParceiro.setId(idLattes);
-						} else {
-							if (listcitacao.contains(ontoParceiro.getNome())) {
-								System.out.println("-----------BANCA-----------------");
-								System.out.println("nome analisado " + nome);
-								System.out.println("lista autor analisado " + pe.getNomeCompleto());
-								System.out.println("nome citacao " + ontoParceiro.getNome());
-								System.out.println("id citacao " + ontoParceiro.getId());
-								System.out.println("abre citacao " + ontoParceiro.getCitacao());
-								System.out.println(ontoParceiro.getNome());
-								System.out.println("---");
-								System.out.println("&");
-								ontoParceiro.setNome(nome);
-								ontoParceiro.setId(idLattes);
-							} else {
-								if (listcitacao.contains(ontoParceiro.getCitacao())) {
-
-									System.out.println("----------BANCA------------------");
-									System.out.println("nome analisado " + nome);
-									System.out.println("lista autor analisado " + pe.getNomeCompleto());
-									System.out.println("nome citacao " + ontoParceiro.getNome());
-									System.out.println("id citacao " + ontoParceiro.getId());
-									System.out.println("abre citacao " + ontoParceiro.getCitacao());
-									System.out.println(ontoParceiro.getCitacao());
-									System.out.println("@");
-									System.out.println("&");
-									ontoParceiro.setNome(nome);
-									ontoParceiro.setId(idLattes);
-								}
-							}
-						}
-					}
-				}
-				for (OntoClass ontoClass : pe.getListOntoFormacao()) {
-					for (OntoParceiro ontoParceiro : ontoClass.getListAutores()) {
-						if (nome.contentEquals(ontoParceiro.getNome())) {
-							System.out.println("-------------FORMACAO---------------");
-							System.out.println("id analisado " + idLattes);
-							System.out.println("nome analisado " + nome);
-							System.out.println("lista autor analisado " + pe.getNomeCompleto());
-							System.out.println("nome citacao " + ontoParceiro.getNome());
-							System.out.println("id citacao " + ontoParceiro.getId());
-							System.out.println("abre citacao " + ontoParceiro.getCitacao());
-
-							System.out.println("#");
-							ontoParceiro.setNome(nome);
-							ontoParceiro.setId(idLattes);
-						} else {
-							if (listcitacao.contains(ontoParceiro.getNome())) {
-								System.out.println("-------------FORMACAO---------------");
-								System.out.println("nome analisado " + nome);
-								System.out.println("lista autor analisado " + pe.getNomeCompleto());
-								System.out.println("nome citacao " + ontoParceiro.getNome());
-								System.out.println("id citacao " + ontoParceiro.getId());
-								System.out.println("abre citacao " + ontoParceiro.getCitacao());
-								System.out.println(ontoParceiro.getNome());
-								System.out.println("---");
-								System.out.println("&");
-								ontoParceiro.setNome(nome);
-								ontoParceiro.setId(idLattes);
-							} else {
-								if (listcitacao.contains(ontoParceiro.getCitacao())) {
-									System.out.println("-----------FORMACAO-----------------");
-									System.out.println("nome analisado " + nome);
-									System.out.println("lista autor analisado " + pe.getNomeCompleto());
-									System.out.println("nome citacao " + ontoParceiro.getNome());
-									System.out.println("id citacao " + ontoParceiro.getId());
-									System.out.println("abre citacao " + ontoParceiro.getCitacao());
-									System.out.println(ontoParceiro.getCitacao());
-									System.out.println("@");
-									System.out.println("&");
-									ontoParceiro.setNome(nome);
-									ontoParceiro.setId(idLattes);
-								}
-							}
-						}
-					}
-
-				}
-				for (OntoClass ontoClass : pe.getListOntoProjetoPesquisa()) {
-					for (OntoParceiro ontoParceiro : ontoClass.getListAutores()) {
-						if (nome.contentEquals(ontoParceiro.getNome())) {
-							System.out.println("-------------ProjetoPesquisa---------------");
-							System.out.println("id analisado " + idLattes);
-							System.out.println("nome analisado " + nome);
-							System.out.println("lista autor analisado " + pe.getNomeCompleto());
-							System.out.println("nome citacao " + ontoParceiro.getNome());
-							System.out.println("id citacao " + ontoParceiro.getId());
-							System.out.println("abre citacao " + ontoParceiro.getCitacao());
-
-							System.out.println("#");
-							ontoParceiro.setNome(nome);
-							ontoParceiro.setId(idLattes);
-						} else {
-							if (listcitacao.contains(ontoParceiro.getNome())) {
-								System.out.println("-------------ProjetoPesquisa---------------");
-								System.out.println("nome analisado " + nome);
-								System.out.println("lista autor analisado " + pe.getNomeCompleto());
-								System.out.println("nome citacao " + ontoParceiro.getNome());
-								System.out.println("id citacao " + ontoParceiro.getId());
-								System.out.println("abre citacao " + ontoParceiro.getCitacao());
-								System.out.println(ontoParceiro.getNome());
-								System.out.println("---");
-								System.out.println("&");
-								ontoParceiro.setNome(nome);
-								ontoParceiro.setId(idLattes);
-							} else {
-								if (listcitacao.contains(ontoParceiro.getCitacao())) {
-									System.out.println("-----------ProjetoPesquisa-----------------");
-									System.out.println("nome analisado " + nome);
-									System.out.println("lista autor analisado " + pe.getNomeCompleto());
-									System.out.println("nome citacao " + ontoParceiro.getNome());
-									System.out.println("id citacao " + ontoParceiro.getId());
-									System.out.println("abre citacao " + ontoParceiro.getCitacao());
-									System.out.println(ontoParceiro.getCitacao());
-									System.out.println("@");
-									System.out.println("&");
-									ontoParceiro.setNome(nome);
-									ontoParceiro.setId(idLattes);
-								}
-							}
-						}
-					}
-				}
-			});
-
-		}
-	}
 
 	public static void EventoeTrabalho(OntoPessoa pessoa) {
 		int antes = pessoa.getListOntoEvento().size();
@@ -254,8 +107,37 @@ public class TratamentoDeDados {
 				});
 		return listDelete;
 	}
+	
+	
 
 	public void JuncaoMembros(ArrayList<OntoPessoa> listaPessoa) {
+		int antes = listaPessoa.size();
+		BaterNomeComIdLattes(listaPessoa);
+		System.out.println("1=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		BaterNomeComNome(listaPessoa);
+		System.out.println("2=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		BaterListCitacaoComNome(listaPessoa);
+		System.out.println("3=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		BaterNomeContidoEmOutro(listaPessoa);
+		System.out.println("4=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		BaterCitacaoPorCitacao(listaPessoa);
+		System.out.println("5=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		BaterNomeComNomeAlgoritmoNGram(listaPessoa);
+		System.out.println("6=== " + (antes - listaPessoa.size()));
+		antes = listaPessoa.size();
+		// listaPessoa.stream()
+				// .filter(p -> p.getNomeCompleto().contentEquals("ciro_de_barros_barbosa"))
+		// .forEach(u -> System.out.println(u.getNomeCompleto() + " " + u.getIdLattes()
+		// + " " + u.getCont()));
+
+	}
+
+	private void BaterNomeComIdLattes(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getIdLattes()));
 		int j = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
@@ -265,7 +147,7 @@ public class TratamentoDeDados {
 					j = i + 1;
 					if (idlattes.contentEquals(listaPessoa.get(j).getIdLattes())) {
 						listaPessoa.get(i).Copiar(listaPessoa.get(j));
-						// listaPessoa.get(i).cont();
+						listaPessoa.get(i).cont();
 						listaPessoa.remove(j);
 					} else {
 						break;
@@ -273,38 +155,94 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+	}
+
+	private void BaterNomeComNome(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
-		j = 0;
+
+		int j = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			while (i + 1 < listaPessoa.size()) {
 				j = i + 1;
 				if (nome.contentEquals(listaPessoa.get(j).getNomeCompleto())) {
 					listaPessoa.get(i).Copiar(listaPessoa.get(j));
-					// listaPessoa.get(i).cont();
+					listaPessoa.get(i).cont();
 					listaPessoa.remove(j);
 				} else {
 					break;
 				}
 			}
 		}
+	}
+
+	private void BaterNomeComNomeAlgoritmoNGram(ArrayList<OntoPessoa> listaPessoa) {
+		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		NGram ngram = new NGram(4);
+		int j = 0;
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			String nome = listaPessoa.get(i).getNomeCompleto();
+			while (i + 1 < listaPessoa.size()) {
+				j = i + 1;
+				if (ngram.distance(nome, listaPessoa.get(j).getNomeCompleto()) < 0.25) {
+					System.out.println("%%%%%%%%%%%%%%%%%%%%%");
+					System.out.println(nome);
+					System.out.println(listaPessoa.get(j).getNomeCompleto());
+					listaPessoa.get(i).Copiar(listaPessoa.get(j));
+					listaPessoa.get(i).cont();
+					listaPessoa.remove(j);
+				} else {
+					break;
+				}
+			}
+		}
+	}
+
+	private void BaterCitacaoPorCitacao(ArrayList<OntoPessoa> listaPessoa) {
+		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
+			for (int j = 0; j < listaPessoa.size(); j++) {
+				if (!(i == j)) {
+					for (int k = 0; k < listaPessoa.get(j).getCitacaoList().size(); k++) {
+						String unidadelist = listaPessoa.get(j).getCitacaoList().get(k);
+						if (listcitacaoPivo.contains(unidadelist) && (!unidadelist.contentEquals(""))) {
+							if (listaPessoa.get(j).getNomeCompleto().length() > listaPessoa.get(i).getNomeCompleto()
+									.length()) {
+								listaPessoa.get(i).setNomeCompleto(listaPessoa.get(j).getNomeCompleto());
+							}
+							listaPessoa.get(i).Copiar(listaPessoa.get(j));
+							listaPessoa.get(i).cont();
+							listaPessoa.remove(j);
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	private void BaterListCitacaoComNome(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
-			for ( j = 0; j < listaPessoa.size(); j++) {
+			for (int j = 0; j < listaPessoa.size(); j++) {
 				if (!(i == j)) {
 					if (listcitacaoPivo.contains(listaPessoa.get(j).getNomeCompleto())) {
 						listaPessoa.get(i).Copiar(listaPessoa.get(j));
-						// listaPessoa.get(i).cont();
+						listaPessoa.get(i).cont();
 						listaPessoa.remove(j);
 						continue;
 					}
 				}
 			}
 		}
+	}
+
+	private void BaterNomeContidoEmOutro(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
-		j = 0;
+		int j = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			while (i + 1 < listaPessoa.size()) {
@@ -319,7 +257,6 @@ public class TratamentoDeDados {
 				}
 			}
 		}
-
 	}
 
 }

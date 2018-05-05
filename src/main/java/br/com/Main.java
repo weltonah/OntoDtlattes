@@ -3,6 +3,7 @@ package br.com;
 import java.io.File;
 import java.util.ArrayList;
 
+import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
@@ -18,7 +19,7 @@ public class Main {
 		String nomeFile = "Completo.owl";
 		OntologyDAO ontoDao = new OntologyDAO(nomeFile);
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
-		int tam = 15;
+		int tam = 44;
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
 		tratamentoDeDados = new TratamentoDeDados();
@@ -32,21 +33,47 @@ public class Main {
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.IDLattes()),
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.UltimaAtualizacao()),
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCitacao()));
-			System.out.println(pessoa.getIdLattes());
+			System.out.println(
+					pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() + "&&& "
+							+ pessoa.getCitacaoList().toString());
 			preencherXMLtoOnto.buscarXML(pessoa);
 			listaPessoa.add(pessoa);
 		}
 		System.out.println(listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
+
 		System.out.println(listaPessoa.size());
 		tratamentoDeDados.JuncaoMembros(listaPessoa);
 
-		listaPessoa.forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() + " " + u.getCont()));
+		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
+		// u.getIdLattes() + " @@@ "
+		// + u.getCitacaoList().toString() + " cont: " + u.getCont()));
+		// listaPessoa.stream().filter(p -> p.getCont() >= 0).forEach(u ->
+		// System.out.println(u.getNomeCompleto() + " "
+		// + u.getIdLattes() + " @@@ " + u.getCitacaoList().toString() + " cont: " +
+		// u.getCont()));
+
+		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
+		// u.getIdLattes() + "\n @@@ "
+		// + u.getCitacaoList().toString() + " cont: " + u.getCont() + "\n| " +
+		// u.getListOntoAreaAtuacao().size()
+		// + "| " + u.getListOntoBanca().size() + "| " + u.getListOntoEvento().size() +
+		// "| "
+		// + u.getListOntoFormacao().size() + "| " + u.getListOntoOrgEvento().size() +
+		// "| "
+		// + u.getListOntoOrientacao().size() + "| " + u.getListOntoProducao().size() +
+		// "| "
+		// + u.getListOntoProjetoPesquisa().size() + "| " +
+		// u.getListOntoTrabalhoEvento().size()));
+		// listaPessoa.stream().filter(u ->
+		// u.getNomeCompleto().contentEquals("2487554612123446"))
+		// .forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() +
+		// " " + u.getCont()));
 		System.out.println(listaPessoa.size());
-		// tratamentoDeDados.TratarNomes(listaPessoa);
-		// ontoDao.preencherOnto(listaPessoa);
+		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
-		// ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
+		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
+		System.out.println("Fim");
 	}
 
 	public static ArrayList<String> ListaDeArquivos(int tam) {

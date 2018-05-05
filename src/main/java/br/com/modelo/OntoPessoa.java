@@ -34,8 +34,13 @@ public class OntoPessoa {
 	}
 
 	public void Copiar(OntoPessoa pessoa) {
-		this.Citacao = (this.Citacao.contentEquals("") || this.Citacao == null) ? pessoa.getCitacao() : "";
-		this.IdLattes = (this.IdLattes.contentEquals("") || this.IdLattes == null) ? pessoa.getIdLattes() : "";
+		if (this.getCitacaoList().size() < pessoa.getCitacaoList().size()) {
+			if (this.IdLattes.length() < pessoa.getIdLattes().length())
+			this.Citacao = pessoa.getCitacao();
+		}
+		this.cont = this.cont + pessoa.getCont();
+		this.IdLattes = (this.IdLattes.contentEquals("") || this.IdLattes == null) ? pessoa.getIdLattes()
+				: this.IdLattes;
 		this.ListOntoAreaAtuacao.addAll(pessoa.getListOntoAreaAtuacao());
 		this.ListOntoTrabalhoEvento.addAll(pessoa.getListOntoTrabalhoEvento());
 		this.ListOntoEvento.addAll(pessoa.getListOntoEvento());

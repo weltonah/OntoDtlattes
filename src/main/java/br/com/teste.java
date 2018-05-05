@@ -1,56 +1,33 @@
 package br.com;
 
-import java.util.ArrayList;
-
-import br.com.modelo.OntoClass;
-import br.com.modelo.OntoPessoa;
+import br.com.converter.TratamentoDeDados;
+import info.debatty.java.stringsimilarity.JaroWinkler;
+import info.debatty.java.stringsimilarity.NGram;
 
 public class teste {
 
 	public static void main(String[] args) {
-		ArrayList<OntoPessoa> listaPessoa = new ArrayList<>();
-		OntoClass teste = new OntoClass("nome Projeto", "", 0);
-		OntoClass teste2 = new OntoClass("nome ttt", "", 0);
-		OntoClass testep = new OntoClass("teste2", "", 0);
-		OntoPessoa pessoa = new OntoPessoa("nome1", "", "", "");
-		OntoPessoa pessoa3 = new OntoPessoa("nome2", "", "", "");
-		OntoPessoa pessoa4 = new OntoPessoa("nome2", "", "", "");
-		pessoa.AddListOntoBanca(teste);
-		pessoa3.AddListOntoBanca(testep);
-		OntoPessoa pessoa2 = new OntoPessoa("nome1", "", "", "");
-		pessoa2.AddListOntoOrientacao(teste2);
-		listaPessoa.add(pessoa);
-		listaPessoa.add(pessoa2);
-		listaPessoa.add(pessoa3);
-		listaPessoa.add(pessoa4);
+		TratamentoDeDados td = new TratamentoDeDados();
+		String teste = "alberto-ferreira";
+		String teste1 = "alBerto ferreíra";
+		String teste2 = "alberto  Ferreira";
+		String teste3 = "alberto.  ferreira";
 
-		int j = 0;
-		for (int i = 0; i < listaPessoa.size(); i++) {
-			String nome = listaPessoa.get(i).getNomeCompleto();
-			// for (j = i + 1; j < listaPessoa.size(); j++) {
-			while (i + 1 < listaPessoa.size()) {
-				j = i + 1;
-				if (nome.contentEquals(listaPessoa.get(j).getNomeCompleto())) {
-					listaPessoa.get(i).Copiar(listaPessoa.get(j));
-					listaPessoa.get(i).cont();
-					listaPessoa.remove(j);
-				} else {
-					break;
-				}
-			}
-		}
-//		System.out.println(listaPessoa.get(0).getNomeCompleto());
-//		System.out.println(listaPessoa.size());
-//		listaPessoa.get(0).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
-//		listaPessoa.get(0).getListOntoOrientacao().forEach(u -> System.out.println(u.getTitulo()));
-//		System.out.println(listaPessoa.get(1).getNomeCompleto());
-//		listaPessoa.get(1).getListOntoBanca().forEach(u -> System.out.println(u.getTitulo()));
+		System.out.println(td.corrigirString(teste));
+		System.out.println(td.corrigirString(teste1));
+		System.out.println(td.corrigirString(teste2));
+		System.out.println(td.corrigirString(teste3));
+		JaroWinkler jw = new JaroWinkler();
+		System.out.println(jw.similarity("vellela", "vieira"));
 		
-		
-		String aux = "ola";
-		String aux2 = "aola mundo";
-		if (aux2.contains(aux))
-			System.out.println(aux2);
+		NGram twogram = new NGram(2);
+		System.out.println(twogram.distance("ABCD", "ABTUIO"));
+
+		// produces 0.97222
+		String s1 = "a_c_n_galeao";
+		String s2 = "abimael_fernando_dourado_loula";
+		NGram ngram = new NGram(4);
+		System.out.println(ngram.distance(s1, s2));
 	}
 
 }
