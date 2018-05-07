@@ -137,6 +137,42 @@ public class TratamentoDeDados {
 
 	}
 
+	public void tratarEventos(ArrayList<OntoPessoa> listaPessoa) {
+		NGram ngram = new NGram(4);
+		int cont = 0;
+		int totalcont = 0;
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			for (int j = i + 1; j < listaPessoa.size(); j++) {
+				if (!(i == j)) {
+					OntoPessoa ontoPessoa = listaPessoa.get(i);
+					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
+					for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
+
+						OntoClass evento = ontoPessoa.getListOntoEvento().get(k);
+						for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
+							OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
+							double aux = ngram.distance(evento.getTitulo(),
+									evento2.getTitulo());
+							if (aux > 0 && aux < 0.25) {
+								// System.out.println("$$$$$###");
+								// System.out.println(evento.getTitulo());
+								// System.out.println(evento2.getTitulo());
+								cont++;
+								evento.setTitulo(evento2.getTitulo());
+								// System.out.println(ontoPessoa.getListOntoEvento().get(k).getTitulo());
+							}
+						}
+					}
+				}
+			}
+		}
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			totalcont = totalcont + listaPessoa.get(i).getListOntoEvento().size();
+		}
+		System.out.println("numero de evento que foram combinadas " + cont);
+		System.out.println("numero total de evento " + totalcont);
+	}
+
 	private void BaterNomeComIdLattes(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getIdLattes()));
 		int j = 0;
@@ -185,9 +221,9 @@ public class TratamentoDeDados {
 			while (i + 1 < listaPessoa.size()) {
 				j = i + 1;
 				if (ngram.distance(nome, listaPessoa.get(j).getNomeCompleto()) < 0.25) {
-					System.out.println("%%%%%%%%%%%%%%%%%%%%%");
-					System.out.println(nome);
-					System.out.println(listaPessoa.get(j).getNomeCompleto());
+					// System.out.println("%%%%%%%%%%%%%%%%%%%%%");
+					// System.out.println(nome);
+					// System.out.println(listaPessoa.get(j).getNomeCompleto());
 					listaPessoa.get(i).Copiar(listaPessoa.get(j));
 					listaPessoa.get(i).cont();
 					listaPessoa.remove(j);

@@ -19,7 +19,7 @@ public class Main {
 		String nomeFile = "Completo.owl";
 		OntologyDAO ontoDao = new OntologyDAO(nomeFile);
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
-		int tam = 44;
+		int tam = 15;
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
 		tratamentoDeDados = new TratamentoDeDados();
@@ -39,11 +39,13 @@ public class Main {
 			preencherXMLtoOnto.buscarXML(pessoa);
 			listaPessoa.add(pessoa);
 		}
-		System.out.println(listaPessoa.size());
+		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
 
-		System.out.println(listaPessoa.size());
+		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
 		tratamentoDeDados.JuncaoMembros(listaPessoa);
+		System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
+		tratamentoDeDados.tratarEventos(listaPessoa);
 
 		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
 		// u.getIdLattes() + " @@@ "
@@ -69,7 +71,6 @@ public class Main {
 		// u.getNomeCompleto().contentEquals("2487554612123446"))
 		// .forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() +
 		// " " + u.getCont()));
-		System.out.println(listaPessoa.size());
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
 		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
