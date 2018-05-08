@@ -3,49 +3,46 @@ package br.com;
 import java.io.File;
 import java.util.ArrayList;
 
-import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
-import org.springframework.core.io.ClassPathResource;
-import org.w3c.dom.Document;
-
-import br.com.Ontology.BuscarXmlToPessoa;
-import br.com.Ontology.OntologyDAO;
-import br.com.converter.ConverterFile;
-import br.com.converter.TratamentoDeDados;
-import br.com.modelo.OntoPessoa;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.OWLDataFactory;
+import org.semanticweb.owlapi.model.OWLObjectProperty;
+import org.semanticweb.owlapi.model.OWLOntology;
+import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
 		String nomeFile = "Completo.owl";
-		OntologyDAO ontoDao = new OntologyDAO(nomeFile);
-		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
-		int tam = 15;
-		ArrayList<String> Namexml;
-		ontoDao = new OntologyDAO(nomeFile);
-		tratamentoDeDados = new TratamentoDeDados();
-		Namexml = ListaDeArquivos(tam);
-		ArrayList<OntoPessoa> listaPessoa = new ArrayList<>();
-		for (String string : Namexml) {
-			File owlfile = new ClassPathResource("static/testFile/" + string).getFile();
-			Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
-			BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
-			OntoPessoa pessoa = new OntoPessoa(tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCompleto()),
-					tratamentoDeDados.corrigirString(preencherXMLtoOnto.IDLattes()),
-					tratamentoDeDados.corrigirString(preencherXMLtoOnto.UltimaAtualizacao()),
-					tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCitacao()));
-			System.out.println(
-					pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() + "&&& "
-							+ pessoa.getCitacaoList().toString());
-			preencherXMLtoOnto.buscarXML(pessoa);
-			listaPessoa.add(pessoa);
-		}
-		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
-		tratamentoDeDados.ExpansaoMembros(listaPessoa);
-
-		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
-		tratamentoDeDados.JuncaoMembros(listaPessoa);
-		System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
-		tratamentoDeDados.tratarEventos(listaPessoa);
+		/*
+		 * OntologyDAO ontoDao = new OntologyDAO(nomeFile); TratamentoDeDados
+		 * tratamentoDeDados = new TratamentoDeDados(); int tam = 15; ArrayList<String>
+		 * Namexml; ontoDao = new OntologyDAO(nomeFile); tratamentoDeDados = new
+		 * TratamentoDeDados(); Namexml = ListaDeArquivos(tam); ArrayList<OntoPessoa>
+		 * listaPessoa = new ArrayList<>(); for (String string : Namexml) { File owlfile
+		 * = new ClassPathResource("static/testFile/" + string).getFile(); Document
+		 * xmlfile = ConverterFile.ConverterFileToDocument(owlfile); BuscarXmlToPessoa
+		 * preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile); OntoPessoa pessoa = new
+		 * OntoPessoa(tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCompleto()
+		 * ), tratamentoDeDados.corrigirString(preencherXMLtoOnto.IDLattes()),
+		 * tratamentoDeDados.corrigirString(preencherXMLtoOnto.UltimaAtualizacao()),
+		 * tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCitacao()));
+		 * System.out.println( pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() +
+		 * "&&& " + pessoa.getCitacaoList().toString());
+		 * preencherXMLtoOnto.buscarXML(pessoa); listaPessoa.add(pessoa); }
+		 * System.out.println("tamanho pessoas antes da expansao " +
+		 * listaPessoa.size()); tratamentoDeDados.ExpansaoMembros(listaPessoa);
+		 * 
+		 * System.out.println("tamanho pessoas depois da expansao " +
+		 * listaPessoa.size()); tratamentoDeDados.JuncaoMembros(listaPessoa);
+		 * System.out.println("tamanho pessoas depois da juncao de membros " +
+		 * listaPessoa.size()); tratamentoDeDados.tratarEventos(listaPessoa);
+		 * ontoDao.preencherOnto(listaPessoa); System.out.println("Depois");
+		 * ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
+		 * System.out.println("Fim");
+		 */
+		criarArquivoResult(nomeFile);
 
 		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
 		// u.getIdLattes() + " @@@ "
@@ -71,11 +68,50 @@ public class Main {
 		// u.getNomeCompleto().contentEquals("2487554612123446"))
 		// .forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() +
 		// " " + u.getCont()));
-		ontoDao.preencherOnto(listaPessoa);
-		System.out.println("Depois");
-		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
-		System.out.println("Fim");
+
+
 	}
+
+	public static void criarArquivoResult(String nomeArq) throws OWLOntologyCreationException {
+		File file = new File(System.getProperty("user.dir") + "/" + nomeArq);
+		IRI DATALATTESIRI = IRI.create("http://www.datalattes.com/ontologies/datalattes.owl");
+		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
+		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(file);
+		OWLDataFactory factory = manager.getOWLDataFactory();
+		OWLObjectProperty obj = factory.getOWLObjectProperty(DATALATTESIRI + "#", "relacaoEvento");
+
+		ontology.individualsInSignature()
+				.filter(u -> u.isOWLNamedIndividual())
+				.filter(u -> ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Pessoa"))
+				.filter(u -> ontology.objectPropertyAssertionAxioms(u)
+						.anyMatch(
+								i -> i.signature().findFirst().get().getIRI().getFragment().contains("relacaoEvento")))
+				.forEach(p -> {
+					System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
+					ontology.objectPropertyAssertionAxioms(p).filter(
+							w -> w.signature().findFirst().get().getIRI().getFragment().contains("relacaoEvento"))
+							.forEach(y -> {
+								System.out.println("-------------------------");
+								y.signature().forEach(w -> System.out.println(w.getIRI()));
+							});
+				});
+		;
+//		ontology.getAxioms(obj).forEach(u ->{ 
+//			u.signature().forEach(t -> System.out.println(t.getIRI()));
+//			u
+//			System.out.println(u.getAxiomType().getName());
+//			});
+		// ontology.axioms().forEach(u -> u.signature());
+		// ontology.individualsInSignature().filter(u ->
+		// u.isOWLNamedIndividual()).forEach(w -> {
+		// System.out.println("@@@" + w.getIRI());
+		//
+		// });
+
+	}
+
+
 
 	public static ArrayList<String> ListaDeArquivos(int tam) {
 		// Tam max 44

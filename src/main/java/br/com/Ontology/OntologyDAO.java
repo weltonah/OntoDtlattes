@@ -61,7 +61,7 @@ public class OntologyDAO {
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		diferentIndividual();
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
-		// Inferir();
+		Inferir();
 	}
 
 
@@ -220,30 +220,26 @@ public class OntologyDAO {
 
 	public void limparDadosDesnecessario() {
 		System.out.println("numero de pessoas antes de ser limpo " + this.ontology.individualsInSignature()
-				.filter(u -> u.isOWLNamedIndividual())
-				.filter(u -> this.ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
-						.getIRI().getFragment().contains("Pessoa"))
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Pessoa"))
 				.count());
 		for (TriplaOwl triplaOwl : TratamentoDeDados.listaPessoaDesnecessario(this.ontology)) {
 			removeIndividual(triplaOwl.getSujeito());
 		}
 		System.out.println("numero de pessoas depois de ser limpo " + this.ontology.individualsInSignature()
-				.filter(u -> u.isOWLNamedIndividual())
-				.filter(u -> this.ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
-						.getIRI().getFragment().contains("Pessoa"))
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Pessoa"))
 				.count());
 		System.out.println("numero de evento antes de ser limpo " + this.ontology.individualsInSignature()
-				.filter(u -> u.isOWLNamedIndividual())
-				.filter(u -> this.ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
-						.getIRI().getFragment().contains("Evento"))
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Evento"))
 				.count());
 		for (TriplaOwl triplaOwl : TratamentoDeDados.listaEventoDesnecessario(this.ontology)) {
 			removeIndividual(triplaOwl.getSujeito());
 		}
 		System.out.println("numero de evento depois de ser limpo " + this.ontology.individualsInSignature()
-				.filter(u -> u.isOWLNamedIndividual())
-				.filter(u -> this.ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
-						.getIRI().getFragment().contains("Evento"))
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Evento"))
 				.count());
 	}
 
