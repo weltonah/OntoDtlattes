@@ -36,8 +36,11 @@ public class OntoPessoa {
 	}
 
 	public void Copiar(OntoPessoa pessoa) {
-		if (pessoa.isFlagLattes())
+
+		if (pessoa.isFlagLattes()) {
 			this.NomeCompleto = pessoa.getNomeCompleto();
+			this.FlagLattes = true;
+		}
 
 		if (this.getCitacaoList().size() < pessoa.getCitacaoList().size()) {
 			if (this.IdLattes.length() <= pessoa.getIdLattes().length())
@@ -55,6 +58,7 @@ public class OntoPessoa {
 		this.ListOntoProducao.addAll(pessoa.getListOntoProducao());
 		this.ListOntoProjetoPesquisa.addAll(pessoa.getListOntoProjetoPesquisa());
 		this.ListOntoBanca.addAll(pessoa.getListOntoBanca());
+
 	}
 
 	public void cont() {

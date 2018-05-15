@@ -165,7 +165,6 @@ public class TratamentoDeDados {
 								// System.out.println(evento.getTitulo());
 								// System.out.println(evento2.getTitulo());
 								cont++;
-
 								if (evento.getTitulo().length() < evento2.getTitulo().length())
 									evento2.setTitulo(evento.getTitulo());
 								else {
