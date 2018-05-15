@@ -36,7 +36,6 @@ public class OntoPessoa {
 	}
 
 	public void Copiar(OntoPessoa pessoa) {
-
 		if (pessoa.isFlagLattes()) {
 			this.NomeCompleto = pessoa.getNomeCompleto();
 			this.FlagLattes = true;

@@ -150,6 +150,13 @@ public class TratamentoDeDadosTeste {
 
 
 	@Test
+	public void teste() throws Exception {
+		String aux = "http://www.datalattes.com/ontologies/datalattes.owl#0846763436344325";
+		System.out.println(aux.substring(aux.indexOf("#") + 1));
+
+	}
+
+	@Test
 	public void BaterListCitacaoComNome() throws Exception {
 		this.tratamentoDeDados = new TratamentoDeDados();
 		ArrayList<OntoPessoa> listaPessoa = new ArrayList<>();

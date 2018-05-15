@@ -95,6 +95,8 @@ public class OntologyDAO {
 		// System.out.println(y.getIRI());
 		// });
 		// });
+		// System.out.println(r.getReasonerVersion());
+		System.out.println("ola");
 
 		List<InferredAxiomGenerator<? extends OWLAxiom>> gens = new ArrayList<>();
 		// gens.add(new InferredClassAssertionAxiomGenerator());
@@ -105,7 +107,6 @@ public class OntologyDAO {
 		InferredOntologyGenerator iog = new InferredOntologyGenerator(r, gens);
 
 		// axiomGenerators.stream().flatMap(g -> generate(df, g))
-
 		iog.fillOntology(factory, this.ontology);
 
 		System.out.println("ola");
@@ -128,11 +129,11 @@ public class OntologyDAO {
 		for (OntoPessoa pessoa : listapessoa) {
 			preencherDadosGerais(pessoa);
 			preencherAreaAtuacao(pessoa);
-			preencherProjetoPesquisa(pessoa);
-			preencherEvento(pessoa);
-			preencherFormacao(pessoa, listapessoa);
-			preencherBanca(pessoa);
-			preencherTrabalhoEvento(pessoa);
+			// preencherProjetoPesquisa(pessoa);
+			// preencherEvento(pessoa);
+			// preencherFormacao(pessoa, listapessoa);
+			// preencherBanca(pessoa);
+			// preencherTrabalhoEvento(pessoa);
 		}
 	}
 
@@ -143,7 +144,7 @@ public class OntologyDAO {
 		addIndividual(nomeclatura, "Pessoa");
 		addAtribNoIndivido(nomeclatura, pessoa.getIdLattes(), "IdLattes");
 		addAtribNoIndivido(nomeclatura, pessoa.getNomeCompleto(), "NomeCompleto");
-		addAtribNoIndivido(nomeclatura, pessoa.getData(), "DataAtualizacao");
+		// addAtribNoIndivido(nomeclatura, pessoa.getData(), "DataAtualizacao");
 	}
 
 	public void preencherProjetoPesquisa(OntoPessoa pessoa) {
@@ -168,6 +169,7 @@ public class OntologyDAO {
 		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
 				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoEvento().forEach(u -> {
+
 			addIndividual(u.getTitulo(), u.getTipo());
 			addRelacaoInd(nomeclatura, u.getTitulo(), "participouEvento");
 			addRelacaoInd(u.getTitulo(), nomeclatura, "eventoTemParticipante");
@@ -178,21 +180,31 @@ public class OntologyDAO {
 		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
 				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoAreaAtuacao().forEach(u -> {
+			System.out.println("$$$$$$$$$");
+			System.out.println(u.getGrandeArea() + '\n' + u.getAreaConhecimento() + "\n" + u.getSubAreaConhecimento()
+					+ "\n"
+					+ u.getNomeEspecialidade() + u.getNomeEspecialidade().length());
+
+			if (u.getGrandeArea().length() != 0) {
 			addIndividual(u.getGrandeArea(), "AreaAtuacao");
 			addRelacaoInd(nomeclatura, u.getGrandeArea(), "temAreaAtuacao");
 			addRelacaoInd(u.getGrandeArea(), nomeclatura, "areaAtuacaoTemPesquisador");
-
+			}
+			if (u.getAreaConhecimento().length() != 0) {
 			addIndividual(u.getAreaConhecimento(), "AreaConhecimento");
 			addRelacaoInd(nomeclatura, u.getAreaConhecimento(), "temAreaConhecimento");
 			addRelacaoInd(u.getAreaConhecimento(), nomeclatura, "areaConhecimentoTemPesquisador");
-
+			}
+			if (u.getSubAreaConhecimento().length() != 0) {
 			addIndividual(u.getSubAreaConhecimento(), "SubArea");
 			addRelacaoInd(nomeclatura, u.getSubAreaConhecimento(), "temSubArea");
 			addRelacaoInd(u.getSubAreaConhecimento(), nomeclatura, "subAreaTemPesquisador");
-
+			}
+			if (u.getNomeEspecialidade().length() != 0) {
 			addIndividual(u.getNomeEspecialidade(), "Especialidade");
 			addRelacaoInd(nomeclatura, u.getNomeEspecialidade(), "temEspecialidade");
 			addRelacaoInd(u.getNomeEspecialidade(), nomeclatura, "especialidadeTemPesquisador");
+			}
 		});
 	}
 
@@ -223,6 +235,10 @@ public class OntologyDAO {
 					}
 					}
 				}
+				if (nome.contains("2017"))
+					System.out.println(nome);
+				if (nomeclatura.contains("2017"))
+					System.out.println(nomeclatura);
 				// System.out.println(nome);
 				// System.out.println("!!");
 				addIndividual(nome, "Pessoa");
