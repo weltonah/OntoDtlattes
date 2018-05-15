@@ -8,11 +8,14 @@ public class OntoClass {
 	private ArrayList<OntoParceiro> ListAutores;
 	private int ano;
 
+	private boolean FlagFormacaoOrientacao;
+
 	public OntoClass(String titulo, String tipo, ArrayList<OntoParceiro> listAutores) {
 		super();
 		this.Titulo = titulo;
 		this.Tipo = tipo;
 		this.ListAutores = listAutores;
+		this.FlagFormacaoOrientacao = false;
 	}
 
 	public OntoClass(String titulo, String tipo, int ano) {
@@ -21,6 +24,7 @@ public class OntoClass {
 		this.Tipo = tipo;
 		this.ListAutores = new ArrayList<>();
 		this.ano = ano;
+		this.FlagFormacaoOrientacao = false;
 	}
 
 	public String getTitulo() {
@@ -59,6 +63,14 @@ public class OntoClass {
 
 	public void setAno(int ano) {
 		this.ano = ano;
+	}
+
+	public boolean isFlagFormacaoOrientacao() {
+		return this.FlagFormacaoOrientacao;
+	}
+
+	public void setFlagFormacaoOrientacao(boolean flagFormacaoOrientacao) {
+		this.FlagFormacaoOrientacao = flagFormacaoOrientacao;
 	}
 
 }

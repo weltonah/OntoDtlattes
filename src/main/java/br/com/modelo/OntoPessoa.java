@@ -35,10 +35,11 @@ public class OntoPessoa {
 
 	public void Copiar(OntoPessoa pessoa) {
 		if (this.getCitacaoList().size() < pessoa.getCitacaoList().size()) {
-			if (this.IdLattes.length() < pessoa.getIdLattes().length())
+			if (this.IdLattes.length() <= pessoa.getIdLattes().length())
 			this.Citacao = pessoa.getCitacao();
 		}
 		this.cont = this.cont + pessoa.getCont();
+
 		this.IdLattes = (this.IdLattes.contentEquals("") || this.IdLattes == null) ? pessoa.getIdLattes()
 				: this.IdLattes;
 		this.ListOntoAreaAtuacao.addAll(pessoa.getListOntoAreaAtuacao());
@@ -103,7 +104,7 @@ public class OntoPessoa {
 		this.ListOntoFormacao = listOntoFormacao;
 	}
 
-	public void setListOntoFormacao(OntoClass aux) {
+	public void AddListOntoFormacao(OntoClass aux) {
 		this.ListOntoFormacao.add(aux);
 	}
 
@@ -121,6 +122,10 @@ public class OntoPessoa {
 
 	public void setListOntoProjetoPesquisa(ArrayList<OntoClass> listOntoProjetoPesquisa) {
 		this.ListOntoProjetoPesquisa = listOntoProjetoPesquisa;
+	}
+
+	public void AddListOntoProjetoPesquisa(OntoClass listOntoProjetoPesquisa) {
+		this.ListOntoProjetoPesquisa.add(listOntoProjetoPesquisa);
 	}
 
 	public ArrayList<OntoClass> getListOntoBanca() {

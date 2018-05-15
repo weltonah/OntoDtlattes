@@ -34,14 +34,13 @@ import org.semanticweb.owlapi.util.InferredObjectPropertyCharacteristicAxiomGene
 import org.semanticweb.owlapi.util.InferredOntologyGenerator;
 import org.semanticweb.owlapi.util.InferredPropertyAssertionGenerator;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
-import org.springframework.stereotype.Service;
 
 import br.com.DAO.ReadFile;
 import br.com.converter.TratamentoDeDados;
+import br.com.modelo.OntoClass;
 import br.com.modelo.OntoPessoa;
 import br.com.modelo.TriplaOwl;
 
-@Service
 public class OntologyDAO {
 
 	private File file;
@@ -63,7 +62,6 @@ public class OntologyDAO {
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		Inferir();
 	}
-
 
 	public void diferentIndividual() throws OWLOntologyCreationException {
 		this.manager = OWLManager.createOWLOntologyManager();
@@ -105,118 +103,173 @@ public class OntologyDAO {
 		gens.add(new InferredPropertyAssertionGenerator());
 		File ont = new File(System.getProperty("user.dir") + "/testeResultado.owl");
 		InferredOntologyGenerator iog = new InferredOntologyGenerator(r, gens);
-		
+
 		// axiomGenerators.stream().flatMap(g -> generate(df, g))
-		
-		
+
 		iog.fillOntology(factory, this.ontology);
 
 		System.out.println("ola");
-		this.manager.saveOntology(this.ontology, new FunctionalSyntaxDocumentFormat(),
-				new FileOutputStream(this.file));
+		this.manager.saveOntology(this.ontology, new FunctionalSyntaxDocumentFormat(), new FileOutputStream(this.file));
 	}
 
-
-	public void preencherOntoPessoa(OntoPessoa pessoa)
-			throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
-		preencherDadosGerais(pessoa);
-		preencherProjetoPesquisa(pessoa);
-		preencherEvento(pessoa);
-		preencherFormacao(pessoa);
-		preencherBanca(pessoa);
-		preencherTrabalhoEvento(pessoa);
-	}
+	// public void preencherOntoPessoa(OntoPessoa pessoa)
+	// throws OWLOntologyStorageException, FileNotFoundException,
+	// OWLOntologyCreationException {
+	// preencherDadosGerais(pessoa);
+	// preencherProjetoPesquisa(pessoa);
+	// preencherEvento(pessoa);
+	// preencherFormacao(pessoa);
+	// preencherBanca(pessoa);
+	// preencherTrabalhoEvento(pessoa);
+	// }
 
 	public void preencherOnto(ArrayList<OntoPessoa> listapessoa)
 			throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		for (OntoPessoa pessoa : listapessoa) {
 			preencherDadosGerais(pessoa);
+			preencherAreaAtuacao(pessoa);
 			preencherProjetoPesquisa(pessoa);
 			preencherEvento(pessoa);
-			preencherFormacao(pessoa);
+			preencherFormacao(pessoa, listapessoa);
 			preencherBanca(pessoa);
 			preencherTrabalhoEvento(pessoa);
 		}
 	}
 
 	public void preencherDadosGerais(OntoPessoa pessoa) {
-		String nome = pessoa.getIdLattes();
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		// Add dados gerais
-		addIndividual(nome, "Pessoa");
-		addAtribNoIndivido(nome, pessoa.getIdLattes(), "IdLattes");
-		addAtribNoIndivido(nome, pessoa.getNomeCompleto(), "NomeCompleto");
-		addAtribNoIndivido(nome, pessoa.getData(), "DataAtualizacao");
+		addIndividual(nomeclatura, "Pessoa");
+		addAtribNoIndivido(nomeclatura, pessoa.getIdLattes(), "IdLattes");
+		addAtribNoIndivido(nomeclatura, pessoa.getNomeCompleto(), "NomeCompleto");
+		addAtribNoIndivido(nomeclatura, pessoa.getData(), "DataAtualizacao");
 	}
 
 	public void preencherProjetoPesquisa(OntoPessoa pessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoProjetoPesquisa().forEach(u -> {
 			addIndividual(u.getTitulo(), u.getTipo());
-			addRelacaoInd(pessoa.getIdLattes(), u.getTitulo(), "TrabalhoEmProjetoPesquisa");
-			addRelacaoInd(u.getTitulo(), pessoa.getIdLattes(), "ProjetoTeveParticipante");
-			u.getListAutores().forEach(t -> {
-				String nome = (t.getId() == "" || t.getId().isEmpty() || t.getId() == null) ? t.getNome() : t.getId();
-				addIndividual(nome, "Pessoa");
-				addRelacaoInd(nome, u.getTitulo(), "TrabalhoEmProjetoPesquisa");
-				addRelacaoInd(u.getTitulo(), nome, "ProjetoTeveParticipante");
-			});
+			addRelacaoInd(nomeclatura, u.getTitulo(), "TrabalhoEmProjetoPesquisa");
+			addRelacaoInd(u.getTitulo(), nomeclatura, "ProjetoTeveParticipante");
+
+			// u.getListAutores().forEach(t -> {
+			// String nome = (t.getId() == "" || t.getId().isEmpty() || t.getId() == null) ?
+			// t.getNome() : t.getId();
+			// addIndividual(nome, "Pessoa");
+			// addRelacaoInd(nome, u.getTitulo(), "TrabalhoEmProjetoPesquisa");
+			// addRelacaoInd(u.getTitulo(), nome, "ProjetoTeveParticipante");
+			// });
 		});
 	}
 
 	public void preencherEvento(OntoPessoa pessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoEvento().forEach(u -> {
 			addIndividual(u.getTitulo(), u.getTipo());
-			addRelacaoInd(pessoa.getIdLattes(), u.getTitulo(), "participouEvento");
-			addRelacaoInd(u.getTitulo(), pessoa.getIdLattes(), "eventoTemParticipante");
+			addRelacaoInd(nomeclatura, u.getTitulo(), "participouEvento");
+			addRelacaoInd(u.getTitulo(), nomeclatura, "eventoTemParticipante");
 		});
 	}
 
+	public void preencherAreaAtuacao(OntoPessoa pessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
+		pessoa.getListOntoAreaAtuacao().forEach(u -> {
+			addIndividual(u.getGrandeArea(), "AreaAtuacao");
+			addRelacaoInd(nomeclatura, u.getGrandeArea(), "temAreaAtuacao");
+			addRelacaoInd(u.getGrandeArea(), nomeclatura, "areaAtuacaoTemPesquisador");
 
-	public void preencherFormacao(OntoPessoa pessoa) {
+			addIndividual(u.getAreaConhecimento(), "AreaConhecimento");
+			addRelacaoInd(nomeclatura, u.getAreaConhecimento(), "temAreaConhecimento");
+			addRelacaoInd(u.getAreaConhecimento(), nomeclatura, "areaConhecimentoTemPesquisador");
+
+			addIndividual(u.getSubAreaConhecimento(), "SubArea");
+			addRelacaoInd(nomeclatura, u.getSubAreaConhecimento(), "temSubArea");
+			addRelacaoInd(u.getSubAreaConhecimento(), nomeclatura, "subAreaTemPesquisador");
+
+			addIndividual(u.getNomeEspecialidade(), "Especialidade");
+			addRelacaoInd(nomeclatura, u.getNomeEspecialidade(), "temEspecialidade");
+			addRelacaoInd(u.getNomeEspecialidade(), nomeclatura, "especialidadeTemPesquisador");
+		});
+	}
+
+	public void preencherFormacao(OntoPessoa pessoa, ArrayList<OntoPessoa> listapessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoFormacao().forEach(u -> {
-			// addIndividual(u.getTitulo(), u.getTipo());
-			// addRelacaoInd(pessoa.getIdLattes(), u.getTitulo(), "eFormado");
-			u.getListAutores().forEach(t -> {
-				String nome = (t.getId() == "" || t.getId().isEmpty() || t.getId() == null) ? t.getNome() : t.getId();
+			String nome = "";
+			boolean flag = false;
+			// System.out.println(pessoa.getNomeCompleto());
+			if (u.isFlagFormacaoOrientacao()) {
+				// System.out.println("((((((((((( " + u.getTitulo() + " )))))))))))))))");
+				first:
+				for (OntoPessoa ontoPessoa : listapessoa) {
+					if (!ontoPessoa.equals(pessoa)) {
+						// System.out.println("------------- " + ontoPessoa.getNomeCompleto() +
+						// "------------- ");
+					for (OntoClass ontoClass : ontoPessoa.getListOntoFormacao()) {
+							// System.out.println(ontoClass.getTitulo() + " &&&& " +
+							// ontoClass.isFlagFormacaoOrientacao());
+						if ((!ontoClass.isFlagFormacaoOrientacao())
+								&& (ontoClass.getTitulo().contentEquals(u.getTitulo()))) {
+							nome = (ontoPessoa.getIdLattes() == "" || ontoPessoa.getIdLattes().isEmpty()
+									|| ontoPessoa.getIdLattes() == null) ? ontoPessoa.getNomeCompleto()
+											: ontoPessoa.getIdLattes();
+								break first;
+						}
+					}
+					}
+				}
+				// System.out.println(nome);
+				// System.out.println("!!");
 				addIndividual(nome, "Pessoa");
-				addRelacaoInd(nome, pessoa.getIdLattes(), "orientou");
-				addRelacaoInd(pessoa.getIdLattes(), nome, "foiOrientadoPor");
-			});
+				addRelacaoInd(nome, nomeclatura, "orientou");
+				addRelacaoInd(nomeclatura, nome, "foiOrientadoPor");
+			}
 		});
 	}
 
 	public void preencherBanca(OntoPessoa pessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
+
 		pessoa.getListOntoBanca().forEach(u -> {
-			// addIndividual(u.getTitulo(), u.getTipo());
-			// addRelacaoInd(pessoa.getIdLattes(), u.getTitulo(), "participouDeBanca");
-			// addRelacaoInd(u.getTitulo(), pessoa.getIdLattes(), "bancaTemParticipante");
-			u.getListAutores().forEach(t -> {
-				String nome = (t.getId() == "" || t.getId().isEmpty() || t.getId() == null) ? t.getNome() : t.getId();
-				addIndividual(nome, "Pessoa");
-				// addRelacaoInd(nome, u.getTitulo(), "participouDeBanca");
 
-				// addRelacaoInd(u.getTitulo(), nome, "bancaTemParticipante");
-				if (!pessoa.getIdLattes().contentEquals(nome)) {
-					addRelacaoInd(pessoa.getIdLattes(), nome, "relacaoBanca");
-					addRelacaoInd(nome, pessoa.getIdLattes(), "relacaoBanca");
-				}
+			addIndividual(u.getTitulo(), u.getTipo());
+			addRelacaoInd(nomeclatura, u.getTitulo(), "participouDeBanca");
+			addRelacaoInd(u.getTitulo(), nomeclatura, "bancaTemParticipante");
 
-			});
+			// u.getListAutores().forEach(t -> {
+			// String nome = (t.getId() == "" || t.getId().isEmpty() || t.getId() == null) ?
+			// t.getNome() : t.getId();
+			// addIndividual(nome, "Pessoa");
+			// // addRelacaoInd(nome, u.getTitulo(), "participouDeBanca");
+			//
+			// // addRelacaoInd(u.getTitulo(), nome, "bancaTemParticipante");
+			// if (!pessoa.getIdLattes().contentEquals(nome)) {
+			// addRelacaoInd(pessoa.getIdLattes(), nome, "relacaoBanca");
+			// addRelacaoInd(nome, pessoa.getIdLattes(), "relacaoBanca");
+			// }
+			//
+			// });
 		});
 	}
 
 	public void preencherTrabalhoEvento(OntoPessoa pessoa) {
+		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
+				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoTrabalhoEvento().forEach(u -> {
 			addIndividual(u.getTituloTrabalho(), "Producao");
 			addIndividual(u.getEvento().getTitulo(), "Evento");
-			addRelacaoInd(pessoa.getIdLattes(), u.getTituloTrabalho(), "apresentouTrabalhoEvento");
-			addRelacaoInd(u.getTituloTrabalho(), pessoa.getIdLattes(), "eventoTeveTrabalhoDe");
+			addRelacaoInd(nomeclatura, u.getTituloTrabalho(), "apresentouTrabalhoEvento");
+			addRelacaoInd(u.getTituloTrabalho(), nomeclatura, "eventoTeveTrabalhoDe");
 			addRelacaoInd(u.getTituloTrabalho(), u.getEvento().getTitulo(), "trabalhoEmEvento");
 			addRelacaoInd(u.getEvento().getTitulo(), u.getTituloTrabalho(), "eventoTeveTrabalho");
 		});
 	}
-
-
-
 
 	public void limparDadosDesnecessario() {
 		System.out.println("numero de pessoas antes de ser limpo " + this.ontology.individualsInSignature()

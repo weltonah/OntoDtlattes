@@ -5,14 +5,15 @@ package br.com.modelo;
  */
 public class AreaConhecimento {
 
+	private String grandeArea;
 	private String areaConhecimento;
-
 	private String subAreaConhecimento;
-
 	private String nomeEspecialidade;
 
-	public AreaConhecimento(String areaConhecimento, String subAreaConhecimento, String nomeEspecialidade) {
+	public AreaConhecimento(String grandeArea, String areaConhecimento, String subAreaConhecimento,
+			String nomeEspecialidade) {
 		super();
+		this.grandeArea = grandeArea;
 		this.areaConhecimento = areaConhecimento;
 		this.subAreaConhecimento = subAreaConhecimento;
 		this.nomeEspecialidade = nomeEspecialidade;
@@ -46,6 +47,14 @@ public class AreaConhecimento {
 	public String toString() {
 		return "AreaConhecimento [areaConhecimento=" + this.areaConhecimento + ", subAreaConhecimento="
 				+ this.subAreaConhecimento + ", nomeEspecialidade=" + this.nomeEspecialidade + "]";
+	}
+
+	public String getGrandeArea() {
+		return this.grandeArea;
+	}
+
+	public void setGrandeArea(String grandeArea) {
+		this.grandeArea = grandeArea;
 	}
 
 }

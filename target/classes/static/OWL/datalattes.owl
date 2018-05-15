@@ -25,6 +25,9 @@
         <Class IRI="#Cultivacao"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#Especialidade"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#CursoMinistrado"/>
     </Declaration>
     <Declaration>
@@ -49,6 +52,12 @@
         <Class IRI="#Sonoplastia"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#SubArea"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#relacaoEspecialidade"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Assesoria"/>
     </Declaration>
     <Declaration>
@@ -65,6 +74,9 @@
     </Declaration>
     <Declaration>
         <Class IRI="#BancaGraduacao"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
     </Declaration>
     <Declaration>
         <Class IRI="#ArtesVisuaisInstalacao"/>
@@ -139,16 +151,10 @@
         <Class IRI="#ArtesVisuais"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CienciasDaSaude"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#RedeSocial"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Apresentacao"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#CienciasBiologicas"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Livro"/>
@@ -190,6 +196,9 @@
         <Class IRI="#SonoplastiaTelevisao"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#temSubArea"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#Diversas"/>
     </Declaration>
     <Declaration>
@@ -227,9 +236,6 @@
     </Declaration>
     <Declaration>
         <Class IRI="#Pedagogica"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#LiguisticaLetrasArtes"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Projeto"/>
@@ -286,6 +292,9 @@
         <Class IRI="#ApresentacaoObraArtisticaLiteraria"/>
     </Declaration>
     <Declaration>
+        <ObjectProperty IRI="#relacaoAreaConhecimento"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#LivroOrganizado"/>
     </Declaration>
     <Declaration>
@@ -299,12 +308,6 @@
     </Declaration>
     <Declaration>
         <Class IRI="#RelatorioPesquisa"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#Engenharias"/>
-    </Declaration>
-    <Declaration>
-        <Class IRI="#CienciaHumanas"/>
     </Declaration>
     <Declaration>
         <Class IRI="#ArtesCenicasRadialistica"/>
@@ -415,22 +418,19 @@
         <Class IRI="#Arranjo"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CienciasSociasAplicadas"/>
-    </Declaration>
-    <Declaration>
         <ObjectProperty IRI="#relacaoTrabalho"/>
     </Declaration>
     <Declaration>
         <Class IRI="#ApresentacaoRadioTVTeatro"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CienciasAgrarias"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#Programa"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Equipamento"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#relacaoSubArea"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Processual"/>
@@ -464,6 +464,12 @@
     </Declaration>
     <Declaration>
         <Class IRI="#Especializacao"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#temEspecialidade"/>
     </Declaration>
     <Declaration>
         <Class IRI="#ArtesVisuaisGravura"/>
@@ -532,7 +538,16 @@
         <Class IRI="#ObraArtesVisuaisDesenho"/>
     </Declaration>
     <Declaration>
+        <Class IRI="#Area"/>
+    </Declaration>
+    <Declaration>
         <Class IRI="#EditoracaoPeriodico"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
+    </Declaration>
+    <Declaration>
+        <Class IRI="#AreaConhecimento"/>
     </Declaration>
     <Declaration>
         <Class IRI="#EditoracaoColetanea"/>
@@ -595,9 +610,6 @@
         <Class IRI="#ArranjoMusical"/>
     </Declaration>
     <Declaration>
-        <Class IRI="#CienciasExatasTerra"/>
-    </Declaration>
-    <Declaration>
         <Class IRI="#ApresentacaoObraArtisticaMusical"/>
     </Declaration>
     <Declaration>
@@ -629,6 +641,9 @@
     </Declaration>
     <Declaration>
         <ObjectProperty IRI="#participouEvento"/>
+    </Declaration>
+    <Declaration>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
     </Declaration>
     <Declaration>
         <Class IRI="#Pos-graduacao"/>
@@ -732,6 +747,14 @@
     <SubClassOf>
         <Class IRI="#ApresentacaoTrabalho"/>
         <Class IRI="#ProducaoTecnica"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#AreaAtuacao"/>
+        <Class IRI="#Area"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#AreaConhecimento"/>
+        <Class IRI="#Area"/>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#Arranjo"/>
@@ -870,30 +893,6 @@
         <Class IRI="#ProducaoTecnica"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#CienciaHumanas"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#CienciasAgrarias"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#CienciasBiologicas"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#CienciasDaSaude"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#CienciasExatasTerra"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#CienciasSociasAplicadas"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
         <Class IRI="#Comentario"/>
         <Class IRI="#ProgramaRadioTV"/>
     </SubClassOf>
@@ -1014,10 +1013,6 @@
         <Class IRI="#TrabalhoTecnico"/>
     </SubClassOf>
     <SubClassOf>
-        <Class IRI="#Engenharias"/>
-        <Class IRI="#AreaAtuacao"/>
-    </SubClassOf>
-    <SubClassOf>
         <Class IRI="#EnsinoSuperior"/>
         <Class IRI="#FormacaçãoAcademica"/>
     </SubClassOf>
@@ -1028,6 +1023,10 @@
     <SubClassOf>
         <Class IRI="#Equipamento"/>
         <Class IRI="#Prototipo"/>
+    </SubClassOf>
+    <SubClassOf>
+        <Class IRI="#Especialidade"/>
+        <Class IRI="#Area"/>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#Especializacao"/>
@@ -1076,10 +1075,6 @@
     <SubClassOf>
         <Class IRI="#LatoSensu"/>
         <Class IRI="#Pos-graduacao"/>
-    </SubClassOf>
-    <SubClassOf>
-        <Class IRI="#LiguisticaLetrasArtes"/>
-        <Class IRI="#AreaAtuacao"/>
     </SubClassOf>
     <SubClassOf>
         <Class IRI="#Livro"/>
@@ -1334,6 +1329,10 @@
         <Class IRI="#Pos-graduacao"/>
     </SubClassOf>
     <SubClassOf>
+        <Class IRI="#SubArea"/>
+        <Class IRI="#Area"/>
+    </SubClassOf>
+    <SubClassOf>
         <Class IRI="#Terapeutica"/>
         <Class IRI="#ProcessoTecnica"/>
     </SubClassOf>
@@ -1362,14 +1361,10 @@
         <Class IRI="#Musica"/>
     </SubClassOf>
     <DisjointClasses>
-        <Class IRI="#Ano"/>
         <Class IRI="#AreaAtuacao"/>
-        <Class IRI="#Banca"/>
-        <Class IRI="#Evento"/>
-        <Class IRI="#FormacaçãoAcademica"/>
-        <Class IRI="#Pessoa"/>
-        <Class IRI="#Producao"/>
-        <Class IRI="#ProjetoPesquisa"/>
+        <Class IRI="#AreaConhecimento"/>
+        <Class IRI="#Especialidade"/>
+        <Class IRI="#SubArea"/>
     </DisjointClasses>
     <DisjointClasses>
         <Class IRI="#ArtigoPublicado"/>
@@ -1388,8 +1383,16 @@
         <ObjectProperty IRI="#temAreaAtuacao"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
         <ObjectProperty IRI="#bancaTemParticipante"/>
         <ObjectProperty IRI="#participouDeBanca"/>
+    </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
+        <ObjectProperty IRI="#temEspecialidade"/>
     </InverseObjectProperties>
     <InverseObjectProperties>
         <ObjectProperty IRI="#eventoTemParticipante"/>
@@ -1407,11 +1410,21 @@
         <ObjectProperty IRI="#participouDeTrabalho"/>
         <ObjectProperty IRI="#trabalhoTemPesquisador"/>
     </InverseObjectProperties>
+    <InverseObjectProperties>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
+        <ObjectProperty IRI="#temSubArea"/>
+    </InverseObjectProperties>
     <SymmetricObjectProperty>
         <ObjectProperty IRI="#relacaoAreaAtuacao"/>
     </SymmetricObjectProperty>
     <SymmetricObjectProperty>
+        <ObjectProperty IRI="#relacaoAreaConhecimento"/>
+    </SymmetricObjectProperty>
+    <SymmetricObjectProperty>
         <ObjectProperty IRI="#relacaoBanca"/>
+    </SymmetricObjectProperty>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#relacaoEspecialidade"/>
     </SymmetricObjectProperty>
     <SymmetricObjectProperty>
         <ObjectProperty IRI="#relacaoEvento"/>
@@ -1421,6 +1434,9 @@
     </SymmetricObjectProperty>
     <SymmetricObjectProperty>
         <ObjectProperty IRI="#relacaoProjetoPesquisa"/>
+    </SymmetricObjectProperty>
+    <SymmetricObjectProperty>
+        <ObjectProperty IRI="#relacaoSubArea"/>
     </SymmetricObjectProperty>
     <SymmetricObjectProperty>
         <ObjectProperty IRI="#relacaoTrabalho"/>
@@ -1441,10 +1457,16 @@
         <ObjectProperty IRI="#areaAtuacaoTemPesquisador"/>
     </AsymmetricObjectProperty>
     <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
         <ObjectProperty IRI="#bancaTemParticipante"/>
     </AsymmetricObjectProperty>
     <AsymmetricObjectProperty>
         <ObjectProperty IRI="#eFormado"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
     </AsymmetricObjectProperty>
     <AsymmetricObjectProperty>
         <ObjectProperty IRI="#eventoTemParticipante"/>
@@ -1471,7 +1493,19 @@
         <ObjectProperty IRI="#participouEvento"/>
     </AsymmetricObjectProperty>
     <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
         <ObjectProperty IRI="#temAreaAtuacao"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#temEspecialidade"/>
+    </AsymmetricObjectProperty>
+    <AsymmetricObjectProperty>
+        <ObjectProperty IRI="#temSubArea"/>
     </AsymmetricObjectProperty>
     <AsymmetricObjectProperty>
         <ObjectProperty IRI="#trabalhoEmEvento"/>
@@ -1492,10 +1526,16 @@
         <ObjectProperty IRI="#areaAtuacaoTemPesquisador"/>
     </IrreflexiveObjectProperty>
     <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#bancaTemParticipante"/>
     </IrreflexiveObjectProperty>
     <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#eFormado"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
     </IrreflexiveObjectProperty>
     <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#eventoTemParticipante"/>
@@ -1522,7 +1562,19 @@
         <ObjectProperty IRI="#participouEvento"/>
     </IrreflexiveObjectProperty>
     <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#temAreaAtuacao"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#temEspecialidade"/>
+    </IrreflexiveObjectProperty>
+    <IrreflexiveObjectProperty>
+        <ObjectProperty IRI="#temSubArea"/>
     </IrreflexiveObjectProperty>
     <IrreflexiveObjectProperty>
         <ObjectProperty IRI="#trabalhoEmEvento"/>
@@ -1547,12 +1599,20 @@
         <Class IRI="#AreaAtuacao"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
+        <Class IRI="#AreaConhecimento"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
         <ObjectProperty IRI="#bancaTemParticipante"/>
         <Class IRI="#Banca"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#eFormado"/>
         <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
+        <Class IRI="#Especialidade"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
         <ObjectProperty IRI="#eventoTemParticipante"/>
@@ -1591,7 +1651,15 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
+        <ObjectProperty IRI="#relacaoAreaConhecimento"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
         <ObjectProperty IRI="#relacaoBanca"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#relacaoEspecialidade"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
@@ -1607,6 +1675,10 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
+        <ObjectProperty IRI="#relacaoSubArea"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
         <ObjectProperty IRI="#relacaoTrabalho"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
@@ -1615,7 +1687,23 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
+        <Class IRI="#SubArea"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
         <ObjectProperty IRI="#temAreaAtuacao"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#temEspecialidade"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyDomain>
+    <ObjectPropertyDomain>
+        <ObjectProperty IRI="#temSubArea"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyDomain>
     <ObjectPropertyDomain>
@@ -1640,6 +1728,10 @@
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#areaAtuacaoTemPesquisador"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#areaConhecimentoTemPesquisador"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
@@ -1651,6 +1743,10 @@
         <Class IRI="#FormacaçãoAcademica"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
+        <ObjectProperty IRI="#especialidadeTemPesquisador"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
         <ObjectProperty IRI="#eventoTemParticipante"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
@@ -1687,7 +1783,15 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
+        <ObjectProperty IRI="#relacaoAreaConhecimento"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
         <ObjectProperty IRI="#relacaoBanca"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#relacaoEspecialidade"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
@@ -1703,6 +1807,10 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
+        <ObjectProperty IRI="#relacaoSubArea"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
         <ObjectProperty IRI="#relacaoTrabalho"/>
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
@@ -1711,8 +1819,24 @@
         <Class IRI="#Pessoa"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
+        <ObjectProperty IRI="#subAreaTemPesquisador"/>
+        <Class IRI="#Pessoa"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
         <ObjectProperty IRI="#temAreaAtuacao"/>
         <Class IRI="#AreaAtuacao"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#temAreaConhecimento"/>
+        <Class IRI="#AreaConhecimento"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#temEspecialidade"/>
+        <Class IRI="#Especialidade"/>
+    </ObjectPropertyRange>
+    <ObjectPropertyRange>
+        <ObjectProperty IRI="#temSubArea"/>
+        <Class IRI="#SubArea"/>
     </ObjectPropertyRange>
     <ObjectPropertyRange>
         <ObjectProperty IRI="#trabalhoEmEvento"/>
@@ -2033,6 +2157,117 @@
         <Head>
             <ObjectPropertyAtom>
                 <ObjectProperty IRI="#relacaoAreaAtuacao"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Def-relacaoAreaConhecimento</Literal>
+        </Annotation>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temAreaConhecimento"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temAreaConhecimento"/>
+                <Variable IRI="#z"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <DifferentIndividualsAtom>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </DifferentIndividualsAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#relacaoAreaConhecimento"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Def-relacaoEspecialidade</Literal>
+        </Annotation>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temEspecialidade"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temEspecialidade"/>
+                <Variable IRI="#z"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <DifferentIndividualsAtom>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </DifferentIndividualsAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#relacaoEspecialidade"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </ObjectPropertyAtom>
+        </Head>
+    </DLSafeRule>
+    <DLSafeRule>
+        <Annotation>
+            <AnnotationProperty IRI="http://swrl.stanford.edu/ontologies/3.3/swrla.owl#isRuleEnabled"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#boolean">true</Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:comment"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string"></Literal>
+        </Annotation>
+        <Annotation>
+            <AnnotationProperty abbreviatedIRI="rdfs:label"/>
+            <Literal datatypeIRI="http://www.w3.org/2001/XMLSchema#string">Def-relacaoSubArea</Literal>
+        </Annotation>
+        <Body>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temSubArea"/>
+                <Variable IRI="#y"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#temSubArea"/>
+                <Variable IRI="#z"/>
+                <Variable IRI="#e"/>
+            </ObjectPropertyAtom>
+            <DifferentIndividualsAtom>
+                <Variable IRI="#y"/>
+                <Variable IRI="#z"/>
+            </DifferentIndividualsAtom>
+        </Body>
+        <Head>
+            <ObjectPropertyAtom>
+                <ObjectProperty IRI="#relacaoSubArea"/>
                 <Variable IRI="#y"/>
                 <Variable IRI="#z"/>
             </ObjectPropertyAtom>

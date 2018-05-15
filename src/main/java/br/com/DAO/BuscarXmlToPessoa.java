@@ -1,4 +1,4 @@
-package br.com.Ontology;
+package br.com.DAO;
 
 import java.util.ArrayList;
 
@@ -244,12 +244,17 @@ public class BuscarXmlToPessoa {
 		ArrayList<AreaConhecimento> listResult = new ArrayList<>();
 		for (int i = 0; i < listaxml.getLength(); i++) {
 			Node TipoNode = listaxml.item(i);
+			String grandeArea = TipoNode.getAttributes().getNamedItem("NOME-GRANDE-AREA-DO-CONHECIMENTO")
+					.getTextContent();
 			String areaConhecimento = TipoNode.getAttributes().getNamedItem("NOME-DA-AREA-DO-CONHECIMENTO")
 					.getTextContent();
 			String subAreaConhecimento = TipoNode.getAttributes().getNamedItem("NOME-DA-SUB-AREA-DO-CONHECIMENTO")
 					.getTextContent();
 			String nomeEspecialidade = TipoNode.getAttributes().getNamedItem("NOME-DA-ESPECIALIDADE").getTextContent();
-			listResult.add(new AreaConhecimento(areaConhecimento, subAreaConhecimento, nomeEspecialidade));
+			listResult.add(new AreaConhecimento(this.tratamentoDeDados.corrigirString(grandeArea),
+					this.tratamentoDeDados.corrigirString(areaConhecimento),
+					this.tratamentoDeDados.corrigirString(subAreaConhecimento),
+					this.tratamentoDeDados.corrigirString(nomeEspecialidade)));
 		}
 		return listResult;
 	}
