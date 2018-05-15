@@ -3,6 +3,7 @@ package br.com.converter;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Random;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -28,6 +29,7 @@ public class TratamentoDeDados {
 	public void ExpansaoMembros(ArrayList<OntoPessoa> listapessoa) {
 		ArrayList<OntoPessoa> listaAux = new ArrayList<>();
 		for (OntoPessoa ontoPessoa : listapessoa) {
+			ontoPessoa.setFlagLattes(true);
 			for (OntoClass ontoClass : ontoPessoa.getListOntoBanca()) {
 				for (OntoParceiro ontoParceiro : ontoClass.getListAutores()) {
 					OntoPessoa ont = new OntoPessoa(ontoParceiro.getNome(), ontoParceiro.getId(), "",
@@ -141,50 +143,88 @@ public class TratamentoDeDados {
 
 	public void tratarEventos(ArrayList<OntoPessoa> listaPessoa) {
 		NGram ngram = new NGram(4);
-		int cont = 0;
 		int totalcont = 0;
-		for (int i = 0; i < listaPessoa.size(); i++) {
-			for (int j = i + 1; j < listaPessoa.size(); j++) {
-				if (!(i == j)) {
+		int cont = 99;
+		while (cont != 0) {
+			cont = 0;
+			for (int i = 0; i < listaPessoa.size(); i++) {
+				for (int j = i + 1; j < listaPessoa.size(); j++) {
 					OntoPessoa ontoPessoa = listaPessoa.get(i);
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
-					for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
 
+					for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
 						OntoClass evento = ontoPessoa.getListOntoEvento().get(k);
+
 						for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
 							OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
 							double aux = ngram.distance(evento.getTitulo(), evento2.getTitulo());
 							if (aux > 0 && aux < 0.25) {
 								// System.out.println("$$$$$###");
+								// System.out.println(ontoPessoa.getNomeCompleto());
+								// System.out.println(ontoPessoa2.getNomeCompleto());
 								// System.out.println(evento.getTitulo());
 								// System.out.println(evento2.getTitulo());
 								cont++;
-								evento.setTitulo(evento2.getTitulo());
+
+								if (evento.getTitulo().length() < evento2.getTitulo().length())
+									evento2.setTitulo(evento.getTitulo());
+								else {
+									if (evento.getTitulo().length() == evento2.getTitulo().length()) {
+										Random rn = new Random();
+										int sorteio = rn.nextInt(2);
+										if (sorteio == 1)
+											evento2.setTitulo(evento.getTitulo());
+										else
+											evento.setTitulo(evento2.getTitulo());
+									} else
+										evento.setTitulo(evento2.getTitulo());
+								}
+
 								// System.out.println(ontoPessoa.getListOntoEvento().get(k).getTitulo());
 							}
 						}
 						for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
 							TrabalhoEvento evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
 							double aux = ngram.distance(evento.getTitulo(), evento2.getEvento().getTitulo());
-							if (aux > 0 && aux < 0.20) {
+							if (aux > 0 && aux < 0.25) {
+								// System.out.println("$$$$$###");
+								// System.out.println(ontoPessoa.getNomeCompleto());
+								// System.out.println(ontoPessoa2.getNomeCompleto());
+								// System.out.println(evento.getTitulo());
+								// System.out.println(evento2.getEvento().getTitulo());
 								// System.out.println("$$$$$###");
 								// System.out.println(evento.getTitulo());
 								// System.out.println(evento2.getEvento().getTitulo());
 								cont++;
-								evento.setTitulo(evento2.getEvento().getTitulo());
+								if (evento.getTitulo().length() < evento2.getEvento().getTitulo().length())
+									evento2.getEvento().setTitulo(evento.getTitulo());
+								else {
+									if (evento.getTitulo().length() == evento2.getEvento().getTitulo().length()) {
+										Random rn = new Random();
+										int sorteio = rn.nextInt(2);
+										if (sorteio == 1)
+											evento2.getEvento().setTitulo(evento.getTitulo());
+										else
+											evento.setTitulo(evento2.getEvento().getTitulo());
+									} else
+										evento.setTitulo(evento2.getEvento().getTitulo());
+								}
+								// evento.setTitulo(evento2.getEvento().getTitulo());
 								// System.out.println(ontoPessoa.getListOntoEvento().get(k).getTitulo());
 							}
-
 						}
 
 					}
+
 				}
 			}
+			System.out.println("numero de evento que foram combinadas " + cont);
+			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 		}
+
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			totalcont = totalcont + listaPessoa.get(i).getListOntoEvento().size();
 		}
-		System.out.println("numero de evento que foram combinadas " + cont);
 		System.out.println("numero total de evento " + totalcont);
 	}
 
@@ -256,10 +296,11 @@ public class TratamentoDeDados {
 					for (int k = 0; k < listaPessoa.get(j).getCitacaoList().size(); k++) {
 						String unidadelist = listaPessoa.get(j).getCitacaoList().get(k);
 						if (listcitacaoPivo.contains(unidadelist) && (!unidadelist.contentEquals(""))) {
-							if (listaPessoa.get(j).getNomeCompleto().length() > listaPessoa.get(i).getNomeCompleto()
-									.length()) {
-								listaPessoa.get(i).setNomeCompleto(listaPessoa.get(j).getNomeCompleto());
-							}
+							// if (listaPessoa.get(j).getNomeCompleto().length() >
+							// listaPessoa.get(i).getNomeCompleto()
+							// .length()) {
+							// listaPessoa.get(i).setNomeCompleto(listaPessoa.get(j).getNomeCompleto());
+							// }
 							listaPessoa.get(i).Copiar(listaPessoa.get(j));
 							listaPessoa.get(i).cont();
 							listaPessoa.remove(j);

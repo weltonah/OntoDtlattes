@@ -7,6 +7,7 @@ public class OntoPessoa {
 	private String Citacao;
 	private String IdLattes;
 	private String Data;
+	private boolean FlagLattes;
 	private int cont = 0;
 	private ArrayList<AreaConhecimento> ListOntoAreaAtuacao;
 	private ArrayList<TrabalhoEvento> ListOntoTrabalhoEvento;
@@ -31,9 +32,13 @@ public class OntoPessoa {
 		this.ListOntoProjetoPesquisa = new ArrayList<>();
 		this.ListOntoBanca = new ArrayList<>();
 		this.ListOntoOrientacao = new ArrayList<>();
+		this.setFlagLattes(false);
 	}
 
 	public void Copiar(OntoPessoa pessoa) {
+		if (pessoa.isFlagLattes())
+			this.NomeCompleto = pessoa.getNomeCompleto();
+
 		if (this.getCitacaoList().size() < pessoa.getCitacaoList().size()) {
 			if (this.IdLattes.length() <= pessoa.getIdLattes().length())
 			this.Citacao = pessoa.getCitacao();
@@ -200,6 +205,14 @@ public class OntoPessoa {
 
 	public void setCont(int cont) {
 		this.cont = cont;
+	}
+
+	public boolean isFlagLattes() {
+		return this.FlagLattes;
+	}
+
+	public void setFlagLattes(boolean flagLattes) {
+		this.FlagLattes = flagLattes;
 	}
 
 }

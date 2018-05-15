@@ -148,6 +148,7 @@ public class TratamentoDeDadosTeste {
 		assertEquals("885", listaPessoa.get(0).getIdLattes());
 	}
 
+
 	@Test
 	public void BaterListCitacaoComNome() throws Exception {
 		this.tratamentoDeDados = new TratamentoDeDados();

@@ -30,7 +30,7 @@ public class MainAnalise {
 
 		OntologyDAO ontoDao = new OntologyDAO(nomeFile);
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
-		int tam = 2;
+		int tam = 15;
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
 		tratamentoDeDados = new TratamentoDeDados();
@@ -65,7 +65,6 @@ public class MainAnalise {
 
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
 		// ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
