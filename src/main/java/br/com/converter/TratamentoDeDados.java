@@ -3,7 +3,6 @@ package br.com.converter;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.Random;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -146,10 +145,12 @@ public class TratamentoDeDados {
 		int totalcont = 0;
 		int cont = 99;
 		while (cont != 0) {
+			long tempoInicio = System.currentTimeMillis();
 			cont = 0;
 			for (int i = 0; i < listaPessoa.size(); i++) {
-				for (int j = i + 1; j < listaPessoa.size(); j++) {
-					OntoPessoa ontoPessoa = listaPessoa.get(i);
+				OntoPessoa ontoPessoa = listaPessoa.get(i);
+				for (int j = i; j < listaPessoa.size(); j++) {
+
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
 
 					for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
@@ -169,9 +170,7 @@ public class TratamentoDeDados {
 									evento2.setTitulo(evento.getTitulo());
 								else {
 									if (evento.getTitulo().length() == evento2.getTitulo().length()) {
-										Random rn = new Random();
-										int sorteio = rn.nextInt(2);
-										if (sorteio == 1)
+										if (evento.getTitulo().hashCode() < evento2.getTitulo().hashCode())
 											evento2.setTitulo(evento.getTitulo());
 										else
 											evento.setTitulo(evento2.getTitulo());
@@ -199,9 +198,7 @@ public class TratamentoDeDados {
 									evento2.getEvento().setTitulo(evento.getTitulo());
 								else {
 									if (evento.getTitulo().length() == evento2.getEvento().getTitulo().length()) {
-										Random rn = new Random();
-										int sorteio = rn.nextInt(2);
-										if (sorteio == 1)
+										if (evento.getTitulo().hashCode() < evento2.getEvento().getTitulo().hashCode())
 											evento2.getEvento().setTitulo(evento.getTitulo());
 										else
 											evento.setTitulo(evento2.getEvento().getTitulo());
@@ -219,6 +216,7 @@ public class TratamentoDeDados {
 			}
 			System.out.println("numero de evento que foram combinadas " + cont);
 			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 		}
 
 		for (int i = 0; i < listaPessoa.size(); i++) {
@@ -270,8 +268,9 @@ public class TratamentoDeDados {
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			for (int j = 0; j < listaPessoa.size(); j++) {
-				if (!(i == j)) {
-
+				if ((i != j)) {
+					if (i == listaPessoa.size())
+						break;
 					if (ngram.distance(nome, listaPessoa.get(j).getNomeCompleto()) < 0.25) {
 						// System.out.println("%%%%%%%%%%%%%%%%%%%%%");
 						// System.out.println(nome);
@@ -317,8 +316,10 @@ public class TratamentoDeDados {
 			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
 			if (!(listcitacaoPivo.get(0).contentEquals("") && listcitacaoPivo.size() == 1)) {
 				for (int j = 0; j < listaPessoa.size(); j++) {
-					if (!(i == j)) {
+					if (i != j) {
 						for (int p = 0; p < listcitacaoPivo.size(); p++) {
+							if (i == listaPessoa.size())
+								break;
 							if (listcitacaoPivo.get(p).contentEquals(listaPessoa.get(j).getNomeCompleto())) {
 								listaPessoa.get(i).Copiar(listaPessoa.get(j));
 								listaPessoa.get(i).cont();
@@ -346,6 +347,8 @@ public class TratamentoDeDados {
 						nome = listaPessoa.get(j).getNomeCompleto();
 						listaPessoa.remove(i);
 						j--;
+						if (i == listaPessoa.size())
+							break;
 					}
 				}
 			}

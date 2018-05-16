@@ -1,5 +1,5 @@
 Manifest-Version: 1.0
-Implementation-Title: OntoDTlattes
+Implementation-Title: OntoDataLattes
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: welton
 Implementation-Vendor-Id: OntoDataLattes

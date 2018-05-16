@@ -107,11 +107,11 @@ public class BuscarXmlToPessoa {
 
 	public ArrayList<OntoClass> listOntoBanca() throws XPathExpressionException {
 		ArrayList<OntoClass> result = new ArrayList<>();
-		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-GRADUACAO", "BancaGraduacao"));
-		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-MESTRADO", "BancaMestrado"));
-		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-DOUTORADO", "BancaDoutorado"));
-		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO", "BancaQualificacao"));
-		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-APERFEICOAMENTO-ESPECIALIZACAO", "BancaAperEspe"));
+		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-GRADUACAO", "Banca"));
+		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-MESTRADO", "Banca"));
+		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-DOUTORADO", "Banca"));
+		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-EXAME-QUALIFICACAO", "Banca"));
+		result.addAll(BuscaBanca("//PARTICIPACAO-EM-BANCA-DE-APERFEICOAMENTO-ESPECIALIZACAO", "Banca"));
 		return result;
 	}
 

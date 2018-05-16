@@ -8,7 +8,6 @@ import java.util.List;
 
 import org.semanticweb.HermiT.ReasonerFactory;
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAxiom;
 import org.semanticweb.owlapi.model.OWLClass;
@@ -27,13 +26,18 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.reasoner.OWLReasoner;
+import org.semanticweb.owlapi.reasoner.OWLReasonerConfiguration;
 import org.semanticweb.owlapi.reasoner.OWLReasonerFactory;
+import org.semanticweb.owlapi.reasoner.ReasonerProgressMonitor;
+import org.semanticweb.owlapi.reasoner.SimpleConfiguration;
 import org.semanticweb.owlapi.util.InferredAxiomGenerator;
 import org.semanticweb.owlapi.util.InferredInverseObjectPropertiesAxiomGenerator;
 import org.semanticweb.owlapi.util.InferredObjectPropertyCharacteristicAxiomGenerator;
 import org.semanticweb.owlapi.util.InferredOntologyGenerator;
 import org.semanticweb.owlapi.util.InferredPropertyAssertionGenerator;
 import org.semanticweb.owlapi.util.OWLEntityRemover;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import br.com.DAO.ReadFile;
 import br.com.converter.TratamentoDeDados;
@@ -60,7 +64,7 @@ public class OntologyDAO {
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		diferentIndividual();
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
-		Inferir();
+		// Inferir(formato);
 	}
 
 	public void diferentIndividual() throws OWLOntologyCreationException {
@@ -72,19 +76,54 @@ public class OntologyDAO {
 		this.ontology.add(diffInd);
 	}
 
-	public void Inferir() throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
+	public static class LoggingReasonerProgressMonitor implements ReasonerProgressMonitor {
+
+		private static Logger logger;
+
+		public LoggingReasonerProgressMonitor(Logger log) {
+			logger = log;
+		}
+
+		public LoggingReasonerProgressMonitor(Logger log, String methodName) {
+			String loggerName = log.getName() + '.' + methodName;
+			logger = LoggerFactory.getLogger(loggerName);
+		}
+
+		@Override
+		public void reasonerTaskStarted(String taskName) {
+			logger.info("Reasoner Task Started: {}.", taskName);
+		}
+
+		@Override
+		public void reasonerTaskStopped() {
+			logger.info("Task stopped.");
+		}
+
+		@Override
+		public void reasonerTaskProgressChanged(int value, int max) {
+			logger.info("Reasoner Task made progress: {}/{}", Integer.valueOf(value), Integer.valueOf(max));
+		}
+
+		@Override
+		public void reasonerTaskBusy() {
+			logger.info("Reasoner Task is busy");
+		}
+	}
+
+	public void Inferir(OWLDocumentFormat formato)
+			throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.ontology = this.manager.loadOntologyFromOntologyDocument(this.file);
 		OWLDataFactory factory = this.manager.getOWLDataFactory();
-		// Logger LOG = LoggerFactory.getLogger(ReasonTeste.class);
-		// ReasonerProgressMonitor progressMonitor = new
-		// LoggingReasonerProgressMonitor(LOG, "Loginference");
-		// OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
+		Logger LOG = LoggerFactory.getLogger(OntologyDAO.class);
+		 ReasonerProgressMonitor progressMonitor = new
+		 LoggingReasonerProgressMonitor(LOG, "Loginference");
+		 OWLReasonerConfiguration config = new SimpleConfiguration(progressMonitor);
 		OWLReasonerFactory rf = new ReasonerFactory();
 		// OWLReasoner r = rf.createReasoner(this.ontology, config);
 		// OWLReasoner r = rf.createNonBufferingReasoner(this.ontology, config);
-		OWLReasoner r = rf.createNonBufferingReasoner(this.ontology);
-		// r.precomputeInferences(InferenceType.DATA_PROPERTY_ASSERTIONS);
+		OWLReasoner r = rf.createReasoner(this.ontology, config);
+		// r.precomputeInferences(InferenceType.OBJECT_PROPERTY_ASSERTIONS);
 
 		// OWLObjectProperty obj = factory.getOWLObjectProperty(this.DATALATTESIRI +
 		// "#", "relacaoEvento");
@@ -110,30 +149,20 @@ public class OntologyDAO {
 		iog.fillOntology(factory, this.ontology);
 
 		System.out.println("ola");
-		this.manager.saveOntology(this.ontology, new FunctionalSyntaxDocumentFormat(), new FileOutputStream(this.file));
+		this.manager.saveOntology(this.ontology, formato,
+				new FileOutputStream(this.file));
 	}
-
-	// public void preencherOntoPessoa(OntoPessoa pessoa)
-	// throws OWLOntologyStorageException, FileNotFoundException,
-	// OWLOntologyCreationException {
-	// preencherDadosGerais(pessoa);
-	// preencherProjetoPesquisa(pessoa);
-	// preencherEvento(pessoa);
-	// preencherFormacao(pessoa);
-	// preencherBanca(pessoa);
-	// preencherTrabalhoEvento(pessoa);
-	// }
 
 	public void preencherOnto(ArrayList<OntoPessoa> listapessoa)
 			throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		for (OntoPessoa pessoa : listapessoa) {
 			preencherDadosGerais(pessoa);
 			preencherAreaAtuacao(pessoa);
-			// preencherProjetoPesquisa(pessoa);
-			// preencherEvento(pessoa);
-			// preencherFormacao(pessoa, listapessoa);
+			preencherProjetoPesquisa(pessoa);
+			preencherEvento(pessoa);
+			preencherFormacao(pessoa, listapessoa);
 			// preencherBanca(pessoa);
-			// preencherTrabalhoEvento(pessoa);
+			preencherTrabalhoEvento(pessoa);
 		}
 	}
 
@@ -169,7 +198,6 @@ public class OntologyDAO {
 		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
 				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoEvento().forEach(u -> {
-
 			addIndividual(u.getTitulo(), u.getTipo());
 			addRelacaoInd(nomeclatura, u.getTitulo(), "participouEvento");
 			addRelacaoInd(u.getTitulo(), nomeclatura, "eventoTemParticipante");
@@ -180,30 +208,27 @@ public class OntologyDAO {
 		String nomeclatura = (pessoa.getIdLattes() == "" || pessoa.getIdLattes().isEmpty()
 				|| pessoa.getIdLattes() == null) ? pessoa.getNomeCompleto() : pessoa.getIdLattes();
 		pessoa.getListOntoAreaAtuacao().forEach(u -> {
-			System.out.println("$$$$$$$$$");
-			System.out.println(u.getGrandeArea() + '\n' + u.getAreaConhecimento() + "\n" + u.getSubAreaConhecimento()
-					+ "\n"
-					+ u.getNomeEspecialidade() + u.getNomeEspecialidade().length());
+			if (u.getGrandeArea().length() > 0) {
+				addIndividual(u.getGrandeArea(), "AreaAtuacao");
+				addRelacaoInd(nomeclatura, u.getGrandeArea(), "temAreaAtuacao");
+				addRelacaoInd(u.getGrandeArea(), nomeclatura, "areaAtuacaoTemPesquisador");
+			}
+			if (u.getAreaConhecimento().length() > 0) {
+				addIndividual(u.getAreaConhecimento(), "AreaConhecimento");
+				addRelacaoInd(nomeclatura, u.getAreaConhecimento(), "temAreaConhecimento");
+				addRelacaoInd(u.getAreaConhecimento(), nomeclatura, "areaConhecimentoTemPesquisador");
+			}
 
-			if (u.getGrandeArea().length() != 0) {
-			addIndividual(u.getGrandeArea(), "AreaAtuacao");
-			addRelacaoInd(nomeclatura, u.getGrandeArea(), "temAreaAtuacao");
-			addRelacaoInd(u.getGrandeArea(), nomeclatura, "areaAtuacaoTemPesquisador");
+			if (u.getSubAreaConhecimento().length() > 0) {
+				addIndividual(u.getSubAreaConhecimento(), "SubArea");
+				addRelacaoInd(nomeclatura, u.getSubAreaConhecimento(), "temSubArea");
+				addRelacaoInd(u.getSubAreaConhecimento(), nomeclatura, "subAreaTemPesquisador");
 			}
-			if (u.getAreaConhecimento().length() != 0) {
-			addIndividual(u.getAreaConhecimento(), "AreaConhecimento");
-			addRelacaoInd(nomeclatura, u.getAreaConhecimento(), "temAreaConhecimento");
-			addRelacaoInd(u.getAreaConhecimento(), nomeclatura, "areaConhecimentoTemPesquisador");
-			}
-			if (u.getSubAreaConhecimento().length() != 0) {
-			addIndividual(u.getSubAreaConhecimento(), "SubArea");
-			addRelacaoInd(nomeclatura, u.getSubAreaConhecimento(), "temSubArea");
-			addRelacaoInd(u.getSubAreaConhecimento(), nomeclatura, "subAreaTemPesquisador");
-			}
-			if (u.getNomeEspecialidade().length() != 0) {
-			addIndividual(u.getNomeEspecialidade(), "Especialidade");
-			addRelacaoInd(nomeclatura, u.getNomeEspecialidade(), "temEspecialidade");
-			addRelacaoInd(u.getNomeEspecialidade(), nomeclatura, "especialidadeTemPesquisador");
+			if (u.getNomeEspecialidade().length() > 0) {
+
+				addIndividual(u.getNomeEspecialidade(), "Especialidade");
+				addRelacaoInd(nomeclatura, u.getNomeEspecialidade(), "temEspecialidade");
+				addRelacaoInd(u.getNomeEspecialidade(), nomeclatura, "especialidadeTemPesquisador");
 			}
 		});
 	}
@@ -217,29 +242,26 @@ public class OntologyDAO {
 			// System.out.println(pessoa.getNomeCompleto());
 			if (u.isFlagFormacaoOrientacao()) {
 				// System.out.println("((((((((((( " + u.getTitulo() + " )))))))))))))))");
-				first:
-				for (OntoPessoa ontoPessoa : listapessoa) {
+				first: for (OntoPessoa ontoPessoa : listapessoa) {
 					if (!ontoPessoa.equals(pessoa)) {
-						// System.out.println("------------- " + ontoPessoa.getNomeCompleto() +
-						// "------------- ");
-					for (OntoClass ontoClass : ontoPessoa.getListOntoFormacao()) {
+
+						for (OntoClass ontoClass : ontoPessoa.getListOntoFormacao()) {
+							// System.out.println("------------- " + ontoPessoa.getNomeCompleto() +
+							// "------------- ");
 							// System.out.println(ontoClass.getTitulo() + " &&&& " +
 							// ontoClass.isFlagFormacaoOrientacao());
-						if ((!ontoClass.isFlagFormacaoOrientacao())
-								&& (ontoClass.getTitulo().contentEquals(u.getTitulo()))) {
-							nome = (ontoPessoa.getIdLattes() == "" || ontoPessoa.getIdLattes().isEmpty()
-									|| ontoPessoa.getIdLattes() == null) ? ontoPessoa.getNomeCompleto()
-											: ontoPessoa.getIdLattes();
+							if ((!ontoClass.isFlagFormacaoOrientacao())
+									&& (ontoClass.getTitulo().contentEquals(u.getTitulo()))) {
+								nome = (ontoPessoa.getIdLattes() == "" || ontoPessoa.getIdLattes().isEmpty()
+										|| ontoPessoa.getIdLattes() == null) ? ontoPessoa.getNomeCompleto()
+												: ontoPessoa.getIdLattes();
 								break first;
+							}
 						}
 					}
-					}
 				}
-				if (nome.contains("2017"))
-					System.out.println(nome);
-				if (nomeclatura.contains("2017"))
-					System.out.println(nomeclatura);
 				// System.out.println(nome);
+				// System.out.println(nomeclatura);
 				// System.out.println("!!");
 				addIndividual(nome, "Pessoa");
 				addRelacaoInd(nome, nomeclatura, "orientou");

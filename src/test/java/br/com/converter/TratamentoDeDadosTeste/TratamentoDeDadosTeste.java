@@ -15,6 +15,7 @@ public class TratamentoDeDadosTeste {
 
 	private TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 
+
 	@Test
 	public void ExpansaoMenbrosBanca() throws Exception {
 		this.tratamentoDeDados = new TratamentoDeDados();

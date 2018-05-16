@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.File;
 
 import org.junit.Test;
-import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
 import br.com.DAO.BuscarXmlToPessoa;
@@ -17,7 +16,9 @@ public class BuscaXmlToPessoaTeste {
 	private TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 	@Test
 	public void ArtigoCompletoAceito() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
+
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals("Alessandreia Marta de Oliveira", preencherXMLtoOnto.NomeCompleto());
@@ -28,7 +29,9 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void AreaAtuacao() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
+
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(this.tratamentoDeDados.corrigirString("CIENCIAS_EXATAS_E_DA_TERRA"),
@@ -41,9 +44,13 @@ public class BuscaXmlToPessoaTeste {
 				preencherXMLtoOnto.listOntoAreaAtuacao().get(0).getNomeEspecialidade());
 	}
 
+
+
 	@Test
 	public void TrabalhoEvento() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
+
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(
@@ -59,7 +66,8 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void Eventos() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(
@@ -73,7 +81,8 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void OrgEvento() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(this.tratamentoDeDados.corrigirString("I Maratona de Programação da FMG"),
@@ -85,7 +94,8 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void formacao() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(
@@ -98,7 +108,8 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void ProjetoPesquisa() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(this.tratamentoDeDados.corrigirString("EVOLUÇÃO SEMÂNTICA DE VARIANTES DE DOCUMENTOS XML"),
@@ -109,7 +120,8 @@ public class BuscaXmlToPessoaTeste {
 
 	@Test
 	public void Banca() throws Exception {
-		File owlfile = new ClassPathResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile();
+		ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		File owlfile = new File(classLoader.getResource("static/testFile/" + "Alessandreiacurriculo.xml").getFile());
 		Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 		BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 		assertEquals(this.tratamentoDeDados.corrigirString("Um Aporte de Web Mining para Web Semântica"),
