@@ -64,7 +64,7 @@ public class OntologyDAO {
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		diferentIndividual();
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
-		// Inferir(formato);
+		Inferir(formato);
 	}
 
 	public void diferentIndividual() throws OWLOntologyCreationException {
@@ -161,7 +161,7 @@ public class OntologyDAO {
 			preencherProjetoPesquisa(pessoa);
 			preencherEvento(pessoa);
 			preencherFormacao(pessoa, listapessoa);
-			// preencherBanca(pessoa);
+			preencherBanca(pessoa);
 			preencherTrabalhoEvento(pessoa);
 		}
 	}

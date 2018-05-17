@@ -1,23 +1,14 @@
 package br.com;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 
-import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
 import br.com.DAO.BuscarXmlToPessoa;
+import br.com.Grafo.GrafoController;
 import br.com.Ontology.OntologyDAO;
 import br.com.converter.ConverterFile;
 import br.com.converter.TratamentoDeDados;
@@ -33,7 +24,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-				tam = 44;
+			tam = 5;
 		else {
 			tam = Integer.parseInt(args[0]);
 		}
@@ -77,13 +68,20 @@ public class Main {
 
 
 		tratamentoDeDados.tratarEventos(listaPessoa);
-		System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		// tratamentoDeDados.tratarBanca(listaPessoa);
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
 			long tempoInicio = System.currentTimeMillis();
 			ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
 			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
-		criarArquivoResult(nomeFile);
+			
+		GrafoController graf = new GrafoController(nomeFile);
+		// graf.preencherBanca();
+		graf.preencherEvento();
+			
+		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");
 		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
 		// u.getIdLattes() + " @@@ "
@@ -93,94 +91,9 @@ public class Main {
 		// + u.getIdLattes() + " @@@ " + u.getCitacaoList().toString() + " cont: " +
 		// u.getCont()));
 
-		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
-		// u.getIdLattes() + "\n @@@ "
-		// + u.getCitacaoList().toString() + " cont: " + u.getCont() + "\n| " +
-		// u.getListOntoAreaAtuacao().size()
-		// + "| " + u.getListOntoBanca().size() + "| " + u.getListOntoEvento().size() +
-		// "| "
-		// + u.getListOntoFormacao().size() + "| " + u.getListOntoOrgEvento().size() +
-		// "| "
-		// + u.getListOntoOrientacao().size() + "| " + u.getListOntoProducao().size() +
-		// "| "
-		// + u.getListOntoProjetoPesquisa().size() + "| " +
-		// u.getListOntoTrabalhoEvento().size()));
-		// listaPessoa.stream().filter(u ->
-		// u.getNomeCompleto().contentEquals("2487554612123446"))
-		// .forEach(u -> System.out.println(u.getIdLattes() + "" + u.getNomeCompleto() +
-		// " " + u.getCont()));
 
 	}
 
-	public static void criarArquivoResult(String nomeArq) throws OWLOntologyCreationException {
-		// File file = new File("/home/welton/exeOntoDt/" + nomeArq);
-		File file = new File(System.getProperty("user.dir") + "/" + nomeArq);
-		File result = new File(System.getProperty("user.dir") + "/resultado.csv");
-		// File result = new File("/home/welton/exeOntoDt/resultado.csv");
-
-		IRI DATALATTESIRI = IRI.create("http://www.datalattes.com/ontologies/datalattes.owl");
-		OWLOntologyManager manager = OWLManager.createOWLOntologyManager();
-		OWLOntology ontology = manager.loadOntologyFromOntologyDocument(file);
-		OWLDataFactory factory = manager.getOWLDataFactory();
-		try {
-			PrintWriter pw = new PrintWriter(new OutputStreamWriter(new FileOutputStream(result)));
-			StringBuilder sb = new StringBuilder();
-			ArrayList<String> relacoes = new ArrayList<>();
-			relacoes.add("relacaoAreaAtuacao");
-			relacoes.add("relacaoAreaConhecimento");
-			relacoes.add("relacaoBanca");
-			relacoes.add("relacaoEspecialidade");
-			relacoes.add("relacaoEvento");
-			relacoes.add("relacaoGuia");
-			relacoes.add("relacaoProjetoPesquisa");
-			relacoes.add("relacaoSubArea");
-			relacoes.add("relacaoTrabalho");
-			relacoes.add("relacaoTrabalhoEvento");
-
-			for (String string : relacoes) {
-				sb = new StringBuilder();
-				sb.append(string);
-				sb.append('\n');
-				pw.write(sb.toString());
-				ArrayList<ArrayList<String>> list = new ArrayList<>();
-				ontology.individualsInSignature().filter(u -> u.isOWLNamedIndividual())
-						.filter(u -> ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
-								.getIRI().getFragment().contains("Pessoa"))
-						.filter(u -> ontology.objectPropertyAssertionAxioms(u)
-								.anyMatch(i -> i.signature().findFirst().get().getIRI().getFragment().contains(string)))
-						.forEach(p -> {
-							// System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
-							ontology.objectPropertyAssertionAxioms(p).filter(
-									w -> w.signature().findFirst().get().getIRI().getFragment().contains(string))
-									.forEach(y -> {
-										// System.out.println("-------------------------");
-										ArrayList<String> aux = new ArrayList<>();
-										y.signature().skip(1).forEach(w -> aux.add(w.getIRI().getIRIString()
-												.substring(w.getIRI().getIRIString().indexOf("#") + 1)));
-										list.add(aux);
-									});
-						});
-				gravarArquivo(list, sb, pw);
-			}
-
-			pw.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-
-	public static void gravarArquivo(ArrayList<ArrayList<String>> list, StringBuilder sb, PrintWriter pw) {
-		for (ArrayList<String> arrayList : list) {
-			sb = new StringBuilder();
-			for (String string : arrayList) {
-				sb.append(string);
-				sb.append(";");
-			}
-			sb.append('\n');
-			pw.write(sb.toString());
-		}
-	}
 
 	public static ArrayList<String> ListaDeArquivos(int tam) {
 		// Tam max 44

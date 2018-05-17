@@ -2,6 +2,8 @@ package br.com.modelo;
 
 import java.util.ArrayList;
 
+import info.debatty.java.stringsimilarity.NGram;
+
 public class OntoPessoa {
 	private String NomeCompleto;
 	private String Citacao;
@@ -56,7 +58,39 @@ public class OntoPessoa {
 		this.ListOntoOrientacao.addAll(pessoa.getListOntoOrientacao());
 		this.ListOntoProducao.addAll(pessoa.getListOntoProducao());
 		this.ListOntoProjetoPesquisa.addAll(pessoa.getListOntoProjetoPesquisa());
+
 		this.ListOntoBanca.addAll(pessoa.getListOntoBanca());
+		// juntarBanca(pessoa.getListOntoBanca());
+	}
+
+	public void juntarBanca(ArrayList<OntoClass> listsoma) {
+		NGram ngram = new NGram(4);
+		for (int i = 0; i < this.ListOntoBanca.size(); i++) {
+			OntoClass banca = this.ListOntoBanca.get(i);
+				for (int j = 0; j < listsoma.size(); j++) {
+					OntoClass bancaCopiada = listsoma.get(j);
+				double aux = ngram.distance(banca.getTitulo(), bancaCopiada.getTitulo());
+				if (aux > 0 && aux < 0.25) {
+					if (banca.getTitulo().length() < bancaCopiada.getTitulo().length())
+						listsoma.remove(j);
+					else {
+						if (banca.getTitulo().length() == bancaCopiada.getTitulo().length()) {
+							if (banca.getTitulo().hashCode() < bancaCopiada.getTitulo().hashCode())
+								listsoma.remove(j);
+							else {
+								banca.setTitulo(bancaCopiada.getTitulo());
+								listsoma.remove(j);
+							}
+						} else {
+							banca.setTitulo(bancaCopiada.getTitulo());
+							listsoma.remove(j);
+						}
+					}
+				}
+
+			}
+		}
+		this.ListOntoBanca.addAll(listsoma);
 
 	}
 
