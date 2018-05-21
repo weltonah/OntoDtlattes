@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLDataFactory;
-import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
@@ -62,13 +61,13 @@ public class GrafoController {
 		this.grafo.contRelacoes(aux);
 	}
 
-	// public void preencherOrientacao() {
-	// preencherGrafo("Pessoa", "foiOrientadoPor", 6);
-	// this.grafo.imprimirOrientacao();
-	//
-	// ArrayList<String[]> aux = this.grafo.InferirEvento();
-	// this.grafo.contRelacoes(aux);
-	// }
+	public void preencherOrientacao() {
+		preencherGrafo("Pessoa", "foiOrientadoPor", 6);
+		this.grafo.imprimirOrientacao();
+
+		ArrayList<String[]> aux = this.grafo.InferirOrientacao();
+		// this.grafo.contRelacoes(aux);
+	}
 
 	public void preencherGrafo(String Classe, String Relacao, int opcao) {
 		ArrayList<String[]> aux = new ArrayList<>();
@@ -78,27 +77,22 @@ public class GrafoController {
 				.filter(u -> this.ontology.objectPropertyAssertionAxioms(u)
 						.anyMatch(i -> i.signature().findFirst().get().getIRI().getFragment().contains(Relacao)))
 				.forEach(p -> {
-					// System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
+					System.out.println("-------------------------");
+					System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
 					this.ontology.objectPropertyAssertionAxioms(p)
 							.filter(w -> w.signature().findFirst().get().getIRI().getFragment().contains(Relacao))
 							.forEach(y -> {
-								// System.out.println("-------------------------");
 								String[] individuos = new String[2];
+								individuos[1] = p.getIRI().getIRIString()
+										.substring(p.getIRI().getIRIString().indexOf("#") + 1);
 								y.signature().skip(1).forEach(w -> {
-									if (this.ontology.classAssertionAxioms((OWLIndividual) w).findFirst().get()
-											.signature().findFirst().get().getIRI().getFragment().contains(Classe)) {
-										individuos[1] = w.getIRI().getIRIString()
-												.substring(w.getIRI().getIRIString().indexOf("#") + 1);
-									} else {
+									if (!p.getIRI().equals(w.getIRI())) {
 										individuos[0] = w.getIRI().getIRIString()
 												.substring(w.getIRI().getIRIString().indexOf("#") + 1);
 									}
-									// System.out.println(this.ontology.classAssertionAxioms((OWLIndividual)
-									// w).findFirst()
-									// .get().signature().findFirst().get().getIRI());
-									// System.out.println(w.getIRI().getIRIString()
-									// .substring(w.getIRI().getIRIString().indexOf("#") + 1));
 								});
+								System.out.println(individuos[0]);
+								System.out.println(individuos[1]);
 								aux.add(individuos);
 
 							});
@@ -116,11 +110,10 @@ public class GrafoController {
 				this.grafo.AddSubArea(u);
 			if (opcao == 5)
 				this.grafo.AddEspecialidade(u);
-			// if (opcao == 6)
-			// this.grafo.AddOrientacao(u);
+			if (opcao == 6)
+				this.grafo.AddOrientacao(u);
 
 		});
 
 	}
-
 }

@@ -12,7 +12,6 @@ public class Grafo {
 	private ArrayList<AreaConhecimento> listParticipouAreaConhecimento;
 	private ArrayList<SubArea> listParticipouSubArea;
 	private ArrayList<Especialidade> listParticipouEspecialidade;
-	// private ArrayList<Orientacao> listParticipouOrientacao;
 
 	public Grafo() {
 		this.listParticipante = new ArrayList<>();
@@ -93,6 +92,8 @@ public class Grafo {
 		list.sort(Comparator.comparing(u -> u[0]));
 		return list;
 	}
+
+
 
 	public ArrayList<String[]> InferirAreaConhecimento() {
 		ArrayList<String[]> list = new ArrayList<String[]>();
@@ -458,15 +459,55 @@ public class Grafo {
 		}
 	}
 
+	public void AddOrientacao(String[] info) {
+		Pessoa resultOrientador = null;
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getNome().contentEquals(info[0])) {
+				resultOrientador = pessoa;
+				break;
+			}
+		}
+
+		Pessoa resultAluno = null;
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getNome().contentEquals(info[1])) {
+				resultAluno = pessoa;
+				break;
+			}
+		}
+
+		if (resultOrientador != null && resultAluno == null) {
+			Pessoa aluno = new Pessoa(info[1]);
+			resultOrientador.AddListAlunosOrientados(aluno);
+			aluno.AddListOrientadores(resultOrientador);
+			AddParticipante(aluno);
+		} else {
+			if (resultOrientador == null && resultAluno != null) {
+				Pessoa orientador = new Pessoa(info[0]);
+				resultAluno.AddListOrientadores(orientador);
+				orientador.AddListAlunosOrientados(resultAluno);
+				AddParticipante(orientador);
+			} else {
+				if (resultOrientador != null && resultAluno != null) {
+					resultAluno.AddListOrientadores(resultOrientador);
+					resultOrientador.AddListAlunosOrientados(resultAluno);
+				} else {
+					Pessoa orientador = new Pessoa(info[0]);
+					Pessoa aluno = new Pessoa(info[1]);
+					orientador.AddListAlunosOrientados(aluno);
+					aluno.AddListOrientadores(orientador);
+					AddParticipante(orientador);
+					AddParticipante(aluno);
+				}
+			}
+		}
+	}
+
 	public void imprimirBanca() {
 		this.listParticipouBanca.forEach(u -> {
 			System.out.println("----------------" + u.getTitulo() + "------------------");
 			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
 		});
-		// this.listParticipante.forEach(u -> {
-		// System.out.println("----------------" + u.getNome() + "------------------");
-		// u.getListParticipouBanca().forEach(p -> System.out.println(p.getTitulo()));
-		// });
 
 	}
 
@@ -475,10 +516,16 @@ public class Grafo {
 			System.out.println("----------------" + u.getTitulo() + "------------------");
 			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
 		});
-		// this.listParticipante.forEach(u -> {
-		// System.out.println("----------------" + u.getNome() + "------------------");
-		// u.getListParticipouBanca().forEach(p -> System.out.println(p.getTitulo()));
-		// });
+
+	}
+
+	public void imprimirOrientacao() {
+		this.listParticipante.forEach(u-> {
+			if (u.getListAlunosOrientados().size() > 0) {
+				System.out.println("-------Orientador--------" + u.getNome() + "------------------");
+				u.getListAlunosOrientados().forEach(p -> System.out.println(p.getNome()));
+			}
+		});
 
 	}
 
@@ -595,5 +642,6 @@ public class Grafo {
 	public void AddListParticipouEspecialidade(Especialidade listParticipouEspecialidade) {
 		this.listParticipouEspecialidade.add(listParticipouEspecialidade);
 	}
+
 
 }

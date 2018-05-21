@@ -54,9 +54,10 @@ public class Main {
 			System.out.println(pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() + "&&& "
 					+ pessoa.getCitacaoList().toString());
 			preencherXMLtoOnto.buscarXML(pessoa);
-			pessoa.getListOntoAreaAtuacao()
-					.forEach(u -> System.out.println(u.getGrandeArea() + " ()()" + u.getAreaConhecimento() + " ()() "
-							+ u.getSubAreaConhecimento() + " ()() " + u.getNomeEspecialidade()));
+			// pessoa.getListOntoAreaAtuacao()
+			// .forEach(u -> System.out.println(u.getGrandeArea() + " ()()" +
+			// u.getAreaConhecimento() + " ()() "
+			// + u.getSubAreaConhecimento() + " ()() " + u.getNomeEspecialidade()));
 			listaPessoa.add(pessoa);
 		}
 		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
@@ -80,7 +81,7 @@ public class Main {
 		// graf.preencherBanca();
 		// graf.preencherEvento();
 		// graf.preencherAreaAtuacao();
-		// graf.preencherOrientacao();
+		graf.preencherOrientacao();
 			
 		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");
