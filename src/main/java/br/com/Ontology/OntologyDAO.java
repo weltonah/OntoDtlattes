@@ -122,7 +122,8 @@ public class OntologyDAO {
 		OWLReasonerFactory rf = new ReasonerFactory();
 		// OWLReasoner r = rf.createReasoner(this.ontology, config);
 		// OWLReasoner r = rf.createNonBufferingReasoner(this.ontology, config);
-		OWLReasoner r = rf.createReasoner(this.ontology, config);
+		// OWLReasoner r = rf.createReasoner(this.ontology, config);
+		OWLReasoner r = rf.createReasoner(this.ontology);
 		// r.precomputeInferences(InferenceType.OBJECT_PROPERTY_ASSERTIONS);
 
 		// OWLObjectProperty obj = factory.getOWLObjectProperty(this.DATALATTESIRI +
@@ -225,7 +226,6 @@ public class OntologyDAO {
 				addRelacaoInd(u.getSubAreaConhecimento(), nomeclatura, "subAreaTemPesquisador");
 			}
 			if (u.getNomeEspecialidade().length() > 0) {
-
 				addIndividual(u.getNomeEspecialidade(), "Especialidade");
 				addRelacaoInd(nomeclatura, u.getNomeEspecialidade(), "temEspecialidade");
 				addRelacaoInd(u.getNomeEspecialidade(), nomeclatura, "especialidadeTemPesquisador");

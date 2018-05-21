@@ -3,14 +3,14 @@ package br.com.modelo;
 /**
  * 
  */
-public class AreaConhecimento {
+public class AreaAtuacaoXML {
 
 	private String grandeArea;
 	private String areaConhecimento;
 	private String subAreaConhecimento;
 	private String nomeEspecialidade;
 
-	public AreaConhecimento(String grandeArea, String areaConhecimento, String subAreaConhecimento,
+	public AreaAtuacaoXML(String grandeArea, String areaConhecimento, String subAreaConhecimento,
 			String nomeEspecialidade) {
 		super();
 		this.grandeArea = grandeArea;

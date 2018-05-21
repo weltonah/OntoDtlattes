@@ -11,7 +11,7 @@ public class OntoPessoa {
 	private String Data;
 	private boolean FlagLattes;
 	private int cont = 0;
-	private ArrayList<AreaConhecimento> ListOntoAreaAtuacao;
+	private ArrayList<AreaAtuacaoXML> ListOntoAreaAtuacao;
 	private ArrayList<TrabalhoEvento> ListOntoTrabalhoEvento;
 	private ArrayList<OntoClass> ListOntoEvento;
 	private ArrayList<OntoClass> ListOntoFormacao;
@@ -122,11 +122,11 @@ public class OntoPessoa {
 		this.Data = data;
 	}
 
-	public ArrayList<AreaConhecimento> getListOntoAreaAtuacao() {
+	public ArrayList<AreaAtuacaoXML> getListOntoAreaAtuacao() {
 		return this.ListOntoAreaAtuacao;
 	}
 
-	public void setListOntoAreaAtuacao(ArrayList<AreaConhecimento> listOntoAreaAtuacao) {
+	public void setListOntoAreaAtuacao(ArrayList<AreaAtuacaoXML> listOntoAreaAtuacao) {
 		this.ListOntoAreaAtuacao = listOntoAreaAtuacao;
 	}
 

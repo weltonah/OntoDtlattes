@@ -13,7 +13,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import br.com.converter.TratamentoDeDados;
-import br.com.modelo.AreaConhecimento;
+import br.com.modelo.AreaAtuacaoXML;
 import br.com.modelo.OntoClass;
 import br.com.modelo.OntoParceiro;
 import br.com.modelo.OntoPessoa;
@@ -238,10 +238,10 @@ public class BuscarXmlToPessoa {
 		return listResult;
 	}
 
-	public ArrayList<AreaConhecimento> listOntoAreaAtuacao() throws XPathExpressionException {
+	public ArrayList<AreaAtuacaoXML> listOntoAreaAtuacao() throws XPathExpressionException {
 		XPathExpression expr = this.xpath.compile("//AREA-DE-ATUACAO");
 		NodeList listaxml = (NodeList) expr.evaluate(this.xmlfile, XPathConstants.NODESET);
-		ArrayList<AreaConhecimento> listResult = new ArrayList<>();
+		ArrayList<AreaAtuacaoXML> listResult = new ArrayList<>();
 		for (int i = 0; i < listaxml.getLength(); i++) {
 			Node TipoNode = listaxml.item(i);
 			String grandeArea = TipoNode.getAttributes().getNamedItem("NOME-GRANDE-AREA-DO-CONHECIMENTO")
@@ -251,7 +251,7 @@ public class BuscarXmlToPessoa {
 			String subAreaConhecimento = TipoNode.getAttributes().getNamedItem("NOME-DA-SUB-AREA-DO-CONHECIMENTO")
 					.getTextContent();
 			String nomeEspecialidade = TipoNode.getAttributes().getNamedItem("NOME-DA-ESPECIALIDADE").getTextContent();
-			listResult.add(new AreaConhecimento(this.tratamentoDeDados.corrigirString(grandeArea),
+			listResult.add(new AreaAtuacaoXML(this.tratamentoDeDados.corrigirString(grandeArea),
 					this.tratamentoDeDados.corrigirString(areaConhecimento),
 					this.tratamentoDeDados.corrigirString(subAreaConhecimento),
 					this.tratamentoDeDados.corrigirString(nomeEspecialidade)));
