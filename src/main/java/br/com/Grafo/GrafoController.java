@@ -66,7 +66,17 @@ public class GrafoController {
 		this.grafo.imprimirOrientacao();
 
 		ArrayList<String[]> aux = this.grafo.InferirOrientacao();
-		// this.grafo.contRelacoes(aux);
+		aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
+		this.grafo.contRelacoes(aux);
+	}
+
+	public void preencherProjetoPesquisa() {
+		preencherGrafo("ProjetoPesquisa", "ProjetoTeveParticipante", 7);
+		this.grafo.imprimirProjetoPesquisa();
+
+		ArrayList<String[]> aux = this.grafo.InferirProjetoPesquisa();
+		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
+		this.grafo.contRelacoes(aux);
 	}
 
 	public void preencherGrafo(String Classe, String Relacao, int opcao) {
@@ -77,8 +87,8 @@ public class GrafoController {
 				.filter(u -> this.ontology.objectPropertyAssertionAxioms(u)
 						.anyMatch(i -> i.signature().findFirst().get().getIRI().getFragment().contains(Relacao)))
 				.forEach(p -> {
-					System.out.println("-------------------------");
-					System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
+					// System.out.println("-------------------------");
+					// System.out.println("%%%%%%%$%$%$%$%" + p.getIRI());
 					this.ontology.objectPropertyAssertionAxioms(p)
 							.filter(w -> w.signature().findFirst().get().getIRI().getFragment().contains(Relacao))
 							.forEach(y -> {
@@ -91,8 +101,8 @@ public class GrafoController {
 												.substring(w.getIRI().getIRIString().indexOf("#") + 1);
 									}
 								});
-								System.out.println(individuos[0]);
-								System.out.println(individuos[1]);
+								// System.out.println(individuos[0]);
+								// System.out.println(individuos[1]);
 								aux.add(individuos);
 
 							});
@@ -112,6 +122,8 @@ public class GrafoController {
 				this.grafo.AddEspecialidade(u);
 			if (opcao == 6)
 				this.grafo.AddOrientacao(u);
+			if (opcao == 7)
+				this.grafo.AddProjetoPesquisa(u);
 
 		});
 

@@ -12,6 +12,7 @@ public class Pessoa {
 	private ArrayList<Especialidade> listParticipouEspecialidade;
 	private ArrayList<Pessoa> listOrientadores;
 	private ArrayList<Pessoa> listAlunosOrientados;
+	private ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa;
 
 	public Pessoa(String nome) {
 		super();
@@ -24,6 +25,7 @@ public class Pessoa {
 		this.listParticipouEspecialidade = new ArrayList<>();
 		this.listOrientadores = new ArrayList<>();
 		this.listAlunosOrientados = new ArrayList<>();
+		this.listParticipouProjetoPesquisa = new ArrayList<>();
 	}
 
 	public String getNome() {
@@ -128,6 +130,18 @@ public class Pessoa {
 
 	public ArrayList<AreaAtuacao> getListParticipouAreaAtuacao() {
 		return this.listParticipouAreaAtuacao;
+	}
+
+	public ArrayList<ProjetoPesquisa> getListParticipouProjetoPesquisa() {
+		return this.listParticipouProjetoPesquisa;
+	}
+
+	public void setListParticipouProjetoPesquisa(ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa) {
+		this.listParticipouProjetoPesquisa = listParticipouProjetoPesquisa;
+	}
+
+	public void AddListParticipouProjetoPesquisa(ProjetoPesquisa listParticipouProjetoPesquisa) {
+		this.listParticipouProjetoPesquisa.add(listParticipouProjetoPesquisa);
 	}
 
 }

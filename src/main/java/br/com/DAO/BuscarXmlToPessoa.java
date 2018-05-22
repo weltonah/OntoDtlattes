@@ -279,7 +279,6 @@ public class BuscarXmlToPessoa {
 							NodeList NodelistAutoresProjeto = aux.getChildNodes();
 							for (int t = 0; t < NodelistAutoresProjeto.getLength(); t++) {
 								Node Autores = NodelistAutoresProjeto.item(t);
-
 								if (Autores != null) {
 									String id = (Autores.getAttributes().getNamedItem("NRO-ID-CNPQ") == null) ? ""
 											: Autores.getAttributes().getNamedItem("NRO-ID-CNPQ").getTextContent();

@@ -24,10 +24,10 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 5;
-		else {
+			tam = 8;
+		else
 			tam = Integer.parseInt(args[0]);
-		}
+
 		System.out.println(tam);
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
@@ -81,7 +81,8 @@ public class Main {
 		// graf.preencherBanca();
 		// graf.preencherEvento();
 		// graf.preencherAreaAtuacao();
-		graf.preencherOrientacao();
+		// graf.preencherOrientacao();
+		graf.preencherProjetoPesquisa();
 			
 		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");

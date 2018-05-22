@@ -12,6 +12,7 @@ public class Grafo {
 	private ArrayList<AreaConhecimento> listParticipouAreaConhecimento;
 	private ArrayList<SubArea> listParticipouSubArea;
 	private ArrayList<Especialidade> listParticipouEspecialidade;
+	private ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa;
 
 	public Grafo() {
 		this.listParticipante = new ArrayList<>();
@@ -21,6 +22,7 @@ public class Grafo {
 		this.listParticipouAreaConhecimento = new ArrayList<>();
 		this.listParticipouSubArea = new ArrayList<>();
 		this.listParticipouEspecialidade = new ArrayList<>();
+		this.listParticipouProjetoPesquisa = new ArrayList<>();
 	}
 
 	public ArrayList<String[]> InferirBanca() {
@@ -34,11 +36,6 @@ public class Grafo {
 						resultado[0] = banca.getListParticipante().get(i).getNome();
 						resultado[1] = banca.getListParticipante().get(j).getNome();
 						list.add(resultado);
-
-						// String[] resultado2 = new String[2];
-						// resultado2[1] = banca.getListParticipante().get(i).getNome();
-						// resultado2[0] = banca.getListParticipante().get(j).getNome();
-						// list.add(resultado2);
 					}
 				}
 			}
@@ -58,10 +55,6 @@ public class Grafo {
 						resultado[0] = evento.getListParticipante().get(i).getNome();
 						resultado[1] = evento.getListParticipante().get(j).getNome();
 						list.add(resultado);
-						// String[] resultado2 = new String[2];
-						// resultado2[1] = banca.getListParticipante().get(i).getNome();
-						// resultado2[0] = banca.getListParticipante().get(j).getNome();
-						// list.add(resultado2);
 					}
 				}
 			}
@@ -81,10 +74,6 @@ public class Grafo {
 						resultado[0] = areaatucao.getListParticipante().get(i).getNome();
 						resultado[1] = areaatucao.getListParticipante().get(j).getNome();
 						list.add(resultado);
-						// String[] resultado2 = new String[2];
-						// resultado2[1] = banca.getListParticipante().get(i).getNome();
-						// resultado2[0] = banca.getListParticipante().get(j).getNome();
-						// list.add(resultado2);
 					}
 				}
 			}
@@ -93,7 +82,63 @@ public class Grafo {
 		return list;
 	}
 
+	public ArrayList<String[]> InferirOrientacao() {
+		ArrayList<String[]> list = new ArrayList<String[]>();
 
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getListAlunosOrientados().size() > 0) {
+				for (int i = 0; i < pessoa.getListAlunosOrientados().size(); i++) {
+					for (int j = 0; j < pessoa.getListAlunosOrientados().size(); j++) {
+						if (i != j) {
+							String[] resultado = new String[2];
+							resultado[0] = pessoa.getListAlunosOrientados().get(i).getNome();
+							resultado[1] = pessoa.getListAlunosOrientados().get(j).getNome();
+							list.add(resultado);
+						}
+					}
+				}
+			}
+		}
+		list.sort(Comparator.comparing(u -> u[0]));
+		return list;
+	}
+
+	public ArrayList<String[]> InferirProjetoPesquisa() {
+		ArrayList<String[]> list = new ArrayList<String[]>();
+
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getListParticipouProjetoPesquisa().size() > 0) {
+				for (int i = 0; i < pessoa.getListParticipouProjetoPesquisa().size(); i++) {
+					ProjetoPesquisa pesq1 = pessoa.getListParticipouProjetoPesquisa().get(i);
+					for (int j = 0; j < pesq1.getListParticipante().size(); j++) {
+						if (!pesq1.getListParticipante().get(j).equals(pessoa)) {
+							Pessoa pessoa2 = pesq1.getListParticipante().get(j);
+							for (int k = 0; k < pessoa2.getListParticipouProjetoPesquisa().size(); k++) {
+								if (!pessoa2.getListParticipouProjetoPesquisa().get(k).equals(pesq1)) {
+									ProjetoPesquisa pesq2 = pessoa2.getListParticipouProjetoPesquisa().get(k);
+									for (int t = 0; t < pesq2.getListParticipante().size(); t++) {
+										if (!pesq2.getListParticipante().get(t).equals(pessoa2)
+												&& !pesq2.getListParticipante().get(t).equals(pessoa)) {
+											String[] resultado = new String[2];
+											resultado[0] = pessoa.getNome();
+											resultado[1] = pesq2.getListParticipante().get(t).getNome();
+											list.add(resultado);
+											// System.out.println(pessoa.getNome() + "-->" + pesq1.getTitulo() + "-->"
+											// + pessoa2.getNome() + "-->" + pesq2.getTitulo() + "-->"
+											// + resultado[1]);
+										}
+									}
+								}
+							}
+						}
+					}
+
+				}
+			}
+		}
+		list.sort(Comparator.comparing(u -> u[0]));
+		return list;
+	}
 
 	public ArrayList<String[]> InferirAreaConhecimento() {
 		ArrayList<String[]> list = new ArrayList<String[]>();
@@ -503,6 +548,48 @@ public class Grafo {
 		}
 	}
 
+	public void AddProjetoPesquisa(String[] info) {
+		Pessoa resultPe = null;
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getNome().contentEquals(info[0])) {
+				resultPe = pessoa;
+				break;
+			}
+		}
+		ProjetoPesquisa resultEP = null;
+		for (ProjetoPesquisa projetoPesquisa : this.listParticipouProjetoPesquisa) {
+			if (projetoPesquisa.getTitulo().contentEquals(info[1])) {
+				resultEP = projetoPesquisa;
+				break;
+			}
+		}
+		if (resultPe != null && resultEP == null) {
+			ProjetoPesquisa projetoPesquisa = new ProjetoPesquisa(info[1]);
+			projetoPesquisa.AddListParticipante(resultPe);
+			resultPe.AddListParticipouProjetoPesquisa(projetoPesquisa);
+			AddListParticipouProjetoPesquisa(projetoPesquisa);
+		} else {
+			if (resultPe == null && resultEP != null) {
+				Pessoa pe = new Pessoa(info[0]);
+				pe.AddListParticipouProjetoPesquisa(resultEP);
+				resultEP.AddListParticipante(pe);
+				AddParticipante(pe);
+			} else {
+				if (resultPe != null && resultEP != null) {
+					resultPe.AddListParticipouProjetoPesquisa(resultEP);
+					resultEP.AddListParticipante(resultPe);
+				} else {
+					Pessoa pe = new Pessoa(info[0]);
+					ProjetoPesquisa projetoPesquisa = new ProjetoPesquisa(info[1]);
+					projetoPesquisa.AddListParticipante(pe);
+					pe.AddListParticipouProjetoPesquisa(projetoPesquisa);
+					AddParticipante(pe);
+					AddListParticipouProjetoPesquisa(projetoPesquisa);
+				}
+			}
+		}
+	}
+
 	public void imprimirBanca() {
 		this.listParticipouBanca.forEach(u -> {
 			System.out.println("----------------" + u.getTitulo() + "------------------");
@@ -520,13 +607,28 @@ public class Grafo {
 	}
 
 	public void imprimirOrientacao() {
-		this.listParticipante.forEach(u-> {
+		this.listParticipante.forEach(u -> {
 			if (u.getListAlunosOrientados().size() > 0) {
 				System.out.println("-------Orientador--------" + u.getNome() + "------------------");
 				u.getListAlunosOrientados().forEach(p -> System.out.println(p.getNome()));
 			}
 		});
+	}
 
+	public void imprimirProjetoPesquisa() {
+		this.listParticipouProjetoPesquisa.forEach(u -> {
+			System.out.println("---------------" + u.getTitulo() + "------------------");
+			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
+		});
+
+		// this.listParticipante.forEach(u -> {
+		// if (u.getListParticipouProjetoPesquisa().size() > 0) {
+		// System.out.println("-------Orientador--------" + u.getNome() +
+		// "------------------");
+		// u.getListParticipouProjetoPesquisa().forEach(p ->
+		// System.out.println(p.getTitulo()));
+		// }
+		// });
 	}
 
 	public void imprimirArea() {
@@ -643,5 +745,16 @@ public class Grafo {
 		this.listParticipouEspecialidade.add(listParticipouEspecialidade);
 	}
 
+	public ArrayList<ProjetoPesquisa> getListParticipouProjetoPesquisa() {
+		return this.listParticipouProjetoPesquisa;
+	}
+
+	public void setListParticipouProjetoPesquisa(ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa) {
+		this.listParticipouProjetoPesquisa = listParticipouProjetoPesquisa;
+	}
+
+	public void AddListParticipouProjetoPesquisa(ProjetoPesquisa listParticipouProjetoPesquisa) {
+		this.listParticipouProjetoPesquisa.add(listParticipouProjetoPesquisa);
+	}
 
 }
