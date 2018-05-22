@@ -13,6 +13,8 @@ public class Pessoa {
 	private ArrayList<Pessoa> listOrientadores;
 	private ArrayList<Pessoa> listAlunosOrientados;
 	private ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa;
+	private ArrayList<TrabalhoEvento> listParticipouTrabalhoEvento;
+	private ArrayList<Resultado> listResultado;
 
 	public Pessoa(String nome) {
 		super();
@@ -26,6 +28,8 @@ public class Pessoa {
 		this.listOrientadores = new ArrayList<>();
 		this.listAlunosOrientados = new ArrayList<>();
 		this.listParticipouProjetoPesquisa = new ArrayList<>();
+		this.listParticipouTrabalhoEvento = new ArrayList<>();
+		this.listResultado = new ArrayList<>();
 	}
 
 	public String getNome() {
@@ -142,6 +146,30 @@ public class Pessoa {
 
 	public void AddListParticipouProjetoPesquisa(ProjetoPesquisa listParticipouProjetoPesquisa) {
 		this.listParticipouProjetoPesquisa.add(listParticipouProjetoPesquisa);
+	}
+
+	public ArrayList<TrabalhoEvento> getListParticipouTrabalhoEvento() {
+		return this.listParticipouTrabalhoEvento;
+	}
+
+	public void setListParticipouTrabalhoEvento(ArrayList<TrabalhoEvento> listParticipouTrabalhoEvento) {
+		this.listParticipouTrabalhoEvento = listParticipouTrabalhoEvento;
+	}
+
+	public void AddListParticipouTrabalhoEvento(TrabalhoEvento listParticipouTrabalhoEvento) {
+		this.listParticipouTrabalhoEvento.add(listParticipouTrabalhoEvento);
+	}
+
+	public ArrayList<Resultado> getListResultado() {
+		return this.listResultado;
+	}
+
+	public void setListResultado(ArrayList<Resultado> listResultado) {
+		this.listResultado = listResultado;
+	}
+
+	public void AddListResultado(Resultado listResultado) {
+		this.listResultado.add(listResultado);
 	}
 
 }

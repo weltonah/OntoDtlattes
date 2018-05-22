@@ -4,82 +4,109 @@ import java.io.File;
 import java.util.ArrayList;
 
 import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.IRI;
-import org.semanticweb.owlapi.model.OWLDataFactory;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 
 public class GrafoController {
 
-	private IRI DATALATTESIRI;
 	private OWLOntologyManager manager;
 	private OWLOntology ontology;
-	private OWLDataFactory factory;
 	private Grafo grafo;
+	private Grafo grafoResultado;
 
 	public GrafoController(String nomeArq) throws OWLOntologyCreationException {
 		File file = new File(System.getProperty("user.dir") + "/" + nomeArq);
-		this.DATALATTESIRI = IRI.create("http://www.datalattes.com/ontologies/datalattes.owl");
 		this.manager = OWLManager.createOWLOntologyManager();
 		this.ontology = this.manager.loadOntologyFromOntologyDocument(file);
-		this.factory = this.manager.getOWLDataFactory();
-		this.grafo = new Grafo();
+		this.grafoResultado = new Grafo();
+
+	}
+
+	public void inferir() {
+		preencherBanca();
+		preencherEvento();
+		preencherAreaAtuacao();
+		preencherOrientacao();
+		preencherProjetoPesquisa();
+		preencherProjetoEmEvento();
 	}
 
 	public void preencherBanca() {
-		preencherGrafo("Banca", "bancaTemParticipante", 0);
-		this.grafo.imprimirBanca();
+		this.grafo = new Grafo();
+		buscarDadosOWL("Banca", "bancaTemParticipante", 0);
+		// this.grafo.imprimirBanca();
 		ArrayList<String[]> aux = this.grafo.InferirBanca();
-		this.grafo.contRelacoes(aux);
+		aux = this.grafo.contRelacoes(aux);
+
 	}
 
 	public void preencherEvento() {
-		preencherGrafo("Evento", "eventoTemParticipante", 1);
-		this.grafo.imprimirEvento();
+		this.grafo = new Grafo();
+		buscarDadosOWL("Evento", "eventoTemParticipante", 1);
+		// this.grafo.imprimirEvento();
 		ArrayList<String[]> aux = this.grafo.InferirEvento();
-		this.grafo.contRelacoes(aux);
+		aux = this.grafo.contRelacoes(aux);
+
 	}
 
 	public void preencherAreaAtuacao() {
-		preencherGrafo("AreaAtuacao", "areaAtuacaoTemPesquisador", 2);
-		preencherGrafo("AreaConhecimento", "areaConhecimentoTemPesquisador", 3);
-		preencherGrafo("SubArea", "subAreaTemPesquisador", 4);
-		preencherGrafo("Especialidade", "especialidadeTemPesquisador", 5);
-		this.grafo.imprimirArea();
+		this.grafo = new Grafo();
+		buscarDadosOWL("AreaAtuacao", "areaAtuacaoTemPesquisador", 2);
+		buscarDadosOWL("AreaConhecimento", "areaConhecimentoTemPesquisador", 3);
+		buscarDadosOWL("SubArea", "subAreaTemPesquisador", 4);
+		buscarDadosOWL("Especialidade", "especialidadeTemPesquisador", 5);
+		// this.grafo.imprimirArea();
 		System.out.println("Area atuacao");
 		ArrayList<String[]> aux = this.grafo.InferirAreaAtuacao();
-		this.grafo.contRelacoes(aux);
+		aux = this.grafo.contRelacoes(aux);
 		System.out.println("area conhecimento");
-		aux = this.grafo.InferirAreaConhecimento();
-		this.grafo.contRelacoes(aux);
+		ArrayList<String[]> aux2 = this.grafo.InferirAreaConhecimento();
+		aux2 =this.grafo.contRelacoes(aux2);
 		System.out.println("sub area");
-		aux = this.grafo.InferirSubArea();
-		this.grafo.contRelacoes(aux);
+		ArrayList<String[]> aux3 = this.grafo.InferirSubArea();
+		aux3 = this.grafo.contRelacoes(aux3);
 		System.out.println("especialidade");
-		aux = this.grafo.InferirEspecialidade();
-		this.grafo.contRelacoes(aux);
+		ArrayList<String[]> aux4 = this.grafo.InferirEspecialidade();
+		aux4 = this.grafo.contRelacoes(aux4);
 	}
 
 	public void preencherOrientacao() {
-		preencherGrafo("Pessoa", "foiOrientadoPor", 6);
-		this.grafo.imprimirOrientacao();
+		this.grafo = new Grafo();
+		buscarDadosOWL("Pessoa", "foiOrientadoPor", 6);
+		// this.grafo.imprimirOrientacao();
 
 		ArrayList<String[]> aux = this.grafo.InferirOrientacao();
-		aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
-		this.grafo.contRelacoes(aux);
+		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
+		aux = this.grafo.contRelacoes(aux);
+
 	}
 
 	public void preencherProjetoPesquisa() {
-		preencherGrafo("ProjetoPesquisa", "ProjetoTeveParticipante", 7);
-		this.grafo.imprimirProjetoPesquisa();
+		this.grafo = new Grafo();
+		buscarDadosOWL("ProjetoPesquisa", "ProjetoTeveParticipante", 7);
+		// this.grafo.imprimirProjetoPesquisa();
 
 		ArrayList<String[]> aux = this.grafo.InferirProjetoPesquisa();
 		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
-		this.grafo.contRelacoes(aux);
+		aux = this.grafo.contRelacoes(aux);
+
 	}
 
-	public void preencherGrafo(String Classe, String Relacao, int opcao) {
+	public void preencherProjetoEmEvento() {
+		this.grafo = new Grafo();
+		buscarDadosOWL("Evento", "eventoTemParticipante", 1);
+		buscarDadosOWL("Producao", "eventoTeveTrabalhoDe", 8); // --> para pessoa
+		buscarDadosOWL("Producao", "trabalhoEmEvento", 9); /// para --> evento
+		// this.grafo.imprimirTrabalhoEvento();
+
+		ArrayList<String[]> aux = this.grafo.InferirProjetoEmEvento();
+		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
+		aux = this.grafo.contRelacoes(aux);
+	}
+
+
+	public void buscarDadosOWL(String Classe, String Relacao, int opcao) {
 		ArrayList<String[]> aux = new ArrayList<>();
 		this.ontology.individualsInSignature().filter(u -> u.isOWLNamedIndividual())
 				.filter(u -> this.ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get()
@@ -104,7 +131,6 @@ public class GrafoController {
 								// System.out.println(individuos[0]);
 								// System.out.println(individuos[1]);
 								aux.add(individuos);
-
 							});
 				});
 		aux.forEach(u -> {
@@ -124,6 +150,10 @@ public class GrafoController {
 				this.grafo.AddOrientacao(u);
 			if (opcao == 7)
 				this.grafo.AddProjetoPesquisa(u);
+			if (opcao == 8)
+				this.grafo.AddProjetoEventoePessoa(u);
+			if (opcao == 9)
+				this.grafo.AddProjetoEventoParaEvento(u);
 
 		});
 

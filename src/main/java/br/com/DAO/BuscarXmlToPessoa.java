@@ -17,7 +17,7 @@ import br.com.modelo.AreaAtuacaoXML;
 import br.com.modelo.OntoClass;
 import br.com.modelo.OntoParceiro;
 import br.com.modelo.OntoPessoa;
-import br.com.modelo.TrabalhoEvento;
+import br.com.modelo.TrabalhoEventoXml;
 
 public class BuscarXmlToPessoa {
 	XPath xpath;
@@ -86,10 +86,10 @@ public class BuscarXmlToPessoa {
 	}
 
 
-	public ArrayList<TrabalhoEvento> listOntoTrabalhoEvento() throws XPathExpressionException {
+	public ArrayList<TrabalhoEventoXml> listOntoTrabalhoEvento() throws XPathExpressionException {
 		XPathExpression expr = this.xpath.compile("//TRABALHO-EM-EVENTOS");
 		NodeList livros = (NodeList) expr.evaluate(this.xmlfile, XPathConstants.NODESET);
-		ArrayList<TrabalhoEvento> listResult = new ArrayList<>();
+		ArrayList<TrabalhoEventoXml> listResult = new ArrayList<>();
 		for (int i = 0; i < livros.getLength(); i++) {
 			Node TipoNode = livros.item(i);
 			String tituloTrabalho = TipoNode.getChildNodes().item(0).getAttributes().getNamedItem("TITULO-DO-TRABALHO")
@@ -99,7 +99,7 @@ public class BuscarXmlToPessoa {
 			int ano = Integer.valueOf(
 					TipoNode.getChildNodes().item(0).getAttributes().getNamedItem("ANO-DO-TRABALHO").getTextContent());
 			OntoClass evento = new OntoClass(this.tratamentoDeDados.corrigirString(tituloEvento), "TrabalhoEmEvento", ano);
-			TrabalhoEvento item = new TrabalhoEvento(this.tratamentoDeDados.corrigirString(tituloTrabalho), evento);
+			TrabalhoEventoXml item = new TrabalhoEventoXml(this.tratamentoDeDados.corrigirString(tituloTrabalho), evento);
 			listResult.add(item);
 		}
 		return listResult;

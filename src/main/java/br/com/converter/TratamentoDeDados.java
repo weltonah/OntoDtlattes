@@ -9,7 +9,7 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import br.com.modelo.OntoClass;
 import br.com.modelo.OntoParceiro;
 import br.com.modelo.OntoPessoa;
-import br.com.modelo.TrabalhoEvento;
+import br.com.modelo.TrabalhoEventoXml;
 import br.com.modelo.TriplaOwl;
 import info.debatty.java.stringsimilarity.NGram;
 
@@ -310,17 +310,9 @@ public class TratamentoDeDados {
 							}
 						}
 						for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
-							TrabalhoEvento evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
+							TrabalhoEventoXml evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
 							double aux = ngram.distance(evento.getTitulo(), evento2.getEvento().getTitulo());
 							if (aux > 0 && aux < 0.25) {
-								// System.out.println("$$$$$###");
-								// System.out.println(ontoPessoa.getNomeCompleto());
-								// System.out.println(ontoPessoa2.getNomeCompleto());
-								// System.out.println(evento.getTitulo());
-								// System.out.println(evento2.getEvento().getTitulo());
-								// System.out.println("$$$$$###");
-								// System.out.println(evento.getTitulo());
-								// System.out.println(evento2.getEvento().getTitulo());
 								cont++;
 								if (evento.getTitulo().length() < evento2.getEvento().getTitulo().length())
 									evento2.getEvento().setTitulo(evento.getTitulo());

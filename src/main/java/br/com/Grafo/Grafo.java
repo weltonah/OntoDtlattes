@@ -13,6 +13,7 @@ public class Grafo {
 	private ArrayList<SubArea> listParticipouSubArea;
 	private ArrayList<Especialidade> listParticipouEspecialidade;
 	private ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa;
+	private ArrayList<TrabalhoEvento> listParticipouTrabalhoEvento;
 
 	public Grafo() {
 		this.listParticipante = new ArrayList<>();
@@ -23,6 +24,7 @@ public class Grafo {
 		this.listParticipouSubArea = new ArrayList<>();
 		this.listParticipouEspecialidade = new ArrayList<>();
 		this.listParticipouProjetoPesquisa = new ArrayList<>();
+		this.listParticipouTrabalhoEvento = new ArrayList<>();
 	}
 
 	public ArrayList<String[]> InferirBanca() {
@@ -105,34 +107,52 @@ public class Grafo {
 
 	public ArrayList<String[]> InferirProjetoPesquisa() {
 		ArrayList<String[]> list = new ArrayList<String[]>();
-
 		for (Pessoa pessoa : this.listParticipante) {
 			if (pessoa.getListParticipouProjetoPesquisa().size() > 0) {
-				for (int i = 0; i < pessoa.getListParticipouProjetoPesquisa().size(); i++) {
-					ProjetoPesquisa pesq1 = pessoa.getListParticipouProjetoPesquisa().get(i);
-					for (int j = 0; j < pesq1.getListParticipante().size(); j++) {
-						if (!pesq1.getListParticipante().get(j).equals(pessoa)) {
-							Pessoa pessoa2 = pesq1.getListParticipante().get(j);
-							for (int k = 0; k < pessoa2.getListParticipouProjetoPesquisa().size(); k++) {
-								if (!pessoa2.getListParticipouProjetoPesquisa().get(k).equals(pesq1)) {
-									ProjetoPesquisa pesq2 = pessoa2.getListParticipouProjetoPesquisa().get(k);
-									for (int t = 0; t < pesq2.getListParticipante().size(); t++) {
-										if (!pesq2.getListParticipante().get(t).equals(pessoa2)
-												&& !pesq2.getListParticipante().get(t).equals(pessoa)) {
+				for (ProjetoPesquisa pesq1 : pessoa.getListParticipouProjetoPesquisa()) {
+					if (!pesq1.equals(pessoa)) {
+						for (Pessoa pessoa2 : pesq1.getListParticipante()) {
+							if (!pessoa2.equals(pesq1)) {
+								for (ProjetoPesquisa pesq2 : pessoa.getListParticipouProjetoPesquisa()) {
+									for (Pessoa pessoa3 : pesq2.getListParticipante()) {
+										if (!pessoa.equals(pessoa3) && !pessoa2.equals(pessoa3)) {
 											String[] resultado = new String[2];
 											resultado[0] = pessoa.getNome();
-											resultado[1] = pesq2.getListParticipante().get(t).getNome();
+											resultado[1] = pessoa3.getNome();
 											list.add(resultado);
-											// System.out.println(pessoa.getNome() + "-->" + pesq1.getTitulo() + "-->"
-											// + pessoa2.getNome() + "-->" + pesq2.getTitulo() + "-->"
-											// + resultado[1]);
 										}
 									}
 								}
 							}
 						}
 					}
+				}
+			}
+		}
 
+		list.sort(Comparator.comparing(u -> u[0]));
+		return list;
+	}
+
+	public ArrayList<String[]> InferirProjetoEmEvento() {
+		ArrayList<String[]> list = new ArrayList<String[]>();
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getListParticipouTrabalhoEvento().size() > 0) {
+				for (TrabalhoEvento trabalhoEvento : pessoa.getListParticipouTrabalhoEvento()) {
+					for (Evento evento : trabalhoEvento.getListParticipouEvento()) {
+						for (Pessoa pessoa2 : evento.getListParticipante()) {
+							if (!pessoa.equals(pessoa2)) {
+
+								String[] resultado = new String[2];
+								resultado[0] = pessoa.getNome();
+								resultado[1] = pessoa2.getNome();
+								// System.out.println(pessoa.getNome() + "--> " + trabalhoEvento.getTitulo() +
+								// "-->"
+								// + evento.getTitulo() + "-->" + pessoa2.getNome());
+								list.add(resultado);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -223,7 +243,6 @@ public class Grafo {
 			listrelacao.add(relacao);
 			i = j - 1;
 		}
-
 		// listrelacao.forEach(u -> u.getListParticipante().forEach(t ->
 		// System.out.println(u.getNome() + " --> " + t)));
 		listrelacao.forEach(u -> {
@@ -244,12 +263,14 @@ public class Grafo {
 			}
 		});
 
-		for (String[] strings : result) {
-			System.out.println(strings[0] + " ---> " + strings[1] + " valor: " + strings[2]);
-		}
+		// for (String[] strings : result) {
+		// System.out.println(strings[0] + " ---> " + strings[1] + " valor: " +
+		// strings[2]);
+		// }
 
 		return result;
 	}
+
 
 	public void AddBanca(String[] info) {
 		Pessoa resultPe = null;
@@ -590,6 +611,90 @@ public class Grafo {
 		}
 	}
 
+	public void AddProjetoEventoePessoa(String[] info) {
+		Pessoa resultPe = null;
+		for (Pessoa pessoa : this.listParticipante) {
+			if (pessoa.getNome().contentEquals(info[0])) {
+				resultPe = pessoa;
+				break;
+			}
+		}
+		TrabalhoEvento resultTE = null;
+		for (TrabalhoEvento trabalhoEventoXml : this.listParticipouTrabalhoEvento) {
+			if (trabalhoEventoXml.getTitulo().contentEquals(info[1])) {
+				resultTE = trabalhoEventoXml;
+				break;
+			}
+		}
+		if (resultPe != null && resultTE == null) {
+			TrabalhoEvento trabalhoEvento = new TrabalhoEvento(info[1]);
+			trabalhoEvento.AddListParticipante(resultPe);
+			resultPe.AddListParticipouTrabalhoEvento(trabalhoEvento);
+			AddListParticipouTrabalhoEvento(trabalhoEvento);
+		} else {
+			if (resultPe == null && resultTE != null) {
+				Pessoa pe = new Pessoa(info[0]);
+				pe.AddListParticipouTrabalhoEvento(resultTE);
+				resultTE.AddListParticipante(pe);
+				AddParticipante(pe);
+			} else {
+				if (resultPe != null && resultTE != null) {
+					resultPe.AddListParticipouTrabalhoEvento(resultTE);
+					resultTE.AddListParticipante(resultPe);
+				} else {
+					Pessoa pe = new Pessoa(info[0]);
+					TrabalhoEvento trabalhoEventoXml = new TrabalhoEvento(info[1]);
+					trabalhoEventoXml.AddListParticipante(pe);
+					pe.AddListParticipouTrabalhoEvento(trabalhoEventoXml);
+					AddParticipante(pe);
+					AddListParticipouTrabalhoEvento(trabalhoEventoXml);
+				}
+			}
+		}
+	}
+
+	public void AddProjetoEventoParaEvento(String[] info) {
+		Evento resultEv = null;
+		for (Evento evento : this.listParticipouEvento) {
+			if (evento.getTitulo().contentEquals(info[0])) {
+				resultEv = evento;
+				break;
+			}
+		}
+		TrabalhoEvento resultTE = null;
+		for (TrabalhoEvento trabalhoEventoXml : this.listParticipouTrabalhoEvento) {
+			if (trabalhoEventoXml.getTitulo().contentEquals(info[1])) {
+				resultTE = trabalhoEventoXml;
+				break;
+			}
+		}
+		if (resultEv != null && resultTE == null) {
+			TrabalhoEvento trabalhoEvento = new TrabalhoEvento(info[1]);
+			trabalhoEvento.AddListParticipouEvento(resultEv);
+			resultEv.AddListTrabalhoEvento(trabalhoEvento);
+			AddListParticipouTrabalhoEvento(trabalhoEvento);
+		} else {
+			if (resultEv == null && resultTE != null) {
+				Evento evento = new Evento(info[0]);
+				evento.AddListTrabalhoEvento(resultTE);
+				resultTE.AddListParticipouEvento(evento);
+				AddListParticipouEvento(evento);
+			} else {
+				if (resultEv != null && resultTE != null) {
+					resultEv.AddListTrabalhoEvento(resultTE);
+					resultTE.AddListParticipouEvento(resultEv);
+				} else {
+					Evento evento = new Evento(info[0]);
+					TrabalhoEvento trabalhoEventoXml = new TrabalhoEvento(info[1]);
+					trabalhoEventoXml.AddListParticipouEvento(evento);
+					evento.AddListTrabalhoEvento(trabalhoEventoXml);
+					AddListParticipouEvento(evento);
+					AddListParticipouTrabalhoEvento(trabalhoEventoXml);
+				}
+			}
+		}
+	}
+
 	public void imprimirBanca() {
 		this.listParticipouBanca.forEach(u -> {
 			System.out.println("----------------" + u.getTitulo() + "------------------");
@@ -620,15 +725,16 @@ public class Grafo {
 			System.out.println("---------------" + u.getTitulo() + "------------------");
 			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
 		});
+	}
 
-		// this.listParticipante.forEach(u -> {
-		// if (u.getListParticipouProjetoPesquisa().size() > 0) {
-		// System.out.println("-------Orientador--------" + u.getNome() +
-		// "------------------");
-		// u.getListParticipouProjetoPesquisa().forEach(p ->
-		// System.out.println(p.getTitulo()));
-		// }
-		// });
+	public void imprimirTrabalhoEvento() {
+		this.listParticipouTrabalhoEvento.forEach(u -> {
+			System.out.println("---------------" + u.getTitulo() + "------------------");
+			System.out.println("@@@ Publicou @@@");
+			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
+			System.out.println("@@@ evento apresentado @@@");
+			u.getListParticipouEvento().forEach(p -> System.out.println(p.getTitulo()));
+		});
 	}
 
 	public void imprimirArea() {
@@ -755,6 +861,18 @@ public class Grafo {
 
 	public void AddListParticipouProjetoPesquisa(ProjetoPesquisa listParticipouProjetoPesquisa) {
 		this.listParticipouProjetoPesquisa.add(listParticipouProjetoPesquisa);
+	}
+
+	public ArrayList<TrabalhoEvento> getListParticipouTrabalhoEvento() {
+		return this.listParticipouTrabalhoEvento;
+	}
+
+	public void setListParticipouTrabalhoEvento(ArrayList<TrabalhoEvento> listParticipouTrabalhoEvento) {
+		this.listParticipouTrabalhoEvento = listParticipouTrabalhoEvento;
+	}
+
+	public void AddListParticipouTrabalhoEvento(TrabalhoEvento listParticipouTrabalhoEvento) {
+		this.listParticipouTrabalhoEvento.add(listParticipouTrabalhoEvento);
 	}
 
 }

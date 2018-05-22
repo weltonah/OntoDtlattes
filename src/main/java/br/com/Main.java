@@ -24,7 +24,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 8;
+			tam = 10;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -78,11 +78,13 @@ public class Main {
 			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 			
 		GrafoController graf = new GrafoController(nomeFile);
+		graf.inferir();
 		// graf.preencherBanca();
 		// graf.preencherEvento();
 		// graf.preencherAreaAtuacao();
 		// graf.preencherOrientacao();
-		graf.preencherProjetoPesquisa();
+		// graf.preencherProjetoPesquisa();
+		// graf.preencherProjetoEmEvento();
 			
 		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");

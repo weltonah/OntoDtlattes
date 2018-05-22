@@ -3,16 +3,16 @@ package br.com.Grafo;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-public class Evento {
+public class TrabalhoEvento {
 	private String titulo;
 	private ArrayList<Pessoa> listParticipante;
-	private ArrayList<TrabalhoEvento> listTrabalhoEvento;
+	private ArrayList<Evento> listParticipouEvento;
 
-	public Evento(String titulo) {
+	public TrabalhoEvento(String titulo) {
 		super();
 		this.titulo = titulo;
 		this.listParticipante = new ArrayList<>();
-		this.listTrabalhoEvento = new ArrayList<>();
+		this.listParticipouEvento = new ArrayList<>();
 	}
 
 	public String getTitulo() {
@@ -37,16 +37,15 @@ public class Evento {
 
 	}
 
-	public ArrayList<TrabalhoEvento> getListTrabalhoEvento() {
-		return this.listTrabalhoEvento;
+	public ArrayList<Evento> getListParticipouEvento() {
+		return this.listParticipouEvento;
 	}
 
-	public void setListTrabalhoEvento(ArrayList<TrabalhoEvento> listTrabalhoEvento) {
-		this.listTrabalhoEvento = listTrabalhoEvento;
+	public void setListParticipouEvento(ArrayList<Evento> listParticipouEvento) {
+		this.listParticipouEvento = listParticipouEvento;
 	}
 
-	public void AddListTrabalhoEvento(TrabalhoEvento listTrabalhoEvento) {
-		this.listTrabalhoEvento.add(listTrabalhoEvento);
-		this.listTrabalhoEvento.sort(Comparator.comparing(u -> u.getTitulo()));
+	public void AddListParticipouEvento(Evento listParticipouEvento) {
+		this.listParticipouEvento.add(listParticipouEvento);
 	}
 }

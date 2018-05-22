@@ -12,7 +12,7 @@ public class OntoPessoa {
 	private boolean FlagLattes;
 	private int cont = 0;
 	private ArrayList<AreaAtuacaoXML> ListOntoAreaAtuacao;
-	private ArrayList<TrabalhoEvento> ListOntoTrabalhoEvento;
+	private ArrayList<TrabalhoEventoXml> ListOntoTrabalhoEvento;
 	private ArrayList<OntoClass> ListOntoEvento;
 	private ArrayList<OntoClass> ListOntoFormacao;
 	private ArrayList<OntoClass> ListOntoOrientacao;
@@ -199,11 +199,11 @@ public class OntoPessoa {
 		this.ListOntoEvento.addAll(listOntoOrgEvento);
 	}
 
-	public ArrayList<TrabalhoEvento> getListOntoTrabalhoEvento() {
+	public ArrayList<TrabalhoEventoXml> getListOntoTrabalhoEvento() {
 		return this.ListOntoTrabalhoEvento;
 	}
 
-	public void setListOntoTrabalhoEvento(ArrayList<TrabalhoEvento> listOntoTrabalhoEvento) {
+	public void setListOntoTrabalhoEvento(ArrayList<TrabalhoEventoXml> listOntoTrabalhoEvento) {
 		this.ListOntoTrabalhoEvento = listOntoTrabalhoEvento;
 	}
 

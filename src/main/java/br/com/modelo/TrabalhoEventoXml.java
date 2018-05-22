@@ -1,10 +1,10 @@
 package br.com.modelo;
 
-public class TrabalhoEvento {
+public class TrabalhoEventoXml {
 	private String tituloTrabalho;
 	private OntoClass evento;
 
-	public TrabalhoEvento(String tituloTrabalho, OntoClass evento) {
+	public TrabalhoEventoXml(String tituloTrabalho, OntoClass evento) {
 		super();
 		this.tituloTrabalho = tituloTrabalho;
 		this.evento = evento;
