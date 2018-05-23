@@ -58,22 +58,22 @@ public class GrafoController {
 		buscarDadosOWL("SubArea", "subAreaTemPesquisador", 4);
 		buscarDadosOWL("Especialidade", "especialidadeTemPesquisador", 5);
 		// this.grafo.imprimirArea();
-		System.out.println("Area atuacao");
+		// System.out.println("Area atuacao");
 		ArrayList<String[]> aux = this.grafo.InferirAreaAtuacao();
 		aux = this.grafo.contRelacoes(aux);
 		this.grafoResultado.PreencherResultado(aux, 2);
-		System.out.println("area conhecimento");
+		// System.out.println("area conhecimento");
 		ArrayList<String[]> aux2 = this.grafo.InferirAreaConhecimento();
-		aux2 =this.grafo.contRelacoes(aux2);
-		this.grafoResultado.PreencherResultado(aux, 3);
-		System.out.println("sub area");
+		aux2 = this.grafo.contRelacoes(aux2);
+		this.grafoResultado.PreencherResultado(aux2, 3);
+		// System.out.println("sub area");
 		ArrayList<String[]> aux3 = this.grafo.InferirSubArea();
 		aux3 = this.grafo.contRelacoes(aux3);
-		this.grafoResultado.PreencherResultado(aux, 4);
-		System.out.println("especialidade");
+		this.grafoResultado.PreencherResultado(aux3, 4);
+		// System.out.println("especialidade");
 		ArrayList<String[]> aux4 = this.grafo.InferirEspecialidade();
 		aux4 = this.grafo.contRelacoes(aux4);
-		this.grafoResultado.PreencherResultado(aux, 5);
+		this.grafoResultado.PreencherResultado(aux4, 5);
 	}
 
 	public void preencherOrientacao() {
@@ -110,7 +110,6 @@ public class GrafoController {
 		aux = this.grafo.contRelacoes(aux);
 		this.grafoResultado.PreencherResultado(aux, 8);
 	}
-
 
 	public void buscarDadosOWL(String Classe, String Relacao, int opcao) {
 		ArrayList<String[]> aux = new ArrayList<>();

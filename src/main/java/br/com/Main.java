@@ -24,7 +24,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 8;
+			tam = 10;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -41,10 +41,6 @@ public class Main {
 			// File owlfile = new File(classLoader.getResource("static/testFile/" +
 			// string).getFile());
 
-			// File owlfile = new File(System.getProperty("user.dir") +
-			// "src/main/resources/static/testFile/" + string);
-			// System.out.println(System.getProperty("user.dir") +
-			// "src/main/resources/static/testFile/" + string);
 			Document xmlfile = ConverterFile.ConverterFileToDocument(owlfile);
 			BuscarXmlToPessoa preencherXMLtoOnto = new BuscarXmlToPessoa(xmlfile);
 			OntoPessoa pessoa = new OntoPessoa(tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCompleto()),
@@ -69,7 +65,7 @@ public class Main {
 
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		tratamentoDeDados.tratarBanca(listaPessoa);
+		// tratamentoDeDados.tratarBanca(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
@@ -80,7 +76,6 @@ public class Main {
 		GrafoController graf = new GrafoController(nomeFile);
 		graf.inferir();
 			
-		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");
 		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
 		// u.getIdLattes() + " @@@ "

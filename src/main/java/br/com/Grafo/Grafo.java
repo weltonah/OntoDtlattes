@@ -785,8 +785,8 @@ public class Grafo {
 		// });
 
 		this.listResultado.forEach(u -> {
-			System.out.println("----------------------------------");
-			System.out.println(u.toString());
+			// System.out.println("----------------------------------");
+			// System.out.println(u.toString());
 			System.out.println(u.getListParticipante().get(0).getNome() + "--> "
 					+ u.getListParticipante().get(1).getNome() + " : " + u.getTotal());
 
