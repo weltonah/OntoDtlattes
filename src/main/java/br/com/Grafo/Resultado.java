@@ -11,7 +11,7 @@ public class Resultado {
 	private final int valorSubArea = 6;
 	private final int valorEspecialidade = 7;
 	private final int valorOrientacao = 8;
-	private final int valorProjetoPesquisa = 9;
+	private final int valorProjetoPesquisa = 10;
 	private final int valorProjetoEvento = 10;
 	private int contBanca;
 	private int contEvento;
@@ -31,16 +31,51 @@ public class Resultado {
 
 	public int getTotal() {
 		int result = 0;
-		result = +(this.contBanca * this.valorBanca);
-		result = +(this.contEvento * this.valorEvento);
-		result = +(this.contAreaAtuacao * this.valorAreaAtuacao);
-		result = +(this.contAreaConhecimento * this.valorAreaConhecimento);
-		result = +(this.contSubArea * this.valorSubArea);
-		result = +(this.contEspecialidade * this.valorEspecialidade);
-		result = +(this.contOrientacao * this.valorOrientacao);
-		result = +(this.contProjetoPesquisa * this.valorProjetoPesquisa);
-		result = +(this.contProjetoEvento * this.valorProjetoEvento);
+		result = result + (this.contBanca * this.valorBanca);
+		result = result + (this.contEvento * this.valorEvento);
+		result = result + (this.contAreaAtuacao * this.valorAreaAtuacao);
+		result = result + (this.contAreaConhecimento * this.valorAreaConhecimento);
+		result = result + (this.contSubArea * this.valorSubArea);
+		result = result + (this.contEspecialidade * this.valorEspecialidade);
+		result = result + (this.contOrientacao * this.valorOrientacao);
+		result = result + (this.contProjetoPesquisa * this.valorProjetoPesquisa);
+		result = result + (this.contProjetoEvento * this.valorProjetoEvento);
 		return result;
+	}
+
+	public void Addcriterio(String valor, int tipo) {
+		switch (tipo) {
+		case 0:
+			this.setContBanca(Integer.parseInt(valor));
+			break;
+		case 1:
+			this.setContEvento(Integer.parseInt(valor));
+			break;
+		case 2:
+			this.setContAreaAtuacao(Integer.parseInt(valor));
+			break;
+		case 3:
+			this.setContAreaConhecimento(Integer.parseInt(valor));
+			break;
+		case 4:
+			this.setContSubArea(Integer.parseInt(valor));
+			break;
+		case 5:
+			this.setContEspecialidade(Integer.parseInt(valor));
+			break;
+		case 6:
+			this.setContOrientacao(Integer.parseInt(valor));
+			break;
+		case 7:
+			this.setContProjetoPesquisa(Integer.parseInt(valor));
+			break;
+		case 8:
+			this.setContProjetoEvento(Integer.parseInt(valor));
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	public ArrayList<Pessoa> getListParticipante() {
@@ -127,5 +162,15 @@ public class Resultado {
 
 	public void setContProjetoEvento(int contProjetoEvento) {
 		this.contProjetoEvento = contProjetoEvento;
+	}
+
+	@Override
+	public String toString() {
+		return "Resultado [contBanca=" + this.contBanca + ", contEvento=" + this.contEvento + ", contAreaAtuacao="
+				+ this.contAreaAtuacao + ", contAreaConhecimento=" + this.contAreaConhecimento + ", contSubArea="
+				+ this.contSubArea + ", contEspecialidade=" + this.contEspecialidade + ", contOrientacao="
+				+ this.contOrientacao + ", contProjetoPesquisa=" + this.contProjetoPesquisa + ", contProjetoEvento="
+				+ this.contProjetoEvento + ", listParticipante=" + this.listParticipante.get(0).getNome() + " ,"
+				+ this.listParticipante.get(1).getNome() + "]";
 	}
 }

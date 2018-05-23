@@ -30,6 +30,7 @@ public class GrafoController {
 		preencherOrientacao();
 		preencherProjetoPesquisa();
 		preencherProjetoEmEvento();
+		this.grafoResultado.imprimirResultado();
 	}
 
 	public void preencherBanca() {
@@ -38,7 +39,7 @@ public class GrafoController {
 		// this.grafo.imprimirBanca();
 		ArrayList<String[]> aux = this.grafo.InferirBanca();
 		aux = this.grafo.contRelacoes(aux);
-
+		this.grafoResultado.PreencherResultado(aux, 0);
 	}
 
 	public void preencherEvento() {
@@ -47,7 +48,7 @@ public class GrafoController {
 		// this.grafo.imprimirEvento();
 		ArrayList<String[]> aux = this.grafo.InferirEvento();
 		aux = this.grafo.contRelacoes(aux);
-
+		this.grafoResultado.PreencherResultado(aux, 1);
 	}
 
 	public void preencherAreaAtuacao() {
@@ -60,15 +61,19 @@ public class GrafoController {
 		System.out.println("Area atuacao");
 		ArrayList<String[]> aux = this.grafo.InferirAreaAtuacao();
 		aux = this.grafo.contRelacoes(aux);
+		this.grafoResultado.PreencherResultado(aux, 2);
 		System.out.println("area conhecimento");
 		ArrayList<String[]> aux2 = this.grafo.InferirAreaConhecimento();
 		aux2 =this.grafo.contRelacoes(aux2);
+		this.grafoResultado.PreencherResultado(aux, 3);
 		System.out.println("sub area");
 		ArrayList<String[]> aux3 = this.grafo.InferirSubArea();
 		aux3 = this.grafo.contRelacoes(aux3);
+		this.grafoResultado.PreencherResultado(aux, 4);
 		System.out.println("especialidade");
 		ArrayList<String[]> aux4 = this.grafo.InferirEspecialidade();
 		aux4 = this.grafo.contRelacoes(aux4);
+		this.grafoResultado.PreencherResultado(aux, 5);
 	}
 
 	public void preencherOrientacao() {
@@ -79,7 +84,7 @@ public class GrafoController {
 		ArrayList<String[]> aux = this.grafo.InferirOrientacao();
 		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
 		aux = this.grafo.contRelacoes(aux);
-
+		this.grafoResultado.PreencherResultado(aux, 6);
 	}
 
 	public void preencherProjetoPesquisa() {
@@ -90,7 +95,7 @@ public class GrafoController {
 		ArrayList<String[]> aux = this.grafo.InferirProjetoPesquisa();
 		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
 		aux = this.grafo.contRelacoes(aux);
-
+		this.grafoResultado.PreencherResultado(aux, 7);
 	}
 
 	public void preencherProjetoEmEvento() {
@@ -103,6 +108,7 @@ public class GrafoController {
 		ArrayList<String[]> aux = this.grafo.InferirProjetoEmEvento();
 		// aux.forEach(p -> System.out.println(p[0] + "-->" + p[1]));
 		aux = this.grafo.contRelacoes(aux);
+		this.grafoResultado.PreencherResultado(aux, 8);
 	}
 
 

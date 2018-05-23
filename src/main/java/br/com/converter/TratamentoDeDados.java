@@ -362,11 +362,11 @@ public class TratamentoDeDados {
 							OntoClass evento2 = ontoPessoa2.getListOntoBanca().get(t);
 							double aux = ngram.distance(evento.getTitulo(), evento2.getTitulo());
 							if (aux > 0 && aux < 0.25) {
-								System.out.println("####################");
-								System.out.println(ontoPessoa.getNomeCompleto());
-								System.out.println(ontoPessoa2.getNomeCompleto());
-								System.out.println(evento.getTitulo());
-								System.out.println(evento2.getTitulo());
+								// System.out.println("####################");
+								// System.out.println(ontoPessoa.getNomeCompleto());
+								// System.out.println(ontoPessoa2.getNomeCompleto());
+								// System.out.println(evento.getTitulo());
+								// System.out.println(evento2.getTitulo());
 								cont++;
 								if (evento.getTitulo().length() < evento2.getTitulo().length())
 									evento2.setTitulo(evento.getTitulo());
@@ -392,6 +392,6 @@ public class TratamentoDeDados {
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
 		}
-		System.out.println("numero total de evento " + totalcont);
+		System.out.println("numero total de banca " + totalcont);
 	}
 }

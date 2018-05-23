@@ -24,7 +24,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 10;
+			tam = 8;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -69,7 +69,7 @@ public class Main {
 
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		// tratamentoDeDados.tratarBanca(listaPessoa);
+		tratamentoDeDados.tratarBanca(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
@@ -79,12 +79,6 @@ public class Main {
 			
 		GrafoController graf = new GrafoController(nomeFile);
 		graf.inferir();
-		// graf.preencherBanca();
-		// graf.preencherEvento();
-		// graf.preencherAreaAtuacao();
-		// graf.preencherOrientacao();
-		// graf.preencherProjetoPesquisa();
-		// graf.preencherProjetoEmEvento();
 			
 		// criarArquivoResult(nomeFile);
 		System.out.println("Fim");

@@ -14,6 +14,7 @@ public class Grafo {
 	private ArrayList<Especialidade> listParticipouEspecialidade;
 	private ArrayList<ProjetoPesquisa> listParticipouProjetoPesquisa;
 	private ArrayList<TrabalhoEvento> listParticipouTrabalhoEvento;
+	private ArrayList<Resultado> listResultado;
 
 	public Grafo() {
 		this.listParticipante = new ArrayList<>();
@@ -25,6 +26,87 @@ public class Grafo {
 		this.listParticipouEspecialidade = new ArrayList<>();
 		this.listParticipouProjetoPesquisa = new ArrayList<>();
 		this.listParticipouTrabalhoEvento = new ArrayList<>();
+		this.listResultado = new ArrayList<>();
+	}
+
+	public void PreencherResultado(ArrayList<String[]> listaResultado, int tipo) {
+		for (String[] strings : listaResultado) {
+			if (Integer.parseInt(strings[2]) > 0) {
+				Pessoa pessoa1 = null;
+				for (Pessoa pessoa : this.listParticipante) {
+					if (pessoa.getNome().contentEquals(strings[0])) {
+						pessoa1 = pessoa;
+						break;
+					}
+				}
+				Pessoa pessoa2 = null;
+				for (Pessoa pessoa : this.listParticipante) {
+					if (pessoa.getNome().contentEquals(strings[1])) {
+						pessoa2 = pessoa;
+						break;
+					}
+				}
+				if (pessoa1 != null && pessoa2 == null) {
+					Pessoa pessoaAux2 = new Pessoa(strings[1]);
+					Resultado resultado = new Resultado();
+					resultado.AddListParticipante(pessoa1);
+					resultado.AddListParticipante(pessoaAux2);
+					pessoa1.AddListResultado(resultado);
+					pessoaAux2.AddListResultado(resultado);
+					resultado.Addcriterio(strings[2], tipo);
+					AddParticipante(pessoaAux2);
+					AddListResultado(resultado);
+				} else {
+					if (pessoa1 == null && pessoa2 != null) {
+						Pessoa pessoaAux1 = new Pessoa(strings[0]);
+						Resultado resultado = new Resultado();
+						resultado.AddListParticipante(pessoa2);
+						resultado.AddListParticipante(pessoaAux1);
+						pessoa2.AddListResultado(resultado);
+						pessoaAux1.AddListResultado(resultado);
+						resultado.Addcriterio(strings[2], tipo);
+						AddParticipante(pessoaAux1);
+						AddListResultado(resultado);
+					} else {
+						if (pessoa1 != null && pessoa2 != null) {
+							buscarresultado(pessoa1, pessoa2, strings[2], tipo);
+						} else {
+							Pessoa pessoaAux1 = new Pessoa(strings[0]);
+							Pessoa pessoaAux2 = new Pessoa(strings[1]);
+							Resultado resultado = new Resultado();
+							resultado.AddListParticipante(pessoaAux1);
+							resultado.AddListParticipante(pessoaAux2);
+							pessoaAux1.AddListResultado(resultado);
+							pessoaAux2.AddListResultado(resultado);
+							resultado.Addcriterio(strings[2], tipo);
+							AddParticipante(pessoaAux1);
+							AddParticipante(pessoaAux2);
+							AddListResultado(resultado);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public void buscarresultado(Pessoa pessoa1, Pessoa pessoa2, String valor, int tipo) {
+		boolean flag = true;
+		for (Resultado resultado : pessoa1.getListResultado()) {
+			if (resultado.getListParticipante().contains(pessoa2)) {
+				resultado.Addcriterio(valor, tipo);
+				flag = false;
+				break;
+			}
+		}
+		if (flag) {
+			Resultado resultado = new Resultado();
+			resultado.AddListParticipante(pessoa1);
+			resultado.AddListParticipante(pessoa2);
+			pessoa1.AddListResultado(resultado);
+			pessoa2.AddListResultado(resultado);
+			resultado.Addcriterio(valor, tipo);
+			AddListResultado(resultado);
+		}
 	}
 
 	public ArrayList<String[]> InferirBanca() {
@@ -270,7 +352,6 @@ public class Grafo {
 
 		return result;
 	}
-
 
 	public void AddBanca(String[] info) {
 		Pessoa resultPe = null;
@@ -695,12 +776,28 @@ public class Grafo {
 		}
 	}
 
+	public void imprimirResultado() {
+		this.listResultado.sort(Comparator.comparing(u -> u.getTotal()));
+
+		// this.listResultado.forEach(u -> {
+		// System.out.println("----------------------------------");
+		// System.out.println(u.toString());
+		// });
+
+		this.listResultado.forEach(u -> {
+			System.out.println("----------------------------------");
+			System.out.println(u.toString());
+			System.out.println(u.getListParticipante().get(0).getNome() + "--> "
+					+ u.getListParticipante().get(1).getNome() + " : " + u.getTotal());
+
+		});
+	}
+
 	public void imprimirBanca() {
 		this.listParticipouBanca.forEach(u -> {
 			System.out.println("----------------" + u.getTitulo() + "------------------");
 			u.getListParticipante().forEach(p -> System.out.println(p.getNome()));
 		});
-
 	}
 
 	public void imprimirEvento() {
@@ -873,6 +970,18 @@ public class Grafo {
 
 	public void AddListParticipouTrabalhoEvento(TrabalhoEvento listParticipouTrabalhoEvento) {
 		this.listParticipouTrabalhoEvento.add(listParticipouTrabalhoEvento);
+	}
+
+	public ArrayList<Resultado> getListResultado() {
+		return this.listResultado;
+	}
+
+	public void setListResultado(ArrayList<Resultado> listResultado) {
+		this.listResultado = listResultado;
+	}
+
+	public void AddListResultado(Resultado listResultado) {
+		this.listResultado.add(listResultado);
 	}
 
 }
