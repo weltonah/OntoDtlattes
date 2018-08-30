@@ -32,7 +32,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 3;
+			tam = 10;
 		else {
 			tam = Integer.parseInt(args[0]);
 		}

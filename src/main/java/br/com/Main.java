@@ -18,13 +18,12 @@ public class Main {
 
 	
 	public static void main(String[] args) throws Exception {
-
 		String nomeFile = "Completo.owl";
 		OntologyDAO ontoDao = new OntologyDAO(nomeFile);
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 10;
+			tam = 44;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -32,6 +31,9 @@ public class Main {
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
 		tratamentoDeDados = new TratamentoDeDados();
+		// NGram ngram = new NGram(4);
+		// System.out.println(ngram.distance("yyyy", "Ola mundooooo"));
+
 		Namexml = ListaDeArquivos(tam);
 		ArrayList<OntoPessoa> listaPessoa = new ArrayList<>();
 		for (String string : Namexml) {
@@ -56,16 +58,45 @@ public class Main {
 			// + u.getSubAreaConhecimento() + " ()() " + u.getNomeEspecialidade()));
 			listaPessoa.add(pessoa);
 		}
+
 		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
-		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
-		tratamentoDeDados.JuncaoMembros(listaPessoa);
-		System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
 
+		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
+		
+		int aux;
+		do {
+			aux = listaPessoa.size();
+			tratamentoDeDados.JuncaoMembros(listaPessoa);
+			System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
+			
+		} while (aux != listaPessoa.size());
+		
+		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoBanca().size());
+		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoEvento().size());
+		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoTrabalhoEvento().size());
+		System.out.println("antes " + listaPessoa.size());
+		tratamentoDeDados.eliminarIndividuosDesnecessarios(listaPessoa);
+		System.out.println("depois " + listaPessoa.size());
+		int totalcont = 0;
+		int exemplo = 0;
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			totalcont = totalcont + listaPessoa.get(i).getListOntoEvento().size();
+			if (listaPessoa.get(i).getListOntoEvento().size() > 0) {
+				exemplo++;
+			}
+		}
+		System.out.println("evento " + totalcont);
+		System.out.println("evento " + exemplo);
+		totalcont = 0;
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
+		}
+		System.out.println("banca " + totalcont);
 
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		// tratamentoDeDados.tratarBanca(listaPessoa);
+		tratamentoDeDados.tratarBanca(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");

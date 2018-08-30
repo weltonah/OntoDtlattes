@@ -191,9 +191,9 @@ public class OntoPessoa {
 				+ this.ListOntoProjetoPesquisa.toString() + "]";
 	}
 
-	public ArrayList<OntoClass> getListOntoOrgEvento() {
-		return this.ListOntoEvento;
-	}
+	// public ArrayList<OntoClass> getListOntoOrgEvento() {
+	// return this.ListOntoEvento;
+	// }
 
 	public void setListOntoOrgEvento(ArrayList<OntoClass> listOntoOrgEvento) {
 		this.ListOntoEvento.addAll(listOntoOrgEvento);

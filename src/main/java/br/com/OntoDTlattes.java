@@ -1,4 +1,7 @@
 package br.com;
+
+import javax.xml.xpath.XPathExpressionException;
+
 //
 // import org.springframework.boot.SpringApplication;
 // import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -6,8 +9,8 @@ package br.com;
 // @SpringBootApplication
 public class OntoDTlattes {
 //
-	public static void main(String[] args) {
-// SpringApplication.run(OntoDTlattes.class, args);
+	public static void main(String[] args) throws XPathExpressionException {
+
 
  }
 }

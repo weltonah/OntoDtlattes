@@ -31,8 +31,6 @@ public class BuscarXmlToPessoa {
 		this.tratamentoDeDados = new TratamentoDeDados();
 	}
 
-
-
 	public OntoPessoa buscarXML(OntoPessoa pessoa) throws XPathExpressionException {
 		pessoa.setListOntoAreaAtuacao(listOntoAreaAtuacao());
 		pessoa.setListOntoTrabalhoEvento(listOntoTrabalhoEvento());
@@ -84,7 +82,6 @@ public class BuscarXmlToPessoa {
 			return false;
 		}
 	}
-
 
 	public ArrayList<TrabalhoEventoXml> listOntoTrabalhoEvento() throws XPathExpressionException {
 		XPathExpression expr = this.xpath.compile("//TRABALHO-EM-EVENTOS");
