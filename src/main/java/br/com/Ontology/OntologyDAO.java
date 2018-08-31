@@ -61,6 +61,7 @@ public class OntologyDAO {
 	public void saveOntologyDAO(OWLDocumentFormat formato)
 			throws OWLOntologyStorageException, FileNotFoundException, OWLOntologyCreationException {
 		limparDadosDesnecessario();
+
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		diferentIndividual();
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
@@ -331,6 +332,18 @@ public class OntologyDAO {
 		System.out.println("numero de evento depois de ser limpo " + this.ontology.individualsInSignature()
 				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
 						.get().signature().findFirst().get().getIRI().getFragment().contains("Evento"))
+				.count());
+
+		System.out.println("numero de Banca antes de ser limpo " + this.ontology.individualsInSignature()
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Banca"))
+				.count());
+		for (TriplaOwl triplaOwl : TratamentoDeDados.listaEventoDesnecessario(this.ontology)) {
+			removeIndividual(triplaOwl.getSujeito());
+		}
+		System.out.println("numero de Banca depois de ser limpo " + this.ontology.individualsInSignature()
+				.filter(u -> u.isOWLNamedIndividual()).filter(u -> this.ontology.classAssertionAxioms(u).findFirst()
+						.get().signature().findFirst().get().getIRI().getFragment().contains("Banca"))
 				.count());
 	}
 

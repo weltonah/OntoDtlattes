@@ -2,6 +2,7 @@ package br.com.Grafo;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Map;
 
 public class Grafo {
 
@@ -776,7 +777,7 @@ public class Grafo {
 		}
 	}
 
-	public void imprimirResultado() {
+	public void imprimirResultado(Map<String, String> mapNome) {
 		this.listResultado.sort(Comparator.comparing(u -> u.getTotal()));
 
 		// this.listResultado.forEach(u -> {
@@ -787,8 +788,16 @@ public class Grafo {
 		this.listResultado.forEach(u -> {
 			// System.out.println("----------------------------------");
 			// System.out.println(u.toString());
-			System.out.println(u.getListParticipante().get(0).getNome() + "--> "
-					+ u.getListParticipante().get(1).getNome() + " : " + u.getTotal());
+			String nome1 = u.getListParticipante().get(0).getNome();
+			String nome2 = u.getListParticipante().get(1).getNome();
+			
+			if (u.getListParticipante().get(0).getNome().matches("-?\\d+(\\.\\d+)?")) {
+				nome1 = mapNome.get(u.getListParticipante().get(0).getNome());
+			}
+			if (u.getListParticipante().get(1).getNome().matches("-?\\d+(\\.\\d+)?")) {
+				nome2 = mapNome.get(u.getListParticipante().get(1).getNome());
+			}
+			System.out.println("[\"" + nome1 + "\" , \"" + nome2 + "\" , " + u.getTotal() + "] ,");
 
 		});
 	}

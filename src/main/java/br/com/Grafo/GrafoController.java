@@ -23,6 +23,10 @@ public class GrafoController {
 
 	}
 
+	public Grafo BuscarResultado() {
+		return this.grafoResultado;
+	}
+
 	public void inferir() {
 		preencherBanca();
 		preencherEvento();
@@ -30,7 +34,7 @@ public class GrafoController {
 		preencherOrientacao();
 		preencherProjetoPesquisa();
 		preencherProjetoEmEvento();
-		this.grafoResultado.imprimirResultado();
+		// this.grafoResultado.imprimirResultado(mapNome);
 	}
 
 	public void preencherBanca() {

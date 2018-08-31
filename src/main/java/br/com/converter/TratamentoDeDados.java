@@ -3,6 +3,8 @@ package br.com.converter;
 import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.semanticweb.owlapi.model.OWLOntology;
 
@@ -86,6 +88,20 @@ public class TratamentoDeDados {
 		ontology.individualsInSignature().filter(u -> u.isOWLNamedIndividual())
 				.filter(u -> ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get().getIRI()
 						.getFragment().contains("Evento"))
+				.forEach(w -> {
+					if (ontology.objectPropertyAssertionAxioms(w).count() == 1) {
+						TriplaOwl triplaOwl = new TriplaOwl(w.getIRI());
+						listDelete.add(triplaOwl);
+					}
+				});
+		return listDelete;
+	}
+
+	public static ArrayList<TriplaOwl> listaBancaDesnecessario(OWLOntology ontology) {
+		ArrayList<TriplaOwl> listDelete = new ArrayList<>();
+		ontology.individualsInSignature().filter(u -> u.isOWLNamedIndividual())
+				.filter(u -> ontology.classAssertionAxioms(u).findFirst().get().signature().findFirst().get().getIRI()
+						.getFragment().contains("Banca"))
 				.forEach(w -> {
 					if (ontology.objectPropertyAssertionAxioms(w).count() == 1) {
 						TriplaOwl triplaOwl = new TriplaOwl(w.getIRI());
@@ -269,6 +285,21 @@ public class TratamentoDeDados {
 		}
 	}
 	public void tratarEventos(ArrayList<OntoPessoa> listaPessoa) {
+		listaPessoa.sort(Comparator.comparing(u -> ((OntoPessoa) u).getListOntoTrabalhoEvento().size()).reversed());
+
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			OntoPessoa ontoPessoa = listaPessoa.get(i);
+			if (ontoPessoa.getListOntoTrabalhoEvento().size() == 0) {
+				System.out.println("id: " + i);
+				break;
+			}
+			// System.out.println(
+			// ontoPessoa.getListOntoEvento().size() + " " +
+			// ontoPessoa.getListOntoTrabalhoEvento().size() + " "
+			// + ontoPessoa.getNomeCompleto());
+		}
+		
+
 		NGram ngram = new NGram(4);
 		int totalcont = 0;
 		int cont = 99;
@@ -277,100 +308,119 @@ public class TratamentoDeDados {
 			cont = 0;
 			for (int i = 0; i < listaPessoa.size(); i++) {
 				OntoPessoa ontoPessoa = listaPessoa.get(i);
+
+				if (ontoPessoa.getListOntoTrabalhoEvento().size() == 0)
+					break;
+
 				for (int j = i + 1; j < listaPessoa.size(); j++) {
-					if (j % 100 == 0)
-						System.out.println(i + " " + j);
 
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
+
+					if (ontoPessoa2.getListOntoTrabalhoEvento().size() == 0)
+						break;
+
+					if ((j % 10 == 0))
+					System.out.println(i + " " + j);
+
 					for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
 						OntoClass evento = ontoPessoa.getListOntoEvento().get(k);
-						for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
-							OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
-							double aux = ngram.distance(evento.getTitulo(), evento2.getTitulo());
-							if (aux > 0 && aux < 0.25) {
-								// System.out.println("combinado: " + evento.getTitulo() + " --> " +
-								// evento2.getTitulo());
-								cont++;
-								if (evento.getTitulo().length() < evento2.getTitulo().length())
-									evento2.setTitulo(evento.getTitulo());
-								else {
-									if (evento.getTitulo().length() == evento2.getTitulo().length()) {
-										if (evento.getTitulo().hashCode() < evento2.getTitulo().hashCode())
-											evento2.setTitulo(evento.getTitulo());
-										else
+
+						if ((ontoPessoa2.getListOntoEvento().size()
+								+ ontoPessoa2.getListOntoTrabalhoEvento().size()) != 0) {
+							for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
+								OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
+								double aux = ngram.distance(evento.getTitulo(), evento2.getTitulo());
+								if (aux > 0 && aux < 0.25) {
+									// System.out.println("combinado: " + evento.getTitulo() + " --> " +
+									// evento2.getTitulo());
+									cont++;
+									if (evento.getTitulo().length() < evento2.getTitulo().length())
+										evento2.setTitulo(evento.getTitulo());
+									else {
+										if (evento.getTitulo().length() == evento2.getTitulo().length()) {
+											if (evento.getTitulo().hashCode() < evento2.getTitulo().hashCode())
+												evento2.setTitulo(evento.getTitulo());
+											else
+												evento.setTitulo(evento2.getTitulo());
+										} else
 											evento.setTitulo(evento2.getTitulo());
-									} else
-										evento.setTitulo(evento2.getTitulo());
+									}
 								}
 							}
-						}
-						for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
-							TrabalhoEventoXml evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
-							double aux = ngram.distance(evento.getTitulo(), evento2.getEvento().getTitulo());
-							if (aux > 0 && aux < 0.25) {
-								// System.out.println(
-								// "combinado: " + evento.getTitulo() + " --> " +
-								// evento2.getEvento().getTitulo());
-								cont++;
-								if (evento.getTitulo().length() < evento2.getEvento().getTitulo().length())
-									evento2.getEvento().setTitulo(evento.getTitulo());
-								else {
-									if (evento.getTitulo().length() == evento2.getEvento().getTitulo().length()) {
-										if (evento.getTitulo().hashCode() < evento2.getEvento().getTitulo().hashCode())
-											evento2.getEvento().setTitulo(evento.getTitulo());
-										else
+
+							for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
+								TrabalhoEventoXml evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
+								double aux = ngram.distance(evento.getTitulo(), evento2.getEvento().getTitulo());
+								if (aux > 0 && aux < 0.25) {
+									// System.out.println(
+									// "combinado: " + evento.getTitulo() + " --> " +
+									// evento2.getEvento().getTitulo());
+									cont++;
+									if (evento.getTitulo().length() < evento2.getEvento().getTitulo().length())
+										evento2.getEvento().setTitulo(evento.getTitulo());
+									else {
+										if (evento.getTitulo().length() == evento2.getEvento().getTitulo().length()) {
+											if (evento.getTitulo().hashCode() < evento2.getEvento().getTitulo()
+													.hashCode())
+												evento2.getEvento().setTitulo(evento.getTitulo());
+											else
+												evento.setTitulo(evento2.getEvento().getTitulo());
+										} else
 											evento.setTitulo(evento2.getEvento().getTitulo());
-									} else
-										evento.setTitulo(evento2.getEvento().getTitulo());
+									}
 								}
 							}
 						}
 					}
-					int cont2 = cont;
-
 					for (int k = 0; k < ontoPessoa.getListOntoTrabalhoEvento().size(); k++) {
 						TrabalhoEventoXml evento = ontoPessoa.getListOntoTrabalhoEvento().get(k);
-						for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
-							OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
-							double aux = ngram.distance(evento.getEvento().getTitulo(), evento2.getTitulo());
-							if (aux > 0 && aux < 0.25) {
-								// System.out.println("combinado: " + evento.getEvento().getTitulo() + " --> "
-								// + evento2.getTitulo());
-								cont++;
-								if (evento.getEvento().getTitulo().length() < evento2.getTitulo().length())
-									evento2.setTitulo(evento.getEvento().getTitulo());
-								else {
-									if (evento.getEvento().getTitulo().length() == evento2.getTitulo().length()) {
-										if (evento.getEvento().getTitulo().hashCode() < evento2.getTitulo().hashCode())
-											evento2.setTitulo(evento.getEvento().getTitulo());
-										else
+
+						if ((ontoPessoa2.getListOntoEvento().size()
+								+ ontoPessoa2.getListOntoTrabalhoEvento().size()) != 0) {
+							for (int t = 0; t < ontoPessoa2.getListOntoEvento().size(); t++) {
+								OntoClass evento2 = ontoPessoa2.getListOntoEvento().get(t);
+								double aux = ngram.distance(evento.getEvento().getTitulo(), evento2.getTitulo());
+								if (aux > 0 && aux < 0.25) {
+									// System.out.println("combinado: " + evento.getEvento().getTitulo() + " --> "
+									// + evento2.getTitulo());
+									cont++;
+									if (evento.getEvento().getTitulo().length() < evento2.getTitulo().length())
+										evento2.setTitulo(evento.getEvento().getTitulo());
+									else {
+										if (evento.getEvento().getTitulo().length() == evento2.getTitulo().length()) {
+											if (evento.getEvento().getTitulo().hashCode() < evento2.getTitulo()
+													.hashCode())
+												evento2.setTitulo(evento.getEvento().getTitulo());
+											else
+												evento.getEvento().setTitulo(evento2.getTitulo());
+										} else
 											evento.getEvento().setTitulo(evento2.getTitulo());
-									} else
-										evento.getEvento().setTitulo(evento2.getTitulo());
+									}
 								}
 							}
-						}
-						for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
-							TrabalhoEventoXml evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
-							double aux = ngram.distance(evento.getEvento().getTitulo(),
-									evento2.getEvento().getTitulo());
-							if (aux > 0 && aux < 0.25) {
-								// System.out.println(
-								// "combinado: " + evento.getEvento().getTitulo() + " --> "
-								// + evento2.getEvento().getTitulo());
-								cont++;
-								if (evento.getEvento().getTitulo().length() < evento2.getEvento().getTitulo().length())
-									evento2.getEvento().setTitulo(evento.getEvento().getTitulo());
-								else {
-									if (evento.getEvento().getTitulo().length() == evento2.getEvento().getTitulo()
-											.length()) {
-										if (evento.getEvento().getTitulo().hashCode() < evento2.getEvento().getTitulo()
-												.hashCode())
-											evento2.getEvento().setTitulo(evento.getEvento().getTitulo());
-										else
+							for (int t = 0; t < ontoPessoa2.getListOntoTrabalhoEvento().size(); t++) {
+								TrabalhoEventoXml evento2 = ontoPessoa2.getListOntoTrabalhoEvento().get(t);
+								double aux = ngram.distance(evento.getEvento().getTitulo(),
+										evento2.getEvento().getTitulo());
+								if (aux > 0 && aux < 0.25) {
+									// System.out.println(
+									// "combinado: " + evento.getEvento().getTitulo() + " --> "
+									// + evento2.getEvento().getTitulo());
+									cont++;
+									if (evento.getEvento().getTitulo().length() < evento2.getEvento().getTitulo()
+											.length())
+										evento2.getEvento().setTitulo(evento.getEvento().getTitulo());
+									else {
+										if (evento.getEvento().getTitulo().length() == evento2.getEvento().getTitulo()
+												.length()) {
+											if (evento.getEvento().getTitulo().hashCode() < evento2.getEvento()
+													.getTitulo().hashCode())
+												evento2.getEvento().setTitulo(evento.getEvento().getTitulo());
+											else
+												evento.getEvento().setTitulo(evento2.getEvento().getTitulo());
+										} else
 											evento.getEvento().setTitulo(evento2.getEvento().getTitulo());
-									} else
-										evento.getEvento().setTitulo(evento2.getEvento().getTitulo());
+									}
 								}
 							}
 						}
@@ -397,19 +447,18 @@ public class TratamentoDeDados {
 
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			OntoPessoa ontoPessoa = listaPessoa.get(i);
-			// System.out.println("--- " + ontoPessoa.getListOntoBanca().size());
+			System.out.println(i + " -" + ontoPessoa.getNomeCompleto() + " -- " + ontoPessoa.getListOntoBanca().size());
 			for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) {
 				OntoClass banca = ontoPessoa.getListOntoBanca().get(k);
+
 				for (int t = k + 1; t < ontoPessoa.getListOntoBanca().size(); t++) {
 					OntoClass banca2 = ontoPessoa.getListOntoBanca().get(t);
 					double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
 					if (aux > 0 && aux < 0.25) {
-
 						/*
 						 * System.out.println(banca.getTitulo());
 						 * System.out.println(banca2.getTitulo()); System.out.println("@@@" + i);
 						 */
-
 						cont++;
 						if (banca.getTitulo().length() < banca2.getTitulo().length()) {
 							banca2.setTitulo(banca.getTitulo());
@@ -438,6 +487,8 @@ public class TratamentoDeDados {
 					}
 				}
 			}
+			// System.out.println(i + " -" + ontoPessoa.getNomeCompleto() + " -- " +
+			// ontoPessoa.getListOntoBanca().size());
 		}
 		System.out.println(cont);
 		cont = 99;
@@ -448,9 +499,13 @@ public class TratamentoDeDados {
 			for (int i = 0; i < listaPessoa.size(); i++) {
 				OntoPessoa ontoPessoa = listaPessoa.get(i);
 
+
 				for (int j = i + 1; j < listaPessoa.size(); j++) {
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
-					System.out.println(i + " " + j);
+
+					if ((j % 50 == 0) && (i % 5 == 0))
+						System.out.println(i + " " + j);
+
 					for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) {
 						OntoClass banca = ontoPessoa.getListOntoBanca().get(k);
 
@@ -459,11 +514,6 @@ public class TratamentoDeDados {
 
 							double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
 							if (aux > 0 && aux < 0.20) {
-								// System.out.println("####################");
-								// System.out.println(ontoPessoa.getNomeCompleto());
-								// System.out.println(ontoPessoa2.getNomeCompleto());
-								// System.out.println(banca.getTitulo());
-								// System.out.println(banca2.getTitulo());
 								cont++;
 								if (banca.getTitulo().length() < banca2.getTitulo().length())
 									banca2.setTitulo(banca.getTitulo());
@@ -509,5 +559,20 @@ public class TratamentoDeDados {
 				i--;
 			}
 		}
+	}
+
+	public Map<String, String> CriarMap(ArrayList<OntoPessoa> listaPessoa) {
+		Map<String, String> MapNome = new HashMap<String, String>();
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			OntoPessoa ontoPessoa = listaPessoa.get(i);
+			// System.out.println(ontoPessoa.getNomeCompleto() + " " +
+			// ontoPessoa.getIdLattes() + " "
+			// + ontoPessoa.getIdLattes().length());
+			if (ontoPessoa.getIdLattes().length() > 1) {
+				MapNome.put(ontoPessoa.getIdLattes(), ontoPessoa.getNomeCompleto());
+			}
+		}
+
+		return MapNome;
 	}
 }

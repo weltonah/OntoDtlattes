@@ -9,7 +9,7 @@ public class Resultado {
 	private final int valorAreaAtuacao = 10;
 	private final int valorAreaConhecimento = 20;
 	private final int valorSubArea = 30;
-	private final int valorEspecialidade = 50;
+	private final int valorEspecialidade = 45;
 	private final int valorOrientacao = 20;
 	private final int valorProjetoPesquisa = 25;
 	private final int valorProjetoEvento = 30;

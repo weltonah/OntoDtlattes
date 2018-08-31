@@ -2,12 +2,14 @@ package br.com;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map;
 
 import org.semanticweb.owlapi.formats.FunctionalSyntaxDocumentFormat;
 import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Document;
 
 import br.com.DAO.BuscarXmlToPessoa;
+import br.com.Grafo.Grafo;
 import br.com.Grafo.GrafoController;
 import br.com.Ontology.OntologyDAO;
 import br.com.converter.ConverterFile;
@@ -23,7 +25,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 44;
+			tam = 10;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -49,7 +51,7 @@ public class Main {
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.IDLattes()),
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.UltimaAtualizacao()),
 					tratamentoDeDados.corrigirString(preencherXMLtoOnto.NomeCitacao()));
-			System.out.println(pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() + "&&& "
+			System.out.println(pessoa.getIdLattes() + " " + pessoa.getNomeCompleto() + " &&& "
 					+ pessoa.getCitacaoList().toString());
 			preencherXMLtoOnto.buscarXML(pessoa);
 			// pessoa.getListOntoAreaAtuacao()
@@ -71,51 +73,49 @@ public class Main {
 			System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
 			
 		} while (aux != listaPessoa.size());
-		
-		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoBanca().size());
-		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoEvento().size());
-		System.out.println(listaPessoa.get(listaPessoa.size() - 1).getListOntoTrabalhoEvento().size());
+		//
+		// System.out.println(listaPessoa.get(listaPessoa.size() -
+		// 1).getListOntoBanca().size());
+		// System.out.println(listaPessoa.get(listaPessoa.size() -
+		// 1).getListOntoEvento().size());
+		// System.out.println(listaPessoa.get(listaPessoa.size() -
+		// 1).getListOntoTrabalhoEvento().size());
 		System.out.println("antes " + listaPessoa.size());
 		tratamentoDeDados.eliminarIndividuosDesnecessarios(listaPessoa);
 		System.out.println("depois " + listaPessoa.size());
 		int totalcont = 0;
 		int exemplo = 0;
-		for (int i = 0; i < listaPessoa.size(); i++) {
+		for (int i = 0; i < listaPessoa.size(); i++)
 			totalcont = totalcont + listaPessoa.get(i).getListOntoEvento().size();
-			if (listaPessoa.get(i).getListOntoEvento().size() > 0) {
-				exemplo++;
-			}
-		}
+
 		System.out.println("evento " + totalcont);
-		System.out.println("evento " + exemplo);
 		totalcont = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
+			// if (listaPessoa.get(i).getListOntoBanca().size() > 50)
+				//System.out.println(listaPessoa.get(i).getNomeCompleto());
 		}
 		System.out.println("banca " + totalcont);
+		// tratamentoDeDados.tratarEventos(listaPessoa);
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+		// tratamentoDeDados.tratarBanca(listaPessoa);
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
-		tratamentoDeDados.tratarEventos(listaPessoa);
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		tratamentoDeDados.tratarBanca(listaPessoa);
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 		ontoDao.preencherOnto(listaPessoa);
 		System.out.println("Depois");
-			long tempoInicio = System.currentTimeMillis();
-			ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
-			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
+		long tempoInicio = System.currentTimeMillis();
+
+		Map<String, String> MapNome = tratamentoDeDados.CriarMap(listaPessoa);
+
+		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
+		System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 			
 		GrafoController graf = new GrafoController(nomeFile);
 		graf.inferir();
-			
+		Grafo result = graf.BuscarResultado();
+		result.imprimirResultado(MapNome);
 		System.out.println("Fim");
-		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto() + " " +
-		// u.getIdLattes() + " @@@ "
-		// + u.getCitacaoList().toString() + " cont: " + u.getCont()));
-		// listaPessoa.stream().filter(p -> p.getCont() >= 0).forEach(u ->
-		// System.out.println(u.getNomeCompleto() + " "
-		// + u.getIdLattes() + " @@@ " + u.getCitacaoList().toString() + " cont: " +
-		// u.getCont()));
-
+		
 
 	}
 
