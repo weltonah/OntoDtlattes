@@ -16,11 +16,41 @@
                     <div class="row">
                         <div class="col">
                                 <div class="form-group">
-                                        <button @click="tudo()"> todos </button>
-                                        Selecione um pesquisador
-                                        <select v-model="raiz" @click="DesenharNo()" class="" placeholder="Selecione o pesquisador">
+                                        <!-- <button @click="tudo()"> todos </button> -->
+
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                               Gerar Grafo Completo
+                                        </button>
+                                              
+                                              <!-- Modal -->
+                                              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                  <div class="modal-content">
+                                                    <div class="modal-header">
+                                                      <h5 class="modal-title" id="exampleModalLabel">Deseja gerar o Grafo completo ?</h5>
+                                                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                      </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                      Este procedimento pode levar minutos, deseja realmente gerar o grafo ?
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Não</button>
+                                                      <button type="button" class="btn btn-primary" data-dismiss="modal" @click="tudo()" >Sim</button>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                              </div>
+
+
+
+
+
+                                        OU Selecione um pesquisador
+                                        <select v-model="raiz" class="" placeholder="Selecione o pesquisador"  @click="DesenharNo()">
                                                 <option disabled value="" selected >Escolha um item</option>
-                                                <option v-for="itemCate in nomeLista">{{itemCate}}</option>
+                                                <option v-for="itemCate in nomeLista" >{{itemCate}}</option>
                                         </select>
                                 </div>
                         </div>
@@ -28,7 +58,10 @@
             
                 </div>
                 <div class="col-12">
-                    <div class="row">
+                    <div class="row" v-if="layouttipo == 0">
+                        
+                    </div>
+                    <div class="row" v-if="layouttipo == 1">
                         <div class="col-3 pr-0" style="overflow: auto;height: 90vh;" >
             
                                 <table class="table table-hover" v-if="booleantabela" style="font-size: 11px;">
@@ -47,6 +80,12 @@
                                 </table>
                         </div>
                         <div class="col-9 p-0 border" style="overflow: auto;height: 90vh;">
+                                <div id="mynetwork"></div>
+                        </div>
+                    </div>
+
+                    <div class="row" v-if="layouttipo == 2">
+                        <div class="col-12 p-0 border" style="overflow: auto;height: 90vh;">
                                 <div id="mynetwork"></div>
                         </div>
                     </div>
@@ -74,6 +113,7 @@
   
     methods: {
         tudo(){
+            this.layouttipo = 2
             BLACK = '#2B1B17'
             var listateste = []
             var nodes = new vis.DataSet([]);
@@ -112,10 +152,10 @@
                 
                 if(this.resultado[i][2]>1){
                  var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.01) - this.resultado[i][2]*this.valormulti;
-                 console.log(pri,seg);
-                 console.log(distancia);
+                 //console.log(pri,seg);
+                 //console.log(distancia);
                  edges.add({from: pri, to: seg,selectionWidth: 40, length: distancia,fontSize: 50, color:{color:'blue', highlight:'red'}, fontColor: BLACK, 
-                         label: ''+distancia});
+                         });
                 }
                 
             }
@@ -137,7 +177,7 @@
                     }
                 },
                 layout: {
-                    randomSeed: 10,
+                    improvedLayout:false,
                 },
                 physics: {
                     barnesHut: {
@@ -153,7 +193,9 @@
                 }
             };
             this.booleantabela = false;
+            console.log('sadasd');
             this.network = new vis.Network(container, data, options);
+            console.log('sadasd');
             
         },
         ListarNomes(){
@@ -181,6 +223,7 @@
         },
 
         DesenharNo(){
+            this.layouttipo =1;
             this.escolherRaiz();
             this.message = "bost";
             var LENGTH_MAIN = 50,
@@ -195,7 +238,7 @@
                 var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.01) - this.lista[i][1]*this.valormulti;
                 
                 edges.add({from: 1, to: i+2, length: distancia,fontSize: 50, color: BLACK, fontColor: BLACK, 
-                label: ''+distancia});
+                label: ''+this.lista[i][1]});
             }
             var container = document.getElementById('mynetwork');
             var data = {
@@ -256,6 +299,8 @@
 
     },
     data: {
+        layouttipo: 0,
+        pontentagem: 0,
         flagcarregador: false,
         nomeLista: [],
         booleantabela: false,
