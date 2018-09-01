@@ -61,9 +61,10 @@ public class Main {
 			listaPessoa.add(pessoa);
 		}
 
+		tratamentoDeDados.tratarBancaExterna(listaPessoa);
+
 		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
-
 		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
 		
 		int aux;
@@ -98,7 +99,7 @@ public class Main {
 		System.out.println("banca " + totalcont);
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		tratamentoDeDados.tratarBanca(listaPessoa);
+		tratamentoDeDados.tratarBancaInterna(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
 		ontoDao.preencherOnto(listaPessoa);

@@ -440,7 +440,7 @@ public class TratamentoDeDados {
 		System.out.println("numero total de evento " + totalcont);
 	}
 
-	public void tratarBanca(ArrayList<OntoPessoa> listaPessoa) {
+	public void tratarBancaInterna(ArrayList<OntoPessoa> listaPessoa) {
 		NGram ngram = new NGram(4);
 		int totalcont = 0;
 		int cont = 0;
@@ -490,20 +490,31 @@ public class TratamentoDeDados {
 			// System.out.println(i + " -" + ontoPessoa.getNomeCompleto() + " -- " +
 			// ontoPessoa.getListOntoBanca().size());
 		}
-		System.out.println(cont);
+		System.out.println("bancas combinadas interiormente " + cont);
 		cont = 99;
 		System.out.println("fim");
+
+		for (int i = 0; i < listaPessoa.size(); i++) {
+			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
+		}
+		System.out.println("numero total de banca " + totalcont);
+	}
+
+	public void tratarBancaExterna(ArrayList<OntoPessoa> listaPessoa) {
+		NGram ngram = new NGram(4);
+		int totalcont = 0;
+		int cont = 99;
+
 		while (cont != 0) {
 			long tempoInicio = System.currentTimeMillis();
 			cont = 0;
 			for (int i = 0; i < listaPessoa.size(); i++) {
 				OntoPessoa ontoPessoa = listaPessoa.get(i);
 
-
 				for (int j = i + 1; j < listaPessoa.size(); j++) {
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
 
-					if ((j % 50 == 0) && (i % 5 == 0))
+					if ((j % 10 == 0) && (i % 1 == 0))
 						System.out.println(i + " " + j);
 
 					for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) {
@@ -514,6 +525,10 @@ public class TratamentoDeDados {
 
 							double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
 							if (aux > 0 && aux < 0.20) {
+								System.out.println("$$$$$$$");
+								System.out.println(banca.getTitulo());
+								System.out.println(banca2.getTitulo());
+
 								cont++;
 								if (banca.getTitulo().length() < banca2.getTitulo().length())
 									banca2.setTitulo(banca.getTitulo());
@@ -536,10 +551,39 @@ public class TratamentoDeDados {
 			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 		}
-		for (int i = 0; i < listaPessoa.size(); i++) {
-			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
-		}
-		System.out.println("numero total de banca " + totalcont);
+
+		/*
+		 * while (cont != 0) { long tempoInicio = System.currentTimeMillis(); cont = 0;
+		 * for (int i = 0; i < listaPessoa.size(); i++) { OntoPessoa ontoPessoa =
+		 * listaPessoa.get(i);
+		 * 
+		 * 
+		 * for (int j = i + 1; j < listaPessoa.size(); j++) { OntoPessoa ontoPessoa2 =
+		 * listaPessoa.get(j);
+		 * 
+		 * if ((j % 50 == 0) && (i % 5 == 0)) System.out.println(i + " " + j);
+		 * 
+		 * for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) { OntoClass
+		 * banca = ontoPessoa.getListOntoBanca().get(k);
+		 * 
+		 * for (int t = 0; t < ontoPessoa2.getListOntoBanca().size(); t++) { OntoClass
+		 * banca2 = ontoPessoa2.getListOntoBanca().get(t);
+		 * 
+		 * double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo()); if (aux >
+		 * 0 && aux < 0.20) { cont++; if (banca.getTitulo().length() <
+		 * banca2.getTitulo().length()) banca2.setTitulo(banca.getTitulo()); else { if
+		 * (banca.getTitulo().length() == banca2.getTitulo().length()) { if
+		 * (banca.getTitulo().hashCode() < banca2.getTitulo().hashCode())
+		 * banca2.setTitulo(banca.getTitulo()); else
+		 * banca.setTitulo(banca2.getTitulo()); } else
+		 * banca.setTitulo(banca2.getTitulo()); } //
+		 * System.out.println(ontoPessoa.getListOntoEvento().get(k).getTitulo()); } } }
+		 * } } System.out.println("numero de banca que foram combinadas " + cont);
+		 * System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+		 * System.out.println("Tempo Total: " + (System.currentTimeMillis() -
+		 * tempoInicio)); }
+		 */
+
 	}
 
 	public void eliminarIndividuosDesnecessarios(ArrayList<OntoPessoa> listaPessoa) {
@@ -561,6 +605,7 @@ public class TratamentoDeDados {
 		}
 	}
 
+
 	public Map<String, String> CriarMap(ArrayList<OntoPessoa> listaPessoa) {
 		Map<String, String> MapNome = new HashMap<String, String>();
 		for (int i = 0; i < listaPessoa.size(); i++) {
@@ -575,4 +620,5 @@ public class TratamentoDeDados {
 
 		return MapNome;
 	}
+
 }

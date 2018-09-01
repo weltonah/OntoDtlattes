@@ -9,21 +9,33 @@
 <body>
         
         <div id="app">
-            <div class="row">
-                <div class="col-12 " style="height: 5vh;">
-                        <button type="button" class="btn btn-danger" @click="teste()">teste</button>
-                        <button type="button" @click="DesenharNo()">printar</button>
-                        <button type="button" @click="escolherRaiz()">escolher</button>
+            <div class="row" >
+                <div class="col-12 " style="height: 8vh;">
+                        <!-- <button type="button" @click="DesenharNo()">printar</button> -->
+{{ListarNomes()}}
+                    <div class="row">
+                        <div class="col">
+                                <div class="form-group">
+                                        <button @click="tudo()"> todos </button>
+                                        Selecione um pesquisador
+                                        <select v-model="raiz" @click="DesenharNo()" class="" placeholder="Selecione o pesquisador">
+                                                <option disabled value="" selected >Escolha um item</option>
+                                                <option v-for="itemCate in nomeLista">{{itemCate}}</option>
+                                        </select>
+                                </div>
+                        </div>
+                    </div>
+            
                 </div>
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-4 pr-0" style="overflow: auto;height: 90vh;" >
+                        <div class="col-3 pr-0" style="overflow: auto;height: 90vh;" >
             
-                                <table class="table table-hover" v-if="booleantabela" style="font-size: 13px;">
+                                <table class="table table-hover" v-if="booleantabela" style="font-size: 11px;">
                                         <thead class="thead-dark">
                                           <tr>
-                                            <th scope="col">Nome</th>
-                                            <th scope="col">Proximidade</th>
+                                            <th scope="col" class="pr-0">Nome</th>
+                                            <th scope="col" class="pr-0">Semelhança</th>
                                           </tr>
                                         </thead>
                                         <tbody>
@@ -34,7 +46,7 @@
                                         </tbody>
                                 </table>
                         </div>
-                        <div class="col-8 p-0 border">
+                        <div class="col-9 p-0 border" style="overflow: auto;height: 90vh;">
                                 <div id="mynetwork"></div>
                         </div>
                     </div>
@@ -50,58 +62,62 @@
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
   <script type="text/javascript">
+  function compare(a,b) {
+    if (a < b)
+        return -1;
+    if (a > b)
+        return 1;
+    return 0;
+    }
     var app = new Vue({
-  el: '#app',
+    el: '#app',
   
-  methods: {
-        teste(){
-                this.message = "bost";
-                var LENGTH_MAIN = 50,
-                BLACK = '#2B1B17';
-                var nodes = new vis.DataSet([
-                    {id: 1, label: this.raiz},
-                ]);
-                var edges = new vis.DataSet([]);
-
-                for(var i = 0; i < this.lista.length; i++){
-                    nodes.add({id: i+2, label: this.lista[i][0]});
-                    var value = this.lista[i][1];
-                    edges.add({from: 1, to: i+2, length: this.lista[i][1],fontSize: 50, color: BLACK, fontColor: BLACK, 
-                    label: ''+value});
-                }
-                var container = document.getElementById('mynetwork');
-                var data = {
-                    nodes: nodes,
-                    edges: edges
-                };
-                var options = {
-                    autoResize: true,
-                    height: '100%',
-                    width: '100%',
-                    edges: {
-                        color: BLACK,
-                        smooth: false
-                    },
-                    nodes:{
-                    }
-                };
-                this.network = new vis.Network(container, data, options);
-        },
-        DesenharNo(){
-            this.message = "bost";
-            var LENGTH_MAIN = 50,
-            BLACK = '#2B1B17';
-            var nodes = new vis.DataSet([
-                 {id: 1, label: this.raiz},
-            ]);
+    methods: {
+        tudo(){
+            BLACK = '#2B1B17'
+            var listateste = []
+            var nodes = new vis.DataSet([]);
+            for(var j = 0; j < this.nomeLista.length; j++){
+                nodes.add({id: j+1,font:{size:40}, label: this.nomeLista[j], shape: 'square'});
+            }
             var edges = new vis.DataSet([
             ]);
-            for(var i = 0; i < this.lista.length; i++){
-                nodes.add({id: i+2, label: this.lista[i][0]});
-                var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.1) - this.lista[i][1]*this.valormulti;
+
+
+            var maiorvalor = 0;
+            for(var i = 0; i < this.resultado.length; i++){
+                if(this.resultado[i][2]>maiorvalor)
+                maiorvalor = this.resultado[i][2];
+            }
+            this.maxvalue = maiorvalor;
+            if(this.maxvalue<200)
+            this.maxvalue=200;
+
+            for(var i = 0; i < this.resultado.length; i++){
+                var pri = 0,
+                seg =0;
+
+                for(var j = 0; j < this.nomeLista.length; j++){
+                    if(this.resultado[i][0] == this.nomeLista[j] ){
+                        pri = j+1;
+                        break;
+                    }
+                }
+                for(var j = 0; j < this.nomeLista.length; j++){
+                    if(this.resultado[i][1] == this.nomeLista[j] ){
+                        seg = j+1;
+                        break;
+                    }
+                }
                 
-                edges.add({from: 1, to: i+2, length: distancia,fontSize: 50, color: BLACK, fontColor: BLACK, 
-                label: ''+this.lista[i][1]});
+                if(this.resultado[i][2]>1){
+                 var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.01) - this.resultado[i][2]*this.valormulti;
+                 console.log(pri,seg);
+                 console.log(distancia);
+                 edges.add({from: pri, to: seg,selectionWidth: 40, length: distancia,fontSize: 50, color:{color:'blue', highlight:'red'}, fontColor: BLACK, 
+                         label: ''+distancia});
+                }
+                
             }
             var container = document.getElementById('mynetwork');
             var data = {
@@ -115,12 +131,95 @@
                     color: BLACK,
                     smooth: false
                 },
+                nodes: {
+                    font: {
+                    size: 20,
+                    }
+                },
                 layout: {
                     randomSeed: 10,
                 },
                 physics: {
                     barnesHut: {
-                        gravitationalConstant: -50000,
+                        gravitationalConstant: -100000,
+                        centralGravity: 0,
+                        springLength: 0,
+                        damping: 0.76,
+                        avoidOverlap: 0.77
+                    },
+                    maxVelocity: 36,
+                    minVelocity: 1,
+                    timestep: 0.86
+                }
+            };
+            this.booleantabela = false;
+            this.network = new vis.Network(container, data, options);
+            
+        },
+        ListarNomes(){
+            if(!this.flagcarregador){
+            var nomescompleto = []
+            for(var i = 0; i < this.resultado.length; i++){
+                nomescompleto.push(this.resultado[i][0]);
+                nomescompleto.push(this.resultado[i][1]);
+            };
+            nomescompleto.sort(compare);
+            for(var i = 0; i < nomescompleto.length; i++){
+                if(i+1 <nomescompleto.length){
+                    if(nomescompleto[i] == nomescompleto[i+1] ){
+                        nomescompleto.splice(i+1, 1);
+                        i--;
+                    }
+                }
+            }
+            // for(var i = 0; i < nomescompleto.length; i++){
+            //     console.log(nomescompleto[i]);
+            // }
+            this.nomeLista = nomescompleto;
+            this.flagcarregador=true;
+        }
+        },
+
+        DesenharNo(){
+            this.escolherRaiz();
+            this.message = "bost";
+            var LENGTH_MAIN = 50,
+            BLACK = '#2B1B17';
+            var nodes = new vis.DataSet([
+                 {id: 1,font:{size:40}, label: this.raiz, shape: 'dot'},
+            ]);
+            var edges = new vis.DataSet([
+            ]);
+            for(var i = 0; i < this.lista.length; i++){
+                nodes.add({id: i+2,font:{size:40}, label: this.lista[i][0], shape: 'square'});
+                var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.01) - this.lista[i][1]*this.valormulti;
+                
+                edges.add({from: 1, to: i+2, length: distancia,fontSize: 50, color: BLACK, fontColor: BLACK, 
+                label: ''+distancia});
+            }
+            var container = document.getElementById('mynetwork');
+            var data = {
+                nodes: nodes,
+                edges: edges
+            };
+            var options = {
+                height: '100%',
+                width: '100%',
+                edges: {
+                    color: BLACK,
+                    smooth: false
+                },
+                nodes: {
+                    font: {
+                    size: 20,
+                    }
+                },
+                layout: {
+                    randomSeed: 10,
+                },
+                physics: {
+                    barnesHut: {
+                        gravitationalConstant: -1000000,
                         centralGravity: 0,
                         springLength: 0,
                         damping: 0.76,
@@ -135,14 +234,12 @@
             this.network = new vis.Network(container, data, options);
         },
         escolherRaiz(){
-            var nome = "eduardo_barrere"
-            this.raiz = nome;
             var grupos = [];
             for(var i = this.resultado.length-1; i >= 0; i--){
-                if(nome == this.resultado[i][0]){
+                if(this.raiz == this.resultado[i][0]){
                     grupos.push([this.resultado[i][1],this.resultado[i][2]]);
                 }
-                if(nome == this.resultado[i][1]){
+                if(this.raiz == this.resultado[i][1]){
                     grupos.push([this.resultado[i][0],this.resultado[i][2]]);
                 }
             }
@@ -154,21 +251,15 @@
             this.maxvalue = maiorvalor;
             if(this.maxvalue<200)
             this.maxvalue=200;
-
-            // for(var i = 0; i < grupos.length; i++){
-            //     console.log(grupos[i][1]);
-            //     //grupos[i][1] = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.1) - grupos[i][1]*this.valormulti;
-            //     grupos[i][1] =  grupos[i][1];
-            //     console.log(grupos[i][1]);
-            // }
-
             this.lista= grupos;
         },
 
     },
     data: {
+        flagcarregador: false,
+        nomeLista: [],
         booleantabela: false,
-        valormulti: 3,
+        valormulti: 5,
         maxvalue:  'Hello Vue!',
         raiz: "welton",
         lista: [
