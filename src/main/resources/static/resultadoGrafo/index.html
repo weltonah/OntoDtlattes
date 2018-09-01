@@ -1,26 +1,103 @@
 <html>
 <head>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"/>
-  <style type="text/css">
-
-</style>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" integrity="sha384-Smlep5jCw/wG7hdkwQ/Z5nLIefveQRIY9nfy6xoR1uRYBtpZgI6339F5dgvm/e9B" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js" integrity="sha384-o+RDsa0aLu++PJvFqy8fFScvbHFLtbvScb8AjopnFD+iEQ7wo/CG0xlczd+2O/em" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/ionicons@4.2.2/dist/ionicons.js"></script>
 </head>
 <body>
         
         <div id="app">
-            <button type="button" @click="DesenharNo()">printar</button>
-            <button type="button" @click="escolherRaiz()">escolher</button>
-                <div id="mynetwork"></div>
+            <div class="row" >
+                <div class="col-12 " style="height: 10vh;">
+                        <!-- <button type="button" @click="DesenharNo()">printar</button> -->
+{{ListarNomes()}}
+                    <div class="row">
+                        <div class="col">
+                                <div class="form-group">
+                                        Selecione um pesquisador
+                                        <select v-model="raiz" @click="DesenharNo()" class="" placeholder="Selecione o pesquisador">
+                                                <option disabled value="" selected >Escolha um item</option>
+                                                <option v-for="itemCate in nomeLista">{{itemCate}}</option>
+                                        </select>
+                                </div>
+                        </div>
+                    </div>
+            
+                </div>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-3 pr-0" style="overflow: auto;height: 90vh;" >
+            
+                                <table class="table table-hover" v-if="booleantabela" style="font-size: 11px;">
+                                        <thead class="thead-dark">
+                                          <tr>
+                                            <th scope="col" class="pr-0">Nome</th>
+                                            <th scope="col" class="pr-0">Pontos</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr v-for="itemCate in lista">
+                                            <th scope="row">{{itemCate[0]}}</th>
+                                            <td>{{itemCate[1]}}</td>
+                                          </tr>
+                                        </tbody>
+                                </table>
+                        </div>
+                        <div class="col-9 p-0 border" style="overflow: auto;height: 90vh;">
+                                <div id="mynetwork"></div>
+                        </div>
+                    </div>
+                    
+                </div>
+
+            </div>
         </div>
+
+
+
 
         <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
   <script type="text/javascript">
+  function compare(a,b) {
+    if (a < b)
+        return -1;
+    if (a > b)
+        return 1;
+    return 0;
+    }
     var app = new Vue({
-  el: '#app',
+    el: '#app',
   
-  methods: {
+    methods: {
+        ListarNomes(){
+            if(!this.flagcarregador){
+            var nomescompleto = []
+            for(var i = 0; i < this.resultado.length; i++){
+                nomescompleto.push(this.resultado[i][0]);
+                nomescompleto.push(this.resultado[i][1]);
+            };
+            nomescompleto.sort(compare);
+            for(var i = 0; i < nomescompleto.length; i++){
+                if(i+1 <nomescompleto.length){
+                    if(nomescompleto[i] == nomescompleto[i+1] ){
+                        nomescompleto.splice(i+1, 1);
+                        i--;
+                    }
+                }
+            }
+            // for(var i = 0; i < nomescompleto.length; i++){
+            //     console.log(nomescompleto[i]);
+            // }
+            this.nomeLista = nomescompleto;
+            this.flagcarregador=true;
+        }
+        },
+
         DesenharNo(){
+            this.escolherRaiz();
             this.message = "bost";
             var LENGTH_MAIN = 50,
             BLACK = '#2B1B17';
@@ -29,44 +106,58 @@
             ]);
             var edges = new vis.DataSet([
             ]);
-            //nodes.add({id: 6, label: 'Node 6'});
             for(var i = 0; i < this.lista.length; i++){
                 nodes.add({id: i+2, label: this.lista[i][0]});
-                //var value = this.maxvalue*5-this.lista[i][1];
-                var value = (this.lista[i][1]-(this.maxvalue*5+this.maxvalue*5*0.1))/-5;
-
-                edges.add({from: 1, to: i+2, length: this.lista[i][1],fontSize: 50, color: BLACK, fontColor: BLACK, 
-                label: ''+value});
+                var distancia = (this.maxvalue*this.valormulti + this.maxvalue*this.valormulti*0.1) - this.lista[i][1]*this.valormulti;
+                
+                edges.add({from: 1, to: i+2, length: distancia,fontSize: 50, color: BLACK, fontColor: BLACK, 
+                label: ''+this.lista[i][1]});
             }
-            // create an array with edges
-            
-            // provide the data in the vis format
             var container = document.getElementById('mynetwork');
             var data = {
                 nodes: nodes,
                 edges: edges
             };
             var options = {
-                autoResize: true,
                 height: '100%',
                 width: '100%',
                 edges: {
-                color: BLACK,
-                smooth: false
+                    color: BLACK,
+                    smooth: false
                 },
-                
+                nodes: {
+                    font: {
+                    size: 20,
+                    }
+                },
+                layout: {
+                    randomSeed: 10,
+                },
+                physics: {
+                    barnesHut: {
+                        gravitationalConstant: -50000,
+                        centralGravity: 0,
+                        springLength: 0,
+                        damping: 0.76,
+                        avoidOverlap: 0.77
+                    },
+                    maxVelocity: 36,
+                    minVelocity: 1,
+                    timestep: 0.86
+                }
             };
+            this.booleantabela = true;
             this.network = new vis.Network(container, data, options);
         },
         escolherRaiz(){
-            var nome = "eduardo_pagani_julio"
-            this.raiz = nome;
+            // var nome = "celso_alberto_saibel_santos"
+            // this.raiz = nome;
             var grupos = [];
-            for(var i = 0; i < this.resultado.length; i++){
-                if(nome == this.resultado[i][0]){
+            for(var i = this.resultado.length-1; i >= 0; i--){
+                if(this.raiz == this.resultado[i][0]){
                     grupos.push([this.resultado[i][1],this.resultado[i][2]]);
                 }
-                if(nome == this.resultado[i][1]){
+                if(this.raiz == this.resultado[i][1]){
                     grupos.push([this.resultado[i][0],this.resultado[i][2]]);
                 }
             }
@@ -76,29 +167,28 @@
                 maiorvalor = grupos[i][1];
             }
             this.maxvalue = maiorvalor;
-
-            for(var i = 0; i < grupos.length; i++){
-                console.log(grupos[i][1]);
-                grupos[i][1] = (maiorvalor*5 + maiorvalor*5*0.1) - grupos[i][1]*5;
-                console.log(grupos[i][1]);
-            }
-
+            if(this.maxvalue<200)
+            this.maxvalue=200;
             this.lista= grupos;
         },
 
     },
     data: {
+        flagcarregador: false,
+        nomeLista: [],
+        booleantabela: false,
+        valormulti: 3,
         maxvalue:  'Hello Vue!',
         raiz: "welton",
         lista: [
-            ["joao", 10],
-            ["pedro", 30],
-            ["ss", 50],
-            ["hhh", 60],
-            ["ff", 10],
-            ["aaa", 30],
-            ["hhh", 500],
-            ["www", 80],
+            ["eduardo_pagani_julio", 100],
+            ["artur_ziviani", 300],
+            ["daniel_sadoc_menasche", 250],
+            ["celso_alberto_saibel_santos", 200],
+            ["c_a_c_teixeira", 100],
+            ["raul_fonseca_neto", 300],
+            ["jussara_almeida", 500],
+            ["italo_cunha", 500],
         ],
         resultado: [
 ["helio_jose_correa_barbosa" , "raul_fonseca_neto" , 3] ,

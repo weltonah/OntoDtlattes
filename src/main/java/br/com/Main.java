@@ -25,7 +25,7 @@ public class Main {
 		TratamentoDeDados tratamentoDeDados = new TratamentoDeDados();
 		int tam;
 		if (args.length == 0)
-			tam = 10;
+			tam = 44;
 		else
 			tam = Integer.parseInt(args[0]);
 
@@ -96,9 +96,9 @@ public class Main {
 				//System.out.println(listaPessoa.get(i).getNomeCompleto());
 		}
 		System.out.println("banca " + totalcont);
-		// tratamentoDeDados.tratarEventos(listaPessoa);
+		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-		// tratamentoDeDados.tratarBanca(listaPessoa);
+		tratamentoDeDados.tratarBanca(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 
 		ontoDao.preencherOnto(listaPessoa);
