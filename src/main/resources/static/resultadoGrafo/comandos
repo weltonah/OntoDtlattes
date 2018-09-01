@@ -1,0 +1,6 @@
+git branch -D gh-pages
+git branch gh-pages
+git checkout gh-pages
+git add *
+git commit -m "primeiro"
+git push -f origin gh-pages
