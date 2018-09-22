@@ -119,7 +119,8 @@ public class BuscarXmlToPessoa {
 		for (int i = 0; i < livros.getLength(); i++) {
 			Node TipoNode = livros.item(i);
 			String titulo = TipoNode.getChildNodes().item(0).getAttributes().getNamedItem("TITULO").getTextContent();
-
+			int ano = Integer
+					.parseInt(TipoNode.getChildNodes().item(0).getAttributes().getNamedItem("ANO").getTextContent());
 			NodeList listAutores = TipoNode.getChildNodes();
 			ArrayList<OntoParceiro> listParticipantes = new ArrayList<>();
 			for (int j = 0; j < listAutores.getLength(); j++) {
@@ -136,6 +137,7 @@ public class BuscarXmlToPessoa {
 				}
 			}
 			OntoClass itemBanca = new OntoClass(this.tratamentoDeDados.corrigirString(titulo), tipo, listParticipantes);
+			itemBanca.setAno(ano);
 			ListArtigoCompleto.add(itemBanca);
 		}
 		return ListArtigoCompleto;

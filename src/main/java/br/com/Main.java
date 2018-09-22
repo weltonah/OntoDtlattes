@@ -28,8 +28,6 @@ public class Main {
 			tam = 44;
 		else
 			tam = Integer.parseInt(args[0]);
-
-		System.out.println(tam);
 		ArrayList<String> Namexml;
 		ontoDao = new OntologyDAO(nomeFile);
 		tratamentoDeDados = new TratamentoDeDados();
@@ -39,7 +37,7 @@ public class Main {
 		Namexml = ListaDeArquivos(tam);
 		ArrayList<OntoPessoa> listaPessoa = new ArrayList<>();
 		for (String string : Namexml) {
-				File owlfile = new ClassPathResource("static/testFile/" + string).getFile();
+			File owlfile = new ClassPathResource("static/testFile/" + string).getFile();
 				// File owlfile = new File("/home/welton/exeOntoDt/testFile/" + string);
 			// ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 			// File owlfile = new File(classLoader.getResource("static/testFile/" +
@@ -61,7 +59,9 @@ public class Main {
 			listaPessoa.add(pessoa);
 		}
 
-		tratamentoDeDados.tratarBancaExterna(listaPessoa);
+		// tratamentoDeDados.tratarBancaExterna(listaPessoa);
+
+		tratamentoDeDados.tratarEventoExterna(listaPessoa);
 
 		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
@@ -72,8 +72,8 @@ public class Main {
 			aux = listaPessoa.size();
 			tratamentoDeDados.JuncaoMembros(listaPessoa);
 			System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
-			
 		} while (aux != listaPessoa.size());
+
 		//
 		// System.out.println(listaPessoa.get(listaPessoa.size() -
 		// 1).getListOntoBanca().size());
@@ -83,7 +83,7 @@ public class Main {
 		// 1).getListOntoTrabalhoEvento().size());
 		System.out.println("antes " + listaPessoa.size());
 		tratamentoDeDados.eliminarIndividuosDesnecessarios(listaPessoa);
-		System.out.println("depois " + listaPessoa.size());
+		System.out.println("depois apagar desnecessarios " + listaPessoa.size());
 		int totalcont = 0;
 		int exemplo = 0;
 		for (int i = 0; i < listaPessoa.size(); i++)
@@ -93,9 +93,8 @@ public class Main {
 		totalcont = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			totalcont = totalcont + listaPessoa.get(i).getListOntoBanca().size();
-			// if (listaPessoa.get(i).getListOntoBanca().size() > 50)
-				//System.out.println(listaPessoa.get(i).getNomeCompleto());
 		}
+
 		System.out.println("banca " + totalcont);
 		tratamentoDeDados.tratarEventos(listaPessoa);
 		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -110,14 +109,12 @@ public class Main {
 
 		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
 		System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
-			
+
 		GrafoController graf = new GrafoController(nomeFile);
 		graf.inferir();
 		Grafo result = graf.BuscarResultado();
 		result.imprimirResultado(MapNome);
 		System.out.println("Fim");
-		
-
 	}
 
 
@@ -171,6 +168,24 @@ public class Main {
 		Namexml.add("VictorStroelecurriculo.xml");
 		Namexml.add("Wagnercurriculo.xml");
 
+		for (int i = 0; i < tam; i++)
+			result.add(Namexml.get(i));
+		return result;
+	}
+
+	public static ArrayList<String> ListaDeArquivosUFF(int tam) {
+		// Tam max 9
+		ArrayList<String> Namexml = new ArrayList<>();
+		ArrayList<String> result = new ArrayList<>();
+		Namexml.add("0309634894063636.zip");
+		Namexml.add("2749336121158204.zip");
+		Namexml.add("2788549078021456.zip");
+		Namexml.add("2817165356256665.zip");
+		Namexml.add("5801469731775346.zip");
+		Namexml.add("8753431507012523.zip");
+		Namexml.add("8802071703082477.zip");
+		Namexml.add("9092968639951008.zip");
+		Namexml.add("9389379560768833.zip");
 		for (int i = 0; i < tam; i++)
 			result.add(Namexml.get(i));
 		return result;
