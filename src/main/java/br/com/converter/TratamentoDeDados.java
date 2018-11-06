@@ -29,6 +29,7 @@ public class TratamentoDeDados {
 
 	public void ExpansaoMembros(ArrayList<OntoPessoa> listapessoa) {
 		ArrayList<OntoPessoa> listaAux = new ArrayList<>();
+		int reg = 0;
 		for (OntoPessoa ontoPessoa : listapessoa) {
 			ontoPessoa.setFlagLattes(true);
 			for (OntoClass ontoClass : ontoPessoa.getListOntoBanca()) {
@@ -38,6 +39,8 @@ public class TratamentoDeDados {
 					OntoClass bancaAux = new OntoClass(ontoClass.getTitulo(), ontoClass.getTipo(), ontoClass.getAno());
 					ont.AddListOntoBanca(bancaAux);
 					listaAux.add(ont);
+					if (ontoPessoa.getNomeCompleto().contains("regina"))
+						reg++;
 				}
 				ontoClass.setListAutores(new ArrayList<>());
 			}
@@ -50,6 +53,8 @@ public class TratamentoDeDados {
 					ontoClass.setFlagFormacaoOrientacao(true);
 					ont.AddListOntoFormacao(formacaoAux);
 					listaAux.add(ont);
+					if (ontoPessoa.getNomeCompleto().contains("regina"))
+						reg++;
 				}
 				ontoClass.setListAutores(new ArrayList<>());
 			}
@@ -60,9 +65,13 @@ public class TratamentoDeDados {
 					OntoClass pesquisa = new OntoClass(ontoClass.getTitulo(), ontoClass.getTipo(), ontoClass.getAno());
 					ont.AddListOntoProjetoPesquisa(pesquisa);
 					listaAux.add(ont);
+					if (ontoPessoa.getNomeCompleto().contains("regina"))
+						reg++;
 				}
 				ontoClass.setListAutores(new ArrayList<>());
 			}
+			if (ontoPessoa.getNomeCompleto().contains("regina"))
+				System.out.println("regina expansao:" + reg);
 		}
 		listapessoa.addAll(listaAux);
 	}
@@ -158,12 +167,19 @@ public class TratamentoDeDados {
 
 	public void BaterNomeComIdLattes(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getIdLattes()));
+		int reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String idlattes = listaPessoa.get(i).getIdLattes();
 			if (!idlattes.contentEquals("")) {
 				for (int j = i + 1; j < listaPessoa.size(); j++) {
 					if (i != j) {
 						if (idlattes.contentEquals(listaPessoa.get(j).getIdLattes())) {
+							if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+									|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+								reg++;
+								// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+								// + listaPessoa.get(i).getNomeCompleto());
+							}
 							listaPessoa.get(i).Copiar(listaPessoa.get(j));
 							listaPessoa.get(i).cont();
 							listaPessoa.remove(j);
@@ -174,15 +190,23 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+		System.out.println("regina" + reg);
 	}
 
 	public void BaterNomeComNome(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		int reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			for (int j = i + 1; j < listaPessoa.size(); j++) {
 				if (i != j) {
 					if (nome.contentEquals(listaPessoa.get(j).getNomeCompleto())) {
+						if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+								|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+							reg++;
+							// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+							// + listaPessoa.get(i).getNomeCompleto());
+						}
 						listaPessoa.get(i).Copiar(listaPessoa.get(j));
 						listaPessoa.get(i).cont();
 						listaPessoa.remove(j);
@@ -191,10 +215,12 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+		System.out.println("regina" + reg);
 	}
 
 	public void BaterNomeComNomeAlgoritmoNGram(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		int reg = 0;
 		NGram ngram = new NGram(4);
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
@@ -205,6 +231,12 @@ public class TratamentoDeDados {
 						break;
 					if (nome.charAt(0) == listaPessoa.get(j).getNomeCompleto().charAt(0)) {
 						if (ngram.distance(nome, segundoNome.getNomeCompleto()) < 0.25) {
+							if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+									|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+								reg++;
+								// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+								// + listaPessoa.get(i).getNomeCompleto());
+							}
 							listaPessoa.get(i).Copiar(segundoNome);
 							listaPessoa.get(i).cont();
 							listaPessoa.remove(j);
@@ -214,11 +246,12 @@ public class TratamentoDeDados {
 				}
 			}
 		}
-
+		System.out.println("regina" + reg);
 	}
 
 	public void BaterCitacaoPorCitacao(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		int reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
 			for (int j = i + 1; j < listaPessoa.size(); j++) {
@@ -226,6 +259,12 @@ public class TratamentoDeDados {
 					for (int k = 0; k < listaPessoa.get(j).getCitacaoList().size(); k++) {
 						String unidadelist = listaPessoa.get(j).getCitacaoList().get(k);
 						if (listcitacaoPivo.contains(unidadelist) && (!unidadelist.contentEquals(""))) {
+							if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+									|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+								reg++;
+								// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+								// + listaPessoa.get(i).getNomeCompleto());
+							}
 							// if (listaPessoa.get(j).getNomeCompleto().length() >
 							// listaPessoa.get(i).getNomeCompleto()
 							// .length()) {
@@ -240,10 +279,12 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+		System.out.println("regina" + reg);
 	}
 
 	public void BaterListCitacaoComNome(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		int reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			ArrayList<String> listcitacaoPivo = listaPessoa.get(i).getCitacaoList();
 			if (!(listcitacaoPivo.get(0).contentEquals("") && listcitacaoPivo.size() == 1)) {
@@ -253,6 +294,12 @@ public class TratamentoDeDados {
 							if (i == listaPessoa.size())
 								break;
 							if (listcitacaoPivo.get(p).contentEquals(listaPessoa.get(j).getNomeCompleto())) {
+								if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+										|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+									reg++;
+									// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+									// + listaPessoa.get(i).getNomeCompleto());
+								}
 								listaPessoa.get(i).Copiar(listaPessoa.get(j));
 								listaPessoa.get(i).cont();
 								listaPessoa.remove(j);
@@ -264,15 +311,23 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+		System.out.println("regina" + reg);
 	}
 
 	public void BaterNomeContidoEmOutro(ArrayList<OntoPessoa> listaPessoa) {
 		listaPessoa.sort(Comparator.comparing(u -> ((OntoPessoa) u).getNomeCompleto()).reversed());
+		int reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			String nome = listaPessoa.get(i).getNomeCompleto();
 			for (int j = i + 1; j < listaPessoa.size(); j++) {
 				if (!(i == j)) {
 					if (nome.contains(listaPessoa.get(j).getNomeCompleto())) {
+						if (listaPessoa.get(j).getNomeCompleto().contains("regina")
+								|| listaPessoa.get(i).getNomeCompleto().contains("regina")) {
+							reg++;
+							// System.out.println(listaPessoa.get(j).getNomeCompleto() + " < -- "
+							// + listaPessoa.get(i).getNomeCompleto());
+						}
 						listaPessoa.get(i).Copiar(listaPessoa.get(j));
 						listaPessoa.get(i).cont();
 						listaPessoa.remove(j);
@@ -281,6 +336,7 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+		System.out.println("regina" + reg);
 	}
 
 	public void tratarEventos(ArrayList<OntoPessoa> listaPessoa) {
@@ -422,7 +478,9 @@ public class TratamentoDeDados {
 
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			OntoPessoa ontoPessoa = listaPessoa.get(i);
-			System.out.println(i + " -" + ontoPessoa.getNomeCompleto() + " -- " + ontoPessoa.getListOntoBanca().size());
+			if (ontoPessoa.getListOntoBanca().size() > 100)
+				System.out.println(
+						i + " -" + ontoPessoa.getNomeCompleto() + " -- " + ontoPessoa.getListOntoBanca().size());
 			for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) {
 				OntoClass banca = ontoPessoa.getListOntoBanca().get(k);
 
@@ -432,11 +490,24 @@ public class TratamentoDeDados {
 					if (banca.getAno() + 1 == banca2.getAno() || banca.getAno() - 1 == banca2.getAno()
 							|| banca.getAno() + 2 == banca2.getAno() || banca.getAno() - 2 == banca2.getAno()
 							|| banca.getAno() == banca2.getAno()) {
-						double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
+
+						if (banca.getTitulo().length() * 1.4 <= banca2.getTitulo().length()
+								|| banca.getTitulo().length() >= banca2.getTitulo().length() * 1.4) {
+							continue;
+						}
+
+						if (banca.getTitulo() == banca2.getTitulo()) {
+							banca.setTitulo(banca2.getTitulo());
+							ontoPessoa.getListOntoBanca().remove(t);
+							t--;
+							cont++;
+						}
+
 						if ((t % 100 == 0) && (k % 50 == 0))
 							System.out.println(k + " " + t);
+
+						double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
 						if (aux > 0 && aux < 0.25) {
-							cont++;
 							if (banca.getTitulo().length() < banca2.getTitulo().length()) {
 								banca2.setTitulo(banca.getTitulo());
 								ontoPessoa.getListOntoBanca().remove(k);
@@ -480,7 +551,7 @@ public class TratamentoDeDados {
 	public void tratarBancaExterna(ArrayList<OntoPessoa> listaPessoa) {
 		NGram ngram = new NGram(4);
 		int totalcont = 0;
-		int cont = 99;
+		int cont = 99, reg = 0;
 
 		while (cont != 0) {
 			long tempoInicio = System.currentTimeMillis();
@@ -491,7 +562,7 @@ public class TratamentoDeDados {
 				for (int j = i + 1; j < listaPessoa.size(); j++) {
 					OntoPessoa ontoPessoa2 = listaPessoa.get(j);
 
-					if ((j % 10 == 0) && (i % 1 == 0))
+					if ((j % 20 == 0) && (i % 3 == 0))
 						System.out.println(i + " " + j);
 
 					for (int k = 0; k < ontoPessoa.getListOntoBanca().size(); k++) {
@@ -504,14 +575,6 @@ public class TratamentoDeDados {
 									|| banca.getAno() == banca2.getAno()) {
 								double aux = ngram.distance(banca.getTitulo(), banca2.getTitulo());
 								if (aux > 0 && aux < 0.20) {
-									// if (banca.getAno() != banca2.getAno()) {
-									// System.out.println(aux);
-									// System.out.println(banca.getTitulo());
-									// System.out.println(banca.getAno());
-									// System.out.println(banca2.getAno());
-									// System.out.println(banca2.getTitulo());
-									// }
-
 									cont++;
 									if (banca.getTitulo().length() < banca2.getTitulo().length())
 										banca2.setTitulo(banca.getTitulo());
@@ -535,6 +598,7 @@ public class TratamentoDeDados {
 			System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 			System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 		}
+		System.out.println("regina" + reg);
 
 	}
 
@@ -582,7 +646,7 @@ public class TratamentoDeDados {
 	}
 
 	public void tratarEventoExterna(ArrayList<OntoPessoa> listaPessoa) {
-		int cont = 0;
+		int cont = 0, reg = 0;
 		for (int i = 0; i < listaPessoa.size(); i++) {
 			OntoPessoa ontoPessoa = listaPessoa.get(i);
 			for (int k = 0; k < ontoPessoa.getListOntoEvento().size(); k++) {
@@ -590,6 +654,10 @@ public class TratamentoDeDados {
 				for (int t = k + 1; t < ontoPessoa.getListOntoEvento().size(); t++) {
 					OntoClass evento2 = ontoPessoa.getListOntoEvento().get(t);
 					if (testeEvento(evento.getTitulo(), evento2.getTitulo())) {
+						if (ontoPessoa.getNomeCompleto().contains("regina")) {
+							System.out.println(evento.getTitulo() + " " + evento2.getTitulo());
+							reg++;
+						}
 						cont++;
 						if (evento.getTitulo().length() < evento2.getTitulo().length()) {
 							// evento2.setTitulo(evento.getTitulo());
@@ -621,7 +689,12 @@ public class TratamentoDeDados {
 				for (int t = k + 1; t < ontoPessoa.getListOntoTrabalhoEvento().size(); t++) {
 					TrabalhoEventoXml evento2 = ontoPessoa.getListOntoTrabalhoEvento().get(t);
 					if (testeEvento(evento.getEvento().getTitulo(), evento2.getEvento().getTitulo())) {
+						if (ontoPessoa.getNomeCompleto().contains("regina")) {
+							System.out.println(evento.getEvento().getTitulo() + " " + evento2.getEvento().getTitulo());
+							reg++;
+						}
 						cont++;
+
 						if (evento.getEvento().getTitulo().length() < evento2.getEvento().getTitulo().length())
 							evento2.getEvento().setTitulo(evento.getEvento().getTitulo());
 						else {
@@ -644,6 +717,10 @@ public class TratamentoDeDados {
 					if (testeEvento(evento.getTitulo(), evento2.getEvento().getTitulo())) {
 						// System.out.println("combinado: " + evento.getTitulo() + " --> "
 						// + evento2.getEvento().getTitulo());
+						if (ontoPessoa.getNomeCompleto().contains("regina")) {
+							System.out.println(evento.getTitulo() + " " + evento2.getEvento().getTitulo());
+							reg++;
+						}
 						cont++;
 						if (evento.getTitulo().length() < evento2.getEvento().getTitulo().length())
 							evento2.getEvento().setTitulo(evento.getTitulo());
@@ -660,7 +737,9 @@ public class TratamentoDeDados {
 				}
 			}
 		}
+
 		System.out.println("rerrr" + cont);
+		System.out.println("regina" + reg);
 	}
 
 }

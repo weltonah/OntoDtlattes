@@ -58,7 +58,6 @@ public class MainSegundo {
 			aux = listaPessoa.size();
 			tratamentoDeDados.JuncaoMembros(listaPessoa);
 			System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
-
 		} while (aux != listaPessoa.size());
 
 		System.out.println("antes " + listaPessoa.size());

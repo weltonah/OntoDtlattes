@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 public class Resultado {
-	private final int valorBanca = 3;
+	private final int valorBanca = 10;
 	private final int valorEvento = 10;
-	private final int valorAreaAtuacao = 10;
-	private final int valorAreaConhecimento = 20;
-	private final int valorSubArea = 30;
-	private final int valorEspecialidade = 45;
-	private final int valorOrientacao = 20;
-	private final int valorProjetoPesquisa = 25;
+	private final int valorAreaAtuacao = 30;
+	private final int valorAreaConhecimento = 60;
+	private final int valorSubArea = 80;
+	private final int valorEspecialidade = 100;
+	private final int valorOrientacao = 10;
+	private final int valorProjetoPesquisa = 20;
 	private final int valorProjetoEvento = 30;
 	private int contBanca;
 	private int contEvento;

@@ -59,14 +59,21 @@ public class Main {
 			listaPessoa.add(pessoa);
 		}
 
-		// tratamentoDeDados.tratarBancaExterna(listaPessoa);
+		tratamentoDeDados.tratarBancaExterna(listaPessoa);
 
 		tratamentoDeDados.tratarEventoExterna(listaPessoa);
+
 
 		System.out.println("tamanho pessoas antes da expansao " + listaPessoa.size());
 		tratamentoDeDados.ExpansaoMembros(listaPessoa);
 		System.out.println("tamanho pessoas depois da expansao " + listaPessoa.size());
-		
+
+		// listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		// listaPessoa.stream().filter(u -> u.getNomeCompleto().contains("r_"))
+		// .forEach(u -> System.out.println(u.getNomeCompleto()));
+		// listaPessoa.stream().filter(u -> u.getNomeCompleto().contains("regina"))
+		// .forEach(u -> System.out.println(u.getNomeCompleto()));
+		// listaPessoa.forEach(u -> System.out.println(u.getNomeCompleto()));
 		int aux;
 		do {
 			aux = listaPessoa.size();
@@ -74,13 +81,11 @@ public class Main {
 			System.out.println("tamanho pessoas depois da juncao de membros " + listaPessoa.size());
 		} while (aux != listaPessoa.size());
 
-		//
-		// System.out.println(listaPessoa.get(listaPessoa.size() -
-		// 1).getListOntoBanca().size());
-		// System.out.println(listaPessoa.get(listaPessoa.size() -
-		// 1).getListOntoEvento().size());
-		// System.out.println(listaPessoa.get(listaPessoa.size() -
-		// 1).getListOntoTrabalhoEvento().size());
+		// listaPessoa.sort(Comparator.comparing(u -> u.getNomeCompleto()));
+		// listaPessoa.stream().filter(u -> u.getNomeCompleto().contains("r_"))
+		// .forEach(u -> System.out.println(u.getNomeCompleto()));
+		// listaPessoa.stream().filter(u -> u.getNomeCompleto().contains("regina"))
+		// .forEach(u -> System.out.println(u.getNomeCompleto()));
 		System.out.println("antes " + listaPessoa.size());
 		tratamentoDeDados.eliminarIndividuosDesnecessarios(listaPessoa);
 		System.out.println("depois apagar desnecessarios " + listaPessoa.size());
@@ -106,14 +111,16 @@ public class Main {
 		long tempoInicio = System.currentTimeMillis();
 
 		Map<String, String> MapNome = tratamentoDeDados.CriarMap(listaPessoa);
+		listaPessoa = new ArrayList<>();
 
 		ontoDao.saveOntologyDAO(new FunctionalSyntaxDocumentFormat());
 		System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
-
+		System.out.println("Agora vai inferir");
 		GrafoController graf = new GrafoController(nomeFile);
 		graf.inferir();
 		Grafo result = graf.BuscarResultado();
 		result.imprimirResultado(MapNome);
+		System.out.println("Tempo Total: " + (System.currentTimeMillis() - tempoInicio));
 		System.out.println("Fim");
 	}
 

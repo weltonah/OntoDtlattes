@@ -65,7 +65,7 @@ public class OntologyDAO {
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
 		diferentIndividual();
 		this.manager.saveOntology(this.ontology, formato, new FileOutputStream(this.file));
-		Inferir(formato);
+		// Inferir(formato);
 	}
 
 	public void diferentIndividual() throws OWLOntologyCreationException {
@@ -146,9 +146,10 @@ public class OntologyDAO {
 		gens.add(new InferredPropertyAssertionGenerator());
 		File ont = new File(System.getProperty("user.dir") + "/testeResultado.owl");
 		InferredOntologyGenerator iog = new InferredOntologyGenerator(r, gens);
-
+		System.out.println("1");
 		// axiomGenerators.stream().flatMap(g -> generate(df, g))
 		iog.fillOntology(factory, this.ontology);
+		System.out.println("2");
 
 		System.out.println("ola");
 		this.manager.saveOntology(this.ontology, formato,

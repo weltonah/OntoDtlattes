@@ -797,7 +797,12 @@ public class Grafo {
 			if (u.getListParticipante().get(1).getNome().matches("-?\\d+(\\.\\d+)?")) {
 				nome2 = mapNome.get(u.getListParticipante().get(1).getNome());
 			}
-			System.out.println("[\"" + nome1 + "\" , \"" + nome2 + "\" , " + u.getTotal() + "] ,");
+			System.out.println("[\"" + nome1 + "\" , \"" + nome2 + "\" , " + u.getTotal() + "], ");
+
+			System.out.println("area " + u.getContAreaAtuacao() + " areaconhe" + u.getContAreaConhecimento() + " banca"
+					+ u.getContBanca() + " especia" + u.getContEspecialidade() + " evento" + u.getContEvento()
+					+ " orient" + u.getContOrientacao() + " projeve" + u.getContProjetoEvento() + " projeoesq"
+					+ u.getContProjetoPesquisa() + " consubarea" + u.getContSubArea() + "" + ",");
 
 		});
 	}

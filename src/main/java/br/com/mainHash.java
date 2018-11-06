@@ -5,7 +5,7 @@ import info.debatty.java.stringsimilarity.NGram;
 public class mainHash {
 	public static void main(String[] args) throws Exception {
 		NGram ngram = new NGram(4);
-		System.out.println(ngram.distance("meet", "meett"));
+		System.out.println(ngram.distance("meet", "meet"));
 		System.out.println(ngram.distance("po", "aac"));
 		System.out.println(ngram.distance("cabeç", "cabeçpp"));
 		System.out.println(ngram.distance("ab", "abab"));
